@@ -1,16 +1,17 @@
 class transaction_chk_sb #(parameter packagesize = 16);
-  int payload [packagesize-9:0];
-  int id [7:0];
-  int transaction_time;
+  bit [packagesize-1:0] payload ;
+  //bit [7:0] id ;
+  //int transaction_time;
   
-  function new(int info [packagesize-9:0], int destino [7:0],int tiempo);
+  function new(bit [packagesize-1:0] info);
     this.payload = info;
-    this.id = destino;
-    this.transaction_time = tiempo;
+    //this.id = destino;
+    //this.transaction_time = tiempo;
   endfunction
   
   function display();
-    $display("El dato: %i se recibió en el Device: %i en el timepo: %i", this.payload, this.id, this.transaction_time);
+    $display("El dato: %b se recibió en el Device:", this.payload);
   endfunction 
   
 endclass
+  
