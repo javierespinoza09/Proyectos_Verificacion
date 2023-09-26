@@ -1,4 +1,4 @@
-`include "bus_if"
+`include "bus_if.sv"
 class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
 	
@@ -6,7 +6,7 @@ class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 	randc bit [7:0] id;
 	int drv_num;
   
-  constraint valid_addrs {id < drvrs;};
+  constraint valid_addrs {id < drvrs;id != drv_num;};
 
 
 	function new (int drv_num);
@@ -16,21 +16,19 @@ class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 	task run();
 		this.v_if.pndng[0][this.drv_num] = 1;	
 		this.v_if.D_pop[0][this.drv_num] = {this.id,this.payload};
-        if (this.v_if.pop[0][this.drv_num]) begin
-          #1
-		  this.v_if.pndng[0][this.drv_num] = 0;
-		end 
+		
+       		@(posedge this.v_if.pop[0][this.drv_num]) begin
+          		
+		  	this.v_if.pndng[0][this.drv_num] = 0;	
+		end
 			
 	endtask
   task recibido();
-    int espera = 0;
-    while(espera==0)begin
-      if (this.v_if.push[0][this.drv_num]==1) begin
-          $display("Device_ 0x%0d Dato Recibido 0x%0d",this.drv_num,this.v_if.D_push[0][this.drv_num]);
-          espera = 1;
-        end
-      #2;
-    end 
+	  forever begin
+    		@(posedge this.v_if.push[0][this.drv_num]) begin
+          	$display("Device_ 0x%0d Dato Recibido %b",this.drv_num,this.v_if.D_push[0][this.drv_num]);
+        	end
+	end
   endtask
   
 	function display();

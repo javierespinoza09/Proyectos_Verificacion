@@ -1,5 +1,6 @@
 `timescale 1ns/10ps
-`include "example_driver"
+`include "example_driver.sv"
+`include "Library.sv"
 module bus_tb;
 reg reset_tb,clk_tb;
 reg pndng_tb [0:0][3:0];
@@ -41,28 +42,34 @@ initial begin
   #50
   reset_tb = 0;
   for(int i = 0; i<Drivers; i++ ) begin
-    fork begin
       automatic int k = i;
       driver[k] = new(k);
       driver[k].v_if = v_if;
       driver[k].randomize();
       driver[k].display();
-      driver[k].run();
       $display("Driver_0x%0d",driver[k].drv_num);
     end 
-    join
-  end 
-  for(int i = 0; i<Drivers; i++)begin
-    $display("Pending = %0d y Dato_pop = %b",v_if.pndng[0][i],v_if.D_pop[0][i]);
-  end
+ 
+ // for(int i = 0; i<Drivers; i++)begin
+ //   $display("Pending = %0d y Dato_pop = %b",v_if.pndng[0][i],v_if.D_pop[0][i]);
+ //   end
+
+	for(int i = 0; i<Drivers; i++ ) begin
+    		fork
+      			automatic int k = i;
+			driver[k].run();
+			driver[k].recibido();
+		join_none
+	end
+
   
-  for(int i = 0; i<Drivers; i++ ) begin
-    fork begin
-      automatic int k = i;
-      driver[i].recibido();
-    end 
-    join_any
-  end 
+  //for(int i = 0; i<Drivers; i++ ) begin
+  //  fork begin
+  //    automatic int k = i;
+  //    driver[k].recibido();
+  //  end 
+  //  join_any
+  //end 
 end
   
   
