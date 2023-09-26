@@ -18,12 +18,16 @@ parameter pckg_sz = 16;
   example_driver #(.drvrs(Drivers)) driver [Drivers-1:0];
   bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
  
-  
-  //inializar los mailbox
+  ///////////////////////////
+  //inicializar los mailbox//
+  ///////////////////////////
   ag_chk_sb_mbx ag_chk_sb_mbx = new();
+  ag_dr_mbx ag_dr_mbx = new();
   
- 
   
+  //////////////////
+  //instanciar DUT//
+  //////////////////
   bs_gnrtr_n_rbtr DUT_0 (.clk(clk_tb),
                          .reset(reset_tb),
                          .pndng(v_if.pndng),
@@ -33,6 +37,10 @@ parameter pckg_sz = 16;
                          .D_push(v_if.D_push)
                         );
   
+  
+///////////////////////  
+//Ciclo de ejecución// 
+/////////////////////
   
 initial begin
   $dumpfile("test_bus.vcd");
