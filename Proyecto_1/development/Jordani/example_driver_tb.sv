@@ -1,54 +1,84 @@
-`include "bus_if"
-`include "test_mbx"
+`timescale 1ns/10ps
+`include "example_driver"
 
-class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
-	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
+
+module bus_tb;
+reg reset_tb,clk_tb;
+reg pndng_tb [0:0][3:0];
+reg [15:0] D_pop_tb [0:0][3:0];
+wire push_tb [0:0][3:0];
+wire pop_tb [0:0][3:0];
+wire [15:0] D_push_tb [0:0][3:0];
+parameter Drivers = 4;
+parameter pckg_sz = 16;
+
   
-    mbx_drv_chk dato_drv_mbx;
+
   
-    transaction_chk_sb #(.packagesize(pckg_sz)) transaction;
+  example_driver #(.drvrs(Drivers)) driver [Drivers-1:0];
+  bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
  
   
-	rand bit [pckg_sz-9:0] payload;
-	randc bit [7:0] id;
-	int drv_num;
+  //inializar los mailbox
+  ag_chk_sb_mbx ag_chk_sb_mbx = new();
   
-
+ 
   
-  constraint valid_addrs {id < drvrs;};
+  bs_gnrtr_n_rbtr DUT_0 (.clk(clk_tb),
+                         .reset(reset_tb),
+                         .pndng(v_if.pndng),
+                         .push(v_if.push),
+                         .pop(v_if.pop),
+                         .D_pop(v_if.D_pop),
+                         .D_push(v_if.D_push)
+                        );
+  
+  
+initial begin
+  $dumpfile("test_bus.vcd");
+  $dumpvars(0,bus_tb);
+end
 
+initial begin
+forever begin
+	#5
+	clk_tb = ~clk_tb;
+end
+end
 
-	function new (int drv_num);
-		this.drv_num = drv_num;
-	endfunction	
-
-	task run();
-		this.v_if.pndng[0][this.drv_num] = 1;	
-		this.v_if.D_pop[0][this.drv_num] = {this.id,this.payload};
-        this.transaction = new({this.id,this.payload}); //crea el mensaje
-      @(posedge v_if.pop[0][this.drv_num])begin
-        if (this.v_if.pop[0][this.drv_num]) begin
-          #2
-		  this.v_if.pndng[0][this.drv_num] = 0;
-          this.transaction.display();
-          dato_drv_mbx.put(transaction);
-		end 
-      end 
-			
-	endtask
-  task recibido();
-    int espera = 0;
-    while(espera==0)begin
-      if (this.v_if.push[0][this.drv_num]==1) begin
-          $display("Device_ 0x%0d Dato Recibido 0x%0d",this.drv_num,this.v_if.D_push[0][this.drv_num]);
-          espera = 1;
-        end
-      #2;
+initial begin
+  clk_tb = 0;
+  reset_tb = 1;
+  #50
+  reset_tb = 0;
+  for(int i = 0; i<Drivers; i++ ) begin
+    fork begin
+      automatic int k = i;
+      driver[k] = new(k);
+      driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
+      driver[k].v_if = v_if;
+      driver[k].randomize();
+      driver[k].display();
+      driver[k].run();
+      $display("Driver_0x%0d",driver[k].drv_num);
     end 
-  endtask
+    join
+  end 
   
-	function display();
-      $display("Dato: %b  Dispositivo: %b", this.payload,this.id);
-	endfunction
+  
+  for(int i = 0; i<Drivers; i++ ) begin
+    fork begin
+      automatic int k = i;
+      driver[i+1].recibido();
+    end 
+    join_any
+  end 
+end
+  
+  
 
-endclass 
+initial begin
+#5000;
+  $finish;
+end
+endmodule

@@ -4,9 +4,9 @@
 class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
   
-    mbx_drv_chk dato_drv_mbx;
+    ag_chk_sb_mbx ag_chk_sb_mbx;
   
-    transaction_chk_sb #(.packagesize(pckg_sz)) transaction;
+    ag_chk_sb #(.packagesize(pckg_sz)) transaction;
  
   
 	rand bit [pckg_sz-9:0] payload;
@@ -25,13 +25,13 @@ class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 	task run();
 		this.v_if.pndng[0][this.drv_num] = 1;	
 		this.v_if.D_pop[0][this.drv_num] = {this.id,this.payload};
-        this.transaction = new({this.id,this.payload}); //crea el mensaje
+      this.transaction = new(this.payload, this.id, $time); //crea el mensaje
       @(posedge v_if.pop[0][this.drv_num])begin
         if (this.v_if.pop[0][this.drv_num]) begin
           #2
 		  this.v_if.pndng[0][this.drv_num] = 0;
           this.transaction.display();
-          dato_drv_mbx.put(transaction);
+          ag_chk_sb_mbx.put(transaction);
 		end 
       end 
 			
