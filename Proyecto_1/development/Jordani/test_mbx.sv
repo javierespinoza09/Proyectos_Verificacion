@@ -10,8 +10,12 @@ class transaction_chk_sb #(parameter packagesize = 16);
   endfunction
   
   function display();
-    $display("El dato: %b se recibió en el Device:", this.payload);
+    $display("El dato: %b se envió", this.payload);
   endfunction 
   
 endclass
-  
+
+
+////Mailboxes//////
+typedef mailbox #(transaction_chk_sb) mbx_drv_chk ;
+/////
