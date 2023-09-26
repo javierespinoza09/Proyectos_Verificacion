@@ -40,13 +40,18 @@ endclass
 
 //clases en uso//
 
-class ag_dr #(parameter packagesize = 16);
+class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   rand bit [packagesize-9:0] dato;
   rand bit [7:0] id;
+  int source;
   int tiempo;
   
-  function new (int tiempo);
+  constraint valid_addrs {id < drivers;};
+  constraint self_addrs {id != source;};
+  
+  function new (int driver, int tiempo);
     this.tiempo = tiempo;
+    this.source = driver;
   endfunction;
   
   function void print(string tag = "");

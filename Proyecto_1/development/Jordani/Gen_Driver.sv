@@ -6,7 +6,7 @@ class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
   
     ag_chk_sb_mbx ag_chk_sb_mbx;
   
-    ag_chk_sb #(.packagesize(pckg_sz)) transaction;
+    ag_chk_sb #(.packagesize(pckg_sz), .drivers(drvrs)) transaction;
  
   
 	rand bit [pckg_sz-9:0] payload;
@@ -26,6 +26,7 @@ class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 		this.v_if.pndng[0][this.drv_num] = 1;	
 		this.v_if.D_pop[0][this.drv_num] = {this.id,this.payload};
       this.transaction = new(this.payload, this.id, $time); //crea el mensaje
+        this.transaction.randomize();
       @(posedge v_if.pop[0][this.drv_num])begin
         if (this.v_if.pop[0][this.drv_num]) begin
           #2
