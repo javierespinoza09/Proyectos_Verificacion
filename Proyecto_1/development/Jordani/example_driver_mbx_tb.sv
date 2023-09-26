@@ -3,9 +3,12 @@
 
 class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
+  
+    mbx_drv_chk dato_drv_mbx;
+  
     transaction_chk_sb #(.packagesize(pckg_sz)) transaction;
-    
-	
+ 
+  
 	rand bit [pckg_sz-9:0] payload;
 	randc bit [7:0] id;
 	int drv_num;
@@ -28,6 +31,7 @@ class example_driver #(parameter drvrs = 4, parameter pckg_sz = 16);
           #2
 		  this.v_if.pndng[0][this.drv_num] = 0;
           this.transaction.display();
+          dato_drv_mbx.put(transaction);
 		end 
       end 
 			
