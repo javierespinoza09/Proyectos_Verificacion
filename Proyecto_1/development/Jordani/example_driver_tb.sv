@@ -22,8 +22,7 @@ parameter pckg_sz = 16;
   //inicializar los mailbox//
   ///////////////////////////
   ag_chk_sb_mbx ag_chk_sb_mbx = new();
-  ag_dr_mbx ag_dr_mbx = new();
-  
+  ag_dr_mbx ag_dr_mbx[Drivers-1:0];
   
   //////////////////
   //instanciar DUT//
