@@ -41,8 +41,8 @@ endclass
 //clases en uso//
 
 class ag_dr #(parameter packagesize = 16);
-  rand [packagesize-9:0] dato;
-  rand [7:0] id;
+  rand bit [packagesize-9:0] dato;
+  rand bit [7:0] id;
   int tiempo;
   
   function new (int tiempo);
