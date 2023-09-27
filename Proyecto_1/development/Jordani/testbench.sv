@@ -13,8 +13,6 @@ parameter Drivers = 4;
 parameter pckg_sz = 16;
 
   
-
-  
   example_driver #(.drvrs(Drivers)) driver [Drivers-1:0];
   bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
  
@@ -35,6 +33,11 @@ parameter pckg_sz = 16;
                          .D_pop(v_if.D_pop),
                          .D_push(v_if.D_push)
                         );
+  
+  
+  
+  
+  
   
   
 ///////////////////////  
@@ -62,28 +65,32 @@ initial begin
     fork begin
       automatic int k = i;
       driver[k] = new(k);
+      ///////////////
+      //constraints//
+      ///////////////
+      driver[k].valid_addrs.constraint_mode(1);
+      driver[k].self_addrs.constraint_mode(1);
+      ///////////////  
       driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
       driver[k].v_if = v_if;
       driver[k].randomize();
       driver[k].display();
-      driver[k].run();
       $display("Driver_0x%0d",driver[k].drv_num);
     end 
     join
   end 
   
   
-  for(int i = 0; i<Drivers; i++ ) begin
-    fork begin
-      automatic int k = i;
-      driver[i+1].recibido();
-    end 
-    join_any
-  end 
-end
-  
-  
+  	for(int i = 0; i<Drivers; i++ ) begin
+    		fork
+      			automatic int k = i;
+			driver[k].run();
+			driver[k].recibido();
+		join_none
+	end
 
+  
+end 
 initial begin
 #5000;
   $finish;
