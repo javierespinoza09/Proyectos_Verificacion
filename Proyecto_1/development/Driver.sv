@@ -28,15 +28,16 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
 				this.v_if.pndng[0][this.drv_num] = 1;
 				this.v_if.D_in[0][this.drv_num] = q_in[0];	
 			@(posedge clk) begin
-				if(this.v_if.pop[0][this.drv_num] == 1) begin
-					front_data = q_in.pop_front;
+					if(this.v_if.pop[0][this.drv_num] == 1) begin
+						front_data = q_in.pop_front;
+					end
+					if(ag_dr_mbx.try_get(ag_dr_transaction)) begin
+						$display("Transaccion ag_dr recibida");
+									this.q_in.push_back(ag_dr_transaction.dato);
+						this.v_if.pndng[0][this.drv_num] = 1;
+					end
+					if (this.v_if.pop[0][this.drv_num] == 1) q_out.push_back(this.v_if.D_out[0][this.drv_num]);
 				end
-				if(ag_dr_mbx.try_get(ag_dr_transaction)) begin
-					$display("Transaccion ag_dr recibida");
-                        		this.q_in.push_back(ag_dr_transaction.dato);
-					this.v_if.pndng[0][this.drv_num] = 1;
-				end
-				if (this.v_if.pop[0][this.drv_num] == 1) q_out.push_back(this.v_if.D_out[0][this.drv_num]);
 			end
 		end
 		
