@@ -68,9 +68,7 @@ initial begin
     //agente = new(20);
 
     for (int i = 0; i<Drivers; i++ ) begin
-        fork 
-
-            begin
+      
             automatic int k = i;
             driver[k] = new(k);
             ///////////////
@@ -86,20 +84,20 @@ initial begin
             driver[k].v_if = v_if;
             ///driver[k].randomize();
             //driver[k].display();
-            $display("Driver_0x%0d",driver[k].drv_num);
+            $display("Driver %0d",driver[k].drv_num);
         end
-	join
-  end 
-  
+ 
   	fork
-		agente.run();
 		begin
-  			for(int i = 0; i<Drivers; i++ ) begin
-      				automatic int k = i;
-				driver[k].run();
+			for(int i = 0; i<Drivers; i++ ) begin
+				fork
+     					automatic int k = i;
+					driver[k].run();
+				join_none
 			end
 		end
-	join	
+		agente.run();
+	join_none
   
 end 
 initial begin

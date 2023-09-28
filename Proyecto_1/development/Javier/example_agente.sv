@@ -15,9 +15,11 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
     endfunction
     task run();
         for (int i = 0; i < this.num_transacciones; i++) begin
-            ag_dr_transaction.randomize();
-	    $display("AAAA");
-            ag_dr_mbx[ag_dr_transaction.source].put(ag_dr_transaction);
+            this.ag_dr_transaction.randomize();
+	    
+            this.ag_dr_mbx[this.ag_dr_transaction.source].put(this.ag_dr_transaction);
+	    $display("Mensaje enviado a %d",this.ag_dr_transaction.source);
+	    #1;
         end
     endtask 
 endclass

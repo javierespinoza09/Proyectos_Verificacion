@@ -13,11 +13,12 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
         	this.q_in={};
         	this.q_out={};
 		this.drv_num = drv_num;
+		$display("Driver %d a iniciado",this.drv_num);
     	endfunction
 
 	task run();				//Tarea principal del driver
 		//this.v_if.rst = 1;		//Se aplica rst al DUT
-		bit [pckg_sz-1:0] front_data = 0;
+		$display("Driver %d running",this.drv_num);
 		@(posedge v_if.clk) v_if.rst = 0;	//Se termina el perido de rst
 		forever begin
 			bit [pckg_sz-1:0] front_data = 0;
@@ -30,7 +31,8 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 				this.v_if.D_pop[0][this.drv_num] = q_in[0];	
 			@(posedge v_if.clk) begin
 					if(this.v_if.pop[0][this.drv_num] == 1) begin
-						front_data = q_in.pop_front;
+						$display("pop %d dato %b",this.drv_num, v_if.D_pop[0][this.drv_num]);
+						q_in.delete(0);
 					end
 					if(ag_dr_mbx.try_get(ag_dr_transaction)) begin
 						$display("Transaccion ag_dr recibida");
