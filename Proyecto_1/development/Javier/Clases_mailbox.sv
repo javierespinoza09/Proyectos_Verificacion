@@ -55,6 +55,7 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   function new ();   //int driver, int tiempo);
     //this.tiempo = tiempo;
     //this.source = driver;
+    $display("Se inicializa la clase ag_dr");
   endfunction;
   
   function void print(string tag = "");
@@ -86,6 +87,6 @@ endclass
 ////Mailboxes//////
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
-typedef mailbox #(gen_ag) ag_dr_mbx ;
+typedef mailbox #(gen_ag) gen_ag_mbx ;
 
 /////

@@ -1,6 +1,6 @@
 `include "bus_if.sv"
 `include "Clases_mailbox.sv"
-class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
+class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
     virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
     int drv_num;
 	bit [pckg_sz-1:0] q_in[$];
@@ -8,7 +8,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
 	ag_dr_mbx ag_dr_mbx;
 	
 	ag_dr #(.pckg_sz(pckg_sz)) ag_dr_transaction;
-	ag_dr_transaction.new();
+
 	function new(int drv_num);
         	this.q_in={};
         	this.q_out={};
@@ -23,12 +23,12 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
 			bit [pckg_sz-1:0] front_data = 0;
 			if (this.q_in.size==0) begin
 			       this.v_if.pndng[0][this.drv_num] = 0;
-			       this.v_if.D_in[0][this.drv_num] = 0;
+			       this.v_if.D_pop[0][this.drv_num] = 0;
 		       	end
 			else begin 
 				this.v_if.pndng[0][this.drv_num] = 1;
-				this.v_if.D_in[0][this.drv_num] = q_in[0];	
-			@(posedge clk) begin
+				this.v_if.D_pop[0][this.drv_num] = q_in[0];	
+			@(posedge v_if.clk) begin
 					if(this.v_if.pop[0][this.drv_num] == 1) begin
 						front_data = q_in.pop_front;
 					end
@@ -37,7 +37,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
 									this.q_in.push_back(ag_dr_transaction.dato);
 						this.v_if.pndng[0][this.drv_num] = 1;
 					end
-					if (this.v_if.pop[0][this.drv_num] == 1) q_out.push_back(this.v_if.D_out[0][this.drv_num]);
+					if (this.v_if.push[0][this.drv_num] == 1) q_out.push_back(this.v_if.D_push[0][this.drv_num]);
 				end
 			end
 		end
@@ -46,7 +46,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
 
 	function report();
 		$display("Driver %d",this.drv_num);
-		foreach(q_out(i)) $display("Pos %d de la cola es = %b",i,q[i]);
+		foreach(q_out[i]) $display("Pos %d de la cola es = %b",i,q_out[i]);
 	endfunction
 	
 
@@ -54,6 +54,3 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16)(input clk);
 
 endclass
 
-salida
-
-./salida -gui
