@@ -47,7 +47,7 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   int tiempo;
   
   constraint valid_addrs {id < drivers;};
-  constraint source_addrs {source < drivers;};
+  constraint source_addrs {source < drivers; source >= 0;};
   constraint self_addrs {id != source;};
  
   

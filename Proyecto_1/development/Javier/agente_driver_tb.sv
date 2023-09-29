@@ -88,13 +88,13 @@ initial begin
         end
  
   	fork
-		begin
-			for(int i = 0; i<Drivers; i++ ) begin
-				fork
+		for(int i = 0; i<Drivers; i++ ) begin
+			fork	
      					automatic int k = i;
 					driver[k].run();
-				join_none
-			end
+				
+			
+			join_none	
 		end
 		agente.run();
 	join_none
