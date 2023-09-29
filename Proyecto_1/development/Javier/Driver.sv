@@ -30,16 +30,15 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 				this.v_if.pndng[0][this.drv_num] = 1;
 				this.v_if.D_pop[0][this.drv_num] = q_in[0];	
 			end
-					if(this.v_if.pop[0][this.drv_num] == 1) begin
-						$display("pop %d dato %b",this.drv_num, v_if.D_pop[0][this.drv_num]);
-						q_in.delete(0);
-					end
-					ag_dr_mbx.get(ag_dr_transaction); 
-						$display("Transaccion ag_dr recibida");
-									this.q_in.push_back(ag_dr_transaction.dato);
-						this.v_if.pndng[0][this.drv_num] = 1;
-					
-					if (this.v_if.push[0][this.drv_num] == 1) q_out.push_back(this.v_if.D_push[0][this.drv_num]);
+			if(this.v_if.pop[0][this.drv_num] == 1) begin
+					$display("pop %d dato %b",this.drv_num, v_if.D_pop[0][this.drv_num]);
+					q_in.delete(0);
+			end
+			if(ag_dr_mbx.try_get(ag_dr_transaction)); 
+				$display("Transaccion ag_dr recibida");
+				this.q_in.push_back(ag_dr_transaction.dato);
+				this.v_if.pndng[0][this.drv_num] = 1;
+			if (this.v_if.push[0][this.drv_num] == 1) q_out.push_back(this.v_if.D_push[0][this.drv_num]);
 				
 			
 		end
