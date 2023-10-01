@@ -1,5 +1,5 @@
-`include "bus_if.sv"
-`include "Clases_mailbox.sv"
+`include "bus_if"
+`include "Clases_mailbox"
 class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
     virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
     int drv_num;
@@ -15,6 +15,9 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 		this.drv_num = drv_num;
 		$display("Driver %d a iniciado",this.drv_num);
 		this.ag_dr_transaction = new();
+      	//this.ag_dr_transaction.valid_addrs.constraint_mode(1);
+      	//this.ag_dr_transaction.self_addrs.constraint_mode(1);
+      	//this.ag_dr_transaction.broadcast.constraint_mode(0);
 		this.ag_dr_mbx = new();
     endfunction
 

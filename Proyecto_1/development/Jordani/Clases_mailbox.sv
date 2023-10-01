@@ -46,10 +46,10 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   rand int source;
   int tiempo;
   
-  //constraint valid_addrs {id < drivers;};
+  constraint valid_addrs {id < drivers;};
   constraint source_addrs {source < drivers; source >= 0;};
-  //constraint self_addrs {id != source;};
-  constraint broadcast {id == {8{1'b1}};};
+  constraint self_addrs {id != source;};
+  //constraint broadcast {id == {8{1'b1}};};
  
   
 
