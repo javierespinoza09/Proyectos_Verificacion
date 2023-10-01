@@ -77,7 +77,7 @@ initial begin
 	agente = new();
   	agente.gen_ag_mbx = gen_ag_mbx;
   	gen_ag_transaction = new();
-	gen_ag_transaction.cant_datos = 20;
+	gen_ag_transaction.cant_datos = 10;
     gen_ag_mbx.put(gen_ag_transaction);
   
 	for (int i = 0; i<Drivers; i++ ) begin
@@ -109,8 +109,21 @@ initial begin
 	join_none
   
 end
+  
 initial begin
-#5000
+  #5000
+  for(int i = 0; i<Drivers; i++ ) begin
+    fork	
+      automatic int k = i;
+      driver[k].report();
+    
+    join_none	
+  end
+  
+end
+  
+initial begin
+#10000
   $finish;
 end
 endmodule
