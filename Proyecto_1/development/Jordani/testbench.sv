@@ -3,6 +3,7 @@
 `timescale 1ns/10ps
 `include "Driver"
 `include "example_agente"
+`include "checker_scoreboard"
 //`include "bus_if.sv"
 
 
@@ -15,6 +16,7 @@ parameter pckg_sz = 16;
     Driver #(.drvrs(Drivers)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
+  	checker_scoreboard  chk_sb_m;
   //  v_if.rst = reset_tb;
    
   ///////////////////////////
@@ -31,6 +33,7 @@ parameter pckg_sz = 16;
     end
   
   gen_ag_mbx gen_ag_mbx = new();
+  ag_chk_sb_mbx ag_chk_sb_mbx = new();
   //////////////////
   //instanciar DUT//
   //////////////////
@@ -76,9 +79,12 @@ end
 initial begin
 	agente = new();
   	agente.gen_ag_mbx = gen_ag_mbx;
+  	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
   	gen_ag_transaction = new();
 	gen_ag_transaction.cant_datos = 10;
     gen_ag_mbx.put(gen_ag_transaction);
+  	chk_sb_m = new();
+  	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
   
 	for (int i = 0; i<Drivers; i++ ) begin
 
