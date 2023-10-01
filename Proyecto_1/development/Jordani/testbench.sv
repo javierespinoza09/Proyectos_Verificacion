@@ -1,31 +1,40 @@
+// Code your testbench here
+// or browse Examples
 `timescale 1ns/10ps
-`include "example_driver"
+`include "Driver"
+`include "example_agente"
+//`include "bus_if.sv"
 
 
-module bus_tb;
+module agente_driver_tb;
 reg reset_tb,clk_tb;
-reg pndng_tb [0:0][3:0];
-reg [15:0] D_pop_tb [0:0][3:0];
-wire push_tb [0:0][3:0];
-wire pop_tb [0:0][3:0];
-wire [15:0] D_push_tb [0:0][3:0];
 parameter Drivers = 4;
 parameter pckg_sz = 16;
 
   
-  example_driver #(.drvrs(Drivers)) driver [Drivers-1:0];
-  bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
- 
+    Driver #(.drvrs(Drivers)) driver [Drivers];
+    Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
+    bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
+  //  v_if.rst = reset_tb;
+   
   ///////////////////////////
   //inicializar los mailbox//
   ///////////////////////////
-  ag_chk_sb_mbx ag_chk_sb_mbx = new();
-  ag_dr_mbx ag_dr_mbx[Drivers-1:0];
+    //ag_chk_sb_mbx ag_chk_sb_mbx = new();
+    ag_dr_mbx ag_dr_mbx[Drivers];
+    initial begin
+	    for(int i = 0; i < Drivers; i++) begin
+		   automatic int k = i;
+		   ag_dr_mbx[k] = new();
+
+    end
+    end
   
+  gen_ag_mbx gen_ag_mbx = new();
   //////////////////
   //instanciar DUT//
   //////////////////
-  bs_gnrtr_n_rbtr DUT_0 (.clk(clk_tb),
+  bs_gnrtr_n_rbtr DUT_0 (.clk(v_if.clk),
                          .reset(reset_tb),
                          .pndng(v_if.pndng),
                          .push(v_if.push),
@@ -37,7 +46,8 @@ parameter pckg_sz = 16;
   
   
   
-  
+//clase de prueba
+  gen_ag gen_ag_transaction;
   
   
 ///////////////////////  
@@ -46,7 +56,7 @@ parameter pckg_sz = 16;
   
 initial begin
   $dumpfile("test_bus.vcd");
-  $dumpvars(0,bus_tb);
+  $dumpvars(0,agente_driver_tb);
 end
 
 initial begin
@@ -57,42 +67,50 @@ end
 end
 
 initial begin
-  clk_tb = 0;
-  reset_tb = 1;
-  #50
-  reset_tb = 0;
-  for(int i = 0; i<Drivers; i++ ) begin
-    fork begin
-      automatic int k = i;
-      driver[k] = new(k);
-      ///////////////
-      //constraints//
-      ///////////////
-      driver[k].valid_addrs.constraint_mode(1);
-      driver[k].self_addrs.constraint_mode(1);
-      ///////////////  
-      driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
-      driver[k].v_if = v_if;
-      driver[k].randomize();
-      driver[k].display();
-      $display("Driver_0x%0d",driver[k].drv_num);
-    end 
-    join
-  end 
-  
-  
-  	for(int i = 0; i<Drivers; i++ ) begin
-    		fork
-      			automatic int k = i;
-			driver[k].run();
-			driver[k].recibido();
-		join_none
-	end
-
-  
-end 
+    clk_tb = 0;
+    reset_tb = 1;
+    #50
+    reset_tb = 0;
+    
+end
 initial begin
-#5000;
+	agente = new();
+  	agente.gen_ag_mbx = gen_ag_mbx;
+  	gen_ag_transaction = new();
+	gen_ag_transaction.cant_datos = 20;
+    gen_ag_mbx.put(gen_ag_transaction);
+  
+	for (int i = 0; i<Drivers; i++ ) begin
+
+            automatic int k = i;
+            driver[k] = new(k);
+            ///////////////
+            //constraints//
+            ///////////////
+            agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
+            driver[k].ag_dr_mbx = ag_dr_mbx[k];
+            driver[k].v_if = v_if;
+           $display("Driver %0d",driver[k].drv_num);
+        end
+
+ 
+  	fork
+		agente.run();
+
+		for(int i = 0; i<Drivers; i++ ) begin
+			fork	
+     					automatic int k = i;
+					driver[k].run();
+				
+			
+				join_none	
+		end
+//		agente.run();
+	join_none
+  
+end
+initial begin
+#5000
   $finish;
 end
 endmodule
