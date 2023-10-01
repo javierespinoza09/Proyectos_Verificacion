@@ -10,7 +10,7 @@ parameter Drivers = 4;
 parameter pckg_sz = 16;
 
   
-    Driver #(.drvrs(Drivers)) driver [Drivers-1:0];
+    Driver #(.drvrs(Drivers)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
   //  v_if.rst = reset_tb;
@@ -19,9 +19,13 @@ parameter pckg_sz = 16;
   //inicializar los mailbox//
   ///////////////////////////
     //ag_chk_sb_mbx ag_chk_sb_mbx = new();
-    ag_dr_mbx ag_dr_mbx[Drivers-1:0];
+    ag_dr_mbx ag_dr_mbx[Drivers];
     initial begin
-        for(int i = 0; i < Drivers; i++) ag_dr_mbx[i] = new();
+	    for(int i = 0; i < Drivers; i++) begin
+		   automatic int k = i;
+		   ag_dr_mbx[k] = new();
+
+    end
     end
   
   //////////////////
@@ -59,49 +63,46 @@ end
 end
 
 initial begin
-	agente = new(20);
     clk_tb = 0;
     reset_tb = 1;
     #50
     reset_tb = 0;
     
-    //agente = new(20);
+end
+initial begin
+	agente = new(20);
+	
+	for (int i = 0; i<Drivers; i++ ) begin
 
-    for (int i = 0; i<Drivers; i++ ) begin
-      
             automatic int k = i;
             driver[k] = new(k);
             ///////////////
             //constraints//
             ///////////////
-            agente.ag_dr_mbx[k] = ag_dr_mbx[k];
+            agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
             driver[k].ag_dr_mbx = ag_dr_mbx[k];
-
-           // driver[k].valid_addrs.constraint_mode(1);
-            //driver[k].self_addrs.constraint_mode(1);
-            ///////////////  
-            //driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
             driver[k].v_if = v_if;
-            ///driver[k].randomize();
-            //driver[k].display();
-            $display("Driver %0d",driver[k].drv_num);
+           $display("Driver %0d",driver[k].drv_num);
         end
+
  
   	fork
+		agente.run();
+
 		for(int i = 0; i<Drivers; i++ ) begin
 			fork	
      					automatic int k = i;
 					driver[k].run();
 				
 			
-			join_none	
+				join_none	
 		end
-		agente.run();
+//		agente.run();
 	join_none
   
-end 
+end
 initial begin
-#5000;
+#5000
   $finish;
 end
 endmodule
