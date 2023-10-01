@@ -98,11 +98,31 @@ initial begin
 				join_none	
 		end
 //		agente.run();
-	join_none
+	join
+
+	for(int i = 0; i<Drivers; i++ ) begin
+		fork
+			automatic int k = i;
+                        driver[k].report();
+                join_none
+	end
+
+
   
 end
+
 initial begin
-#5000
+	#5000
+	for(int i = 0; i<Drivers; i++ ) begin
+                fork
+                        automatic int k = i;
+                        driver[k].report();
+                join_none
+        end
+end
+
+initial begin
+#10000
   $finish;
 end
 endmodule
