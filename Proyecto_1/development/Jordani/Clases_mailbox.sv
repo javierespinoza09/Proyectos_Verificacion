@@ -43,15 +43,20 @@ endclass
 class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   rand bit [packagesize-9:0] dato;
   rand bit [7:0] id;
-  int source;
+  rand int source;
   int tiempo;
   
-  constraint valid_addrs {id < drivers;};
-  constraint self_addrs {id != source;};
+  //constraint valid_addrs {id < drivers;};
+  constraint source_addrs {source < drivers; source >= 0;};
+  //constraint self_addrs {id != source;};
+  constraint broadcast {id < 256; id > 254;};
+ 
   
-  function new (int driver, int tiempo);
-    this.tiempo = tiempo;
-    this.source = driver;
+
+  function new ();   //int driver, int tiempo);
+    //this.tiempo = tiempo;
+    //this.source = driver;
+    $display("Se inicializa la clase ag_dr");
   endfunction;
   
   function void print(string tag = "");
@@ -83,4 +88,7 @@ endclass
 ////Mailboxes//////
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
+typedef mailbox #(gen_ag) gen_ag_mbx ;
+
+
 /////
