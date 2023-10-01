@@ -81,7 +81,7 @@ initial begin
   	agente.gen_ag_mbx = gen_ag_mbx;
   	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
   	gen_ag_transaction = new();
-	gen_ag_transaction.cant_datos = 10;
+	gen_ag_transaction.cant_datos = 5;
     gen_ag_mbx.put(gen_ag_transaction);
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
@@ -102,6 +102,7 @@ initial begin
  
   	fork
 		agente.run();
+        chk_sb_m.run();
 
 		for(int i = 0; i<Drivers; i++ ) begin
 			fork	
