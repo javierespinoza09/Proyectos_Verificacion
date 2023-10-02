@@ -70,11 +70,13 @@ class ag_chk_sb #(parameter packagesize = 16);
   bit [packagesize-9:0] payload ;
   bit [7:0] id ;
   int transaction_time;
+  int source;
   
-  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo);
+  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo, source);
     this.payload = info;
     this.id = destino;
     this.transaction_time = tiempo;
+    this.source = source;
   endfunction
   
   function display();
@@ -89,6 +91,6 @@ endclass
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
-
+typedef mailbox #(mon_chk_sb) mon_chk_sb_mbx ;
 
 /////
