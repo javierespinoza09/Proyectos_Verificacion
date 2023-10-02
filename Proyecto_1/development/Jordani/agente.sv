@@ -40,10 +40,11 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
         for (int i = 0; i < this.num_transacciones; i++) begin
 		this.ag_dr_transaction = new();
             	this.ag_dr_transaction.randomize();
+          		this.ag_dr_transaction.tiempo = $time;
 	        //$display("Mensaje enviado a %d Antes",this.ag_dr_transaction.source);
             	this.ag_dr_mbx_array[this.ag_dr_transaction.source].put(this.ag_dr_transaction);
           	//comunicación con el checker/scoreboard
-          		this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, this.ag_dr_transaction.tiempo);
+          		this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, this.ag_dr_transaction.tiempo, this.ag_dr_transaction.source);
           		this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
           
           
