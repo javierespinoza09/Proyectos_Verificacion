@@ -6,6 +6,7 @@
 `include "checker_scoreboard.sv"
 `include "Generador.sv"
 `include "Library.sv"
+`include "Monitor.sv"
 //`include "bus_if.sv"
 
 
@@ -17,6 +18,7 @@ parameter pckg_sz = 16;
   //Clases de los módulos//
     Driver #(.drvrs(Drivers)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
+    Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor;
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
   	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
   	checker_scoreboard  chk_sb_m;
@@ -82,6 +84,7 @@ initial begin
     
 end
 initial begin
+	monitor = new(0);
 	agente = new();
     generador = new();
     tst_gen_transaction = new();
