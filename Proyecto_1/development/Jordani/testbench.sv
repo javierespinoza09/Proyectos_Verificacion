@@ -37,10 +37,11 @@ parameter pckg_sz = 16;
   gen_ag_mbx gen_ag_mbx = new();
   ag_chk_sb_mbx ag_chk_sb_mbx = new();
   mon_chk_sb_mbx mon_chk_sb_mbx = new();
+  tst_gen_mbx tst_gen_mbx = new ();
   //////////////////
   //instanciar DUT//
   //////////////////
-  bs_gnrtr_n_rbtr DUT_0 (.clk(v_if.clk),
+  bs_gnrtr_n_rbtr  #(.drvrs(Drivers)) DUT_0 (.clk(v_if.clk),
                          .reset(reset_tb),
                          .pndng(v_if.pndng),
                          .push(v_if.push),
@@ -53,8 +54,8 @@ parameter pckg_sz = 16;
   
   
 //clase de prueba
-  gen_ag gen_ag_transaction;
-  
+  //gen_ag gen_ag_transaction;
+  tst_gen tst_gen_transaction;
   
 ///////////////////////  
 //Ciclo de ejecución// 
@@ -82,9 +83,14 @@ end
 initial begin
 	agente = new();
     generador = new();
+    tst_gen_transaction = new();
+  	tst_gen_transaction.caso = broadcast;
+  	generador.tst_gen_mbx = tst_gen_mbx;
+    tst_gen_mbx.put(tst_gen_transaction);
   	agente.gen_ag_mbx = gen_ag_mbx;
   	generador.gen_ag_mbx = gen_ag_mbx;
   	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
+  	
     generador.run();
   	//gen_ag_transaction = new();
 	//gen_ag_transaction.cant_datos = 10;
@@ -92,7 +98,6 @@ initial begin
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
   	chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
-  
 	for (int i = 0; i<Drivers; i++ ) begin
 
             automatic int k = i;
