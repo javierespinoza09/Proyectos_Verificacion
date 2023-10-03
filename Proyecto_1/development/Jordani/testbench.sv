@@ -4,6 +4,7 @@
 `include "Driver"
 `include "example_agente"
 `include "checker_scoreboard"
+`include "Generador"
 //`include "bus_if.sv"
 
 
@@ -12,10 +13,11 @@ reg reset_tb,clk_tb;
 parameter Drivers = 4;
 parameter pckg_sz = 16;
 
-  
+  //Clases de los módulos//
     Driver #(.drvrs(Drivers)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
+  	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
   	checker_scoreboard  chk_sb_m;
   //  v_if.rst = reset_tb;
    
@@ -79,11 +81,14 @@ initial begin
 end
 initial begin
 	agente = new();
+    generador = new();
   	agente.gen_ag_mbx = gen_ag_mbx;
+  	generador.gen_ag_mbx = gen_ag_mbx;
   	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
-  	gen_ag_transaction = new();
-	gen_ag_transaction.cant_datos = 10;
-    gen_ag_mbx.put(gen_ag_transaction);
+    generador.run();
+  	//gen_ag_transaction = new();
+	//gen_ag_transaction.cant_datos = 10;
+    //gen_ag_mbx.put(gen_ag_transaction);
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
   	chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
