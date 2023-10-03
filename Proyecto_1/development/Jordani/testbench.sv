@@ -34,6 +34,7 @@ parameter pckg_sz = 16;
   
   gen_ag_mbx gen_ag_mbx = new();
   ag_chk_sb_mbx ag_chk_sb_mbx = new();
+  mon_chk_sb_mbx mon_chk_sb_mbx = new();
   //////////////////
   //instanciar DUT//
   //////////////////
@@ -85,6 +86,7 @@ initial begin
     gen_ag_mbx.put(gen_ag_transaction);
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
+  	chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
   
 	for (int i = 0; i<Drivers; i++ ) begin
 

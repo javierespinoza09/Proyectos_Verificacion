@@ -41,9 +41,18 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
         for (int i = 0; i < this.num_transacciones; i++) begin
 			this.ag_dr_transaction = new();
 			case (this.gen_ag_transaction.data_modo)
-				max_variabilidad: ag_dr_transaction.data_variablility.constraint_mode(1);
-				max_aleatoriedad: ag_dr_transaction.data_variablility.constraint_mode(0);
-				default: max_aleatoriedad: ag_dr_transaction.data_variablility.constraint_mode(0);
+				max_variabilidad: begin
+                  ag_dr_transaction.data_variablility_h.constraint_mode(1);
+                  ag_dr_transaction.data_variablility_l.constraint_mode(0);
+                end
+				max_aleatoriedad: begin 
+                  ag_dr_transaction.data_variablility_h.constraint_mode(1);
+                  ag_dr_transaction.data_variablility_l.constraint_mode(0);
+                end
+				default: begin 
+                  ag_dr_transaction.data_variablility_h.constraint_mode(1);
+                   	ag_dr_transaction.data_variablility_l.constraint_mode(0);
+                end
 			endcase
 
 			case (this.gen_ag_transaction.id_modo)

@@ -35,6 +35,7 @@ class mon_chk_sb;
   int payload;
   int receiver;
   int tiempo;
+  int tipo_interaccion;
   function new ();
   endfunction;
 endclass
@@ -46,6 +47,7 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   rand bit [7:0] id;
   rand int source;
   int tiempo;
+  int variability;
   
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
   //Respecto al ID
@@ -53,13 +55,15 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   constraint source_addrs {source < drivers;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
   constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
-  constraint data_variablility {dato inside {(packagesize-9){1'b1},0}};
+  constraint data_variablility_h {dato == {(packagesize-8){1'b1}};};
+  constraint data_variablility_l {dato == {(packagesize-8){1'b0}};};
  
   
 
   function new ();   //int driver, int tiempo);
     //this.tiempo = tiempo;
     //this.source = driver;
+    variability = packagesize - 9;
     $display("Se inicializa la clase ag_dr");
   endfunction;
   
@@ -76,10 +80,11 @@ class ag_chk_sb #(parameter packagesize = 16);
   int transaction_time;
   int source;
   
-  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo);
+  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo, source);
     this.payload = info;
     this.id = destino;
     this.transaction_time = tiempo;
+    this.source = source;
   endfunction
   
   function display();
@@ -94,7 +99,8 @@ endclass
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
-
-/////
+typedef mailbox #(mon_chk_sb) mon_chk_sb_mbx;
+////
 typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
 typedef enum {self_id, any_id, invalid_id, normal_id} gen_ag_id_modo;
+typedef enum {bus_push, bus_pop} monitor_modo;
