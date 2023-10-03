@@ -21,7 +21,7 @@ class checker_scoreboard;
   
   function report_sb();
     $display("Reporte Cola Scoreboard");
-    foreach(this.q_instrucciones[i]) $display("Posisción %d de la cola, dato = %b , id = %b, instante [%g], salió del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source); //aserciones para el caso broadcast, revisar que lleguen todos
+    foreach(this.q_instrucciones[i]) $display("Posición %d de la cola, dato = %b , id = %b, instante [%g], salió del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source); //aserciones para el caso broadcast, revisar que lleguen todos
 	endfunction
   
   
