@@ -20,7 +20,8 @@ endclass
 
 class gen_ag;
   int cant_datos;
-  int modo;
+  int data_modo;         //Seleccionar los constraints de los datos rand
+  int id_modo;
   int id_rand;
   int id;
   int source_rand;
@@ -46,10 +47,13 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   rand int source;
   int tiempo;
   
-  constraint valid_addrs {id < drivers;};
-  constraint source_addrs {source < drivers; source >= 0;};
-  constraint self_addrs {id != source;};
-  //constraint broadcast {id == {8{1'b1}};};
+  constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
+  //Respecto al ID
+  constraint valid_addrs {id < drivers;};       //Restriccion asegura que la direccion pertenece a un driver
+  constraint source_addrs {source < drivers;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
+  constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
+  //Respecto al DATO
+  constraint data_variablility {dato inside {(packagesize-9){1'b1},0}};
  
   
 
@@ -72,11 +76,10 @@ class ag_chk_sb #(parameter packagesize = 16);
   int transaction_time;
   int source;
   
-  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo, source);
+  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo);
     this.payload = info;
     this.id = destino;
     this.transaction_time = tiempo;
-    this.source = source;
   endfunction
   
   function display();
@@ -91,6 +94,7 @@ endclass
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
-typedef mailbox #(mon_chk_sb) mon_chk_sb_mbx ;
 
 /////
+typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
+typedef enum {self_id, any_id, invalid_id, normal_id} gen_ag_id_modo;
