@@ -122,6 +122,7 @@ initial begin
       		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx[k];
             driver[k].ag_dr_mbx = ag_dr_mbx[k];
             driver[k].v_if = v_if;
+      		monitor[k].v_if = v_if;
            $display("Driver %0d",driver[k].drv_num);
         end
 
@@ -132,11 +133,11 @@ initial begin
 
 		for(int i = 0; i<Drivers; i++ ) begin
 			fork	
-     					automatic int k = i;
-					driver[k].run();
+              automatic int k = i;
+              driver[k].run();
+              monitor[k].run();
 				
-			
-				join_none	
+			join_none	
 		end
 //		agente.run();
 	join_none
