@@ -5,6 +5,7 @@
 `include "agente.sv"
 `include "checker_scoreboard.sv"
 `include "Generador.sv"
+`include "Library.sv"
 //`include "bus_if.sv"
 
 
@@ -84,7 +85,7 @@ initial begin
 	agente = new();
     generador = new();
     tst_gen_transaction = new();
-  	tst_gen_transaction.caso = broadcast;
+  	tst_gen_transaction.caso = normal;
   	generador.tst_gen_mbx = tst_gen_mbx;
     tst_gen_mbx.put(tst_gen_transaction);
   	agente.gen_ag_mbx = gen_ag_mbx;

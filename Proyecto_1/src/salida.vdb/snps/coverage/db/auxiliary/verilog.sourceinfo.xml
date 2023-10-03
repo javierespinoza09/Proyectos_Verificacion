@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE cov SYSTEM "ucdb_srcinfo.dtd">
+  <srcinfo name="/mnt/vol_NFS_rh003/Est_Verif_II2023/JavierEspinozaR_II_2023/Proyectos_Verificacion/Proyecto_1/src"  >
+    <ucapi_version  major_ver="13"  minor_ver="1"  patch_str="R-2020.12-SP2"  />
+      <fileinfo name="testbench.sv"  id="0"  timestamp="1696346449"  />
+      <fileinfo name="Driver.sv"  id="1"  timestamp="1696342172"  />
+      <fileinfo name="bus_if.sv"  id="2"  timestamp="1696342487"  />
+      <fileinfo name="Clases_mailbox.sv"  id="3"  timestamp="1696342208"  />
+      <fileinfo name="agente.sv"  id="4"  timestamp="1696346120"  />
+      <fileinfo name="checker_scoreboard.sv"  id="5"  timestamp="1696342407"  />
+      <fileinfo name="Generador.sv"  id="6"  timestamp="1696342201"  />
+      <fileinfo name="Library.sv"  id="7"  timestamp="1696346205"  />
+      <fileinfo name=""  id="8"  />
+    </srcinfo>
