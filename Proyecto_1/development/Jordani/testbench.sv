@@ -1,13 +1,14 @@
 // Code your testbench here
 // or browse Examples
 `timescale 1ns/10ps
-`include "Driver.sv"
-`include "agente.sv"
-`include "checker_scoreboard.sv"
-`include "Generador.sv"
-`include "Library.sv"
-`include "Monitor.sv"
+`include "Driver"
+`include "example_agente"
+`include "checker_scoreboard"
+`include "Generador"
+`include "monitor"
+`include "Test"
 //`include "bus_if.sv"
+
 
 
 module agente_driver_tb;
@@ -21,6 +22,7 @@ parameter pckg_sz = 16;
     Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor;
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
   	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
+    Test #(.drvrs(Drivers), .pckg_sz(pckg_sz)) test;
   	checker_scoreboard  chk_sb_m;
   //  v_if.rst = reset_tb;
    
@@ -58,7 +60,7 @@ parameter pckg_sz = 16;
   
 //clase de prueba
   //gen_ag gen_ag_transaction;
-  tst_gen tst_gen_transaction;
+  //tst_gen tst_gen_transaction;
   
 ///////////////////////  
 //Ciclo de ejecución// 
@@ -87,10 +89,13 @@ initial begin
 	monitor = new(0);
 	agente = new();
     generador = new();
-    tst_gen_transaction = new();
-  	tst_gen_transaction.caso = normal;
+    test = new();
+    //tst_gen_transaction = new();
+  	//tst_gen_transaction.caso = normal;
   	generador.tst_gen_mbx = tst_gen_mbx;
-    tst_gen_mbx.put(tst_gen_transaction);
+  	test.tst_gen_mbx = tst_gen_mbx;
+    //tst_gen_mbx.put(tst_gen_transaction);
+    test.run();
   	agente.gen_ag_mbx = gen_ag_mbx;
   	generador.gen_ag_mbx = gen_ag_mbx;
   	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
