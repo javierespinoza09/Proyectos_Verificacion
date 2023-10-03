@@ -1,8 +1,0 @@
-Clases_mailbox.sv
-Driver.sv
-Generador.sv
-Library.sv
-agente.sv
-bus_if.sv
-checker_scoreboard.sv
-testbench.sv
