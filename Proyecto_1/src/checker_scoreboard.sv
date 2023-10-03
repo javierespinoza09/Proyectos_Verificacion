@@ -1,13 +1,17 @@
-class checker_scoreboard;
+class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   ag_chk_sb_mbx ag_chk_sb_mbx;
   ag_chk_sb	ag_chk_sb_transaction;
-  mon_chk_sb_mbx mon_chk_sb_mbx;
+  mon_chk_sb_mbx mon_chk_sb_mbx [drvrs];
   mon_chk_sb mon_chk_sb_transaction;
   ag_chk_sb q_instrucciones [$];
   mon_chk_sb q_resultados [$];
   
   function new();
     this.q_instrucciones = {};
+    for(int i = 0;i < drvrs; i++) begin
+		automatic int k = i;	
+		this.mon_chk_sb_mbx[k] = new();
+	end
   endfunction 
   
   task run();
@@ -21,7 +25,7 @@ class checker_scoreboard;
   
   function report_sb();
     $display("Reporte Cola Scoreboard");
-    foreach(this.q_instrucciones[i]) $display("Posisción %d de la cola, dato = %b , id = %b, instante [%g], salió del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source); //aserciones para el caso broadcast, revisar que lleguen todos
+    foreach(this.q_instrucciones[i]) $display("Posición %d de la cola, dato = %b , id = %b, instante [%g], salió del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source); //aserciones para el caso broadcast, revisar que lleguen todos
 	endfunction
   
   

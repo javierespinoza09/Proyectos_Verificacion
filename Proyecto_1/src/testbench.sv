@@ -1,13 +1,14 @@
 // Code your testbench here
 // or browse Examples
 `timescale 1ns/10ps
-`include "Driver.sv"
-`include "agente.sv"
-`include "checker_scoreboard.sv"
-`include "Generador.sv"
-`include "Library.sv"
-`include "Monitor.sv"
+`include "Driver"
+`include "example_agente"
+`include "checker_scoreboard"
+`include "Generador"
+`include "monitor"
+`include "Test"
 //`include "bus_if.sv"
+
 
 
 module agente_driver_tb;
@@ -18,10 +19,11 @@ parameter pckg_sz = 16;
   //Clases de los módulos//
     Driver #(.drvrs(Drivers)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
-    Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor;
+  	Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor[Drivers];
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
   	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
-  	checker_scoreboard  chk_sb_m;
+    Test #(.drvrs(Drivers), .pckg_sz(pckg_sz)) test;
+  	checker_scoreboard #(.drvrs(Drivers), .pckg_sz(pckg_sz)) chk_sb_m;
   //  v_if.rst = reset_tb;
    
   ///////////////////////////
@@ -29,17 +31,19 @@ parameter pckg_sz = 16;
   ///////////////////////////
     //ag_chk_sb_mbx ag_chk_sb_mbx = new();
     ag_dr_mbx ag_dr_mbx[Drivers];
+  	mon_chk_sb_mbx mon_chk_sb_mbx[Drivers];
     initial begin
 	    for(int i = 0; i < Drivers; i++) begin
 		   automatic int k = i;
 		   ag_dr_mbx[k] = new();
+           mon_chk_sb_mbx[k] = new();
 
     end
     end
   
   gen_ag_mbx gen_ag_mbx = new();
   ag_chk_sb_mbx ag_chk_sb_mbx = new();
-  mon_chk_sb_mbx mon_chk_sb_mbx = new();
+  
   tst_gen_mbx tst_gen_mbx = new ();
   //////////////////
   //instanciar DUT//
@@ -58,7 +62,7 @@ parameter pckg_sz = 16;
   
 //clase de prueba
   //gen_ag gen_ag_transaction;
-  tst_gen tst_gen_transaction;
+  //tst_gen tst_gen_transaction;
   
 ///////////////////////  
 //Ciclo de ejecución// 
@@ -84,13 +88,16 @@ initial begin
     
 end
 initial begin
-	monitor = new(0);
+	//monitor = new(0);
 	agente = new();
     generador = new();
-    tst_gen_transaction = new();
-  	tst_gen_transaction.caso = normal;
+    test = new();
+    //tst_gen_transaction = new();
+  	//tst_gen_transaction.caso = normal;
   	generador.tst_gen_mbx = tst_gen_mbx;
-    tst_gen_mbx.put(tst_gen_transaction);
+  	test.tst_gen_mbx = tst_gen_mbx;
+    //tst_gen_mbx.put(tst_gen_transaction);
+    test.run();
   	agente.gen_ag_mbx = gen_ag_mbx;
   	generador.gen_ag_mbx = gen_ag_mbx;
   	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
@@ -101,15 +108,18 @@ initial begin
     //gen_ag_mbx.put(gen_ag_transaction);
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
-  	chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
+  	//chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
 	for (int i = 0; i<Drivers; i++ ) begin
 
             automatic int k = i;
             driver[k] = new(k);
+     		monitor[k] = new(k);
             ///////////////
             //constraints//
             ///////////////
             agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
+      		chk_sb_m.mon_chk_sb_mbx[k] = mon_chk_sb_mbx[k];
+      		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx[k];
             driver[k].ag_dr_mbx = ag_dr_mbx[k];
             driver[k].v_if = v_if;
            $display("Driver %0d",driver[k].drv_num);

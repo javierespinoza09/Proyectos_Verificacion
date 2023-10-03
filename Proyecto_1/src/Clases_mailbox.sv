@@ -39,6 +39,7 @@ class mon_chk_sb;
   int id;
   int payload;
   int receiver;
+  int sender;
   int tiempo;
   int tipo_interaccion;
   function new ();
@@ -108,6 +109,7 @@ typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
 typedef mailbox #(mon_chk_sb) mon_chk_sb_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
+
 
 ////
 typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;

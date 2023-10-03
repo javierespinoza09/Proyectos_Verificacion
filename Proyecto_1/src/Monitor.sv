@@ -17,8 +17,8 @@ class Monitor #(parameter pckg_sz = 16, parameter drvrs = 4);
 			@(posedge this.v_if.clk);
 			if(this.v_if.pop[0][this.mnt_num]) begin
 				this.mon_chk_sb_transaction = new();
-				this.mon_chk_sb_transaction.id = this.v_if.D_pop[0][this.mnt_num][drvrs-1:drvrs-9];
-				this.mon_chk_sb_transaction.payload = this.v_if.D_pop[0][this.mnt_num][drvrs-9:0];
+				this.mon_chk_sb_transaction.id = this.v_if.D_pop[0][this.mnt_num][pckg_sz-1:pckg_sz-9];
+				this.mon_chk_sb_transaction.payload = this.v_if.D_pop[0][this.mnt_num][pckg_sz-9:0];
 				this.mon_chk_sb_transaction.sender = this.mnt_num;
 				this.mon_chk_sb_transaction.tiempo = $time;
 				this.mon_chk_sb_transaction.tipo_interaccion = bus_pop;
@@ -27,8 +27,8 @@ class Monitor #(parameter pckg_sz = 16, parameter drvrs = 4);
 			end
 			if(this.v_if.push[0][this.mnt_num]) begin
                                 this.mon_chk_sb_transaction = new();
-                                this.mon_chk_sb_transaction.id = this.v_if.D_push[0][this.mnt_num][drvrs-1:drvrs-9];
-                                this.mon_chk_sb_transaction.payload = this.v_if.D_push[0][this.mnt_num][drvrs-9:0];
+                                this.mon_chk_sb_transaction.id = this.v_if.D_push[0][this.mnt_num][pckg_sz-1:pckg_sz-9];
+                                this.mon_chk_sb_transaction.payload = this.v_if.D_push[0][this.mnt_num][pckg_sz-9:0];
                                 this.mon_chk_sb_transaction.receiver = this.mnt_num;
                                 this.mon_chk_sb_transaction.tiempo = $time;
 				this.mon_chk_sb_transaction.tipo_interaccion = bus_push;
