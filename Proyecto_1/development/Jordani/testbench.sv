@@ -19,7 +19,7 @@ parameter pckg_sz = 16;
   //Clases de los módulos//
     Driver #(.drvrs(Drivers)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
-    Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor;
+  	Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor[Drivers];
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
   	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
     Test #(.drvrs(Drivers), .pckg_sz(pckg_sz)) test;
@@ -86,7 +86,7 @@ initial begin
     
 end
 initial begin
-	monitor = new(0);
+	//monitor = new(0);
 	agente = new();
     generador = new();
     test = new();
@@ -111,6 +111,7 @@ initial begin
 
             automatic int k = i;
             driver[k] = new(k);
+     		monitor[k] = new(k);
             ///////////////
             //constraints//
             ///////////////
