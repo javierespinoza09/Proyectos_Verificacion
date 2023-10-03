@@ -1,13 +1,17 @@
-class checker_scoreboard;
+class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   ag_chk_sb_mbx ag_chk_sb_mbx;
   ag_chk_sb	ag_chk_sb_transaction;
-  mon_chk_sb_mbx mon_chk_sb_mbx;
+  mon_chk_sb_mbx mon_chk_sb_mbx [drvrs];
   mon_chk_sb mon_chk_sb_transaction;
   ag_chk_sb q_instrucciones [$];
   mon_chk_sb q_resultados [$];
   
   function new();
     this.q_instrucciones = {};
+    for(int i = 0;i < drvrs; i++) begin
+		automatic int k = i;	
+		this.mon_chk_sb_mbx[k] = new();
+	end
   endfunction 
   
   task run();
