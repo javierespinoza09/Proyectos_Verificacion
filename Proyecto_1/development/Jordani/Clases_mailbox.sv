@@ -47,8 +47,8 @@ class mon_chk_sb;
 endclass
 
 
-class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
-  rand bit [packagesize-9:0] dato;
+class ag_dr #(parameter drvrs = 4, parameter pckg_sz = 16);
+  rand bit [pckg_sz-9:0] dato;
   rand bit [7:0] id;
   rand int source;
   int tiempo;
@@ -57,21 +57,21 @@ class ag_dr #(parameter packagesize = 16, parameter drivers = 4);
   
   //Respecto al Source
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
-  constraint source_addrs {source < drivers;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
+  constraint source_addrs {source < drvrs;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
   //Respecto al ID
-  constraint valid_addrs {id < drivers;};       //Restriccion asegura que la direccion pertenece a un driver
+  constraint valid_addrs {id < drvrs;};       //Restriccion asegura que la direccion pertenece a un driver
   constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
-  constraint data_variablility {dato inside {{(packagesize-8){1'b1}},{(packagesize-8){1'b0}}};};
+  constraint data_variablility {dato inside {{(pckg_sz-8){1'b1}},{(pckg_sz-8){1'b0}}};};
   
-  constraint fixed_source {source == fix_source;};
+  //constraint fixed_source {source == fix_source;};
   
   
 
   function new ();   //int driver, int tiempo);
     //this.tiempo = tiempo;
     //this.source = driver;
-    variability = packagesize - 9;
+    variability = pckg_sz - 9;
     $display("Se inicializa la clase ag_dr");
   endfunction;
   
@@ -104,6 +104,7 @@ endclass
 
 
 ////Mailboxes//////
+ 
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
@@ -115,4 +116,4 @@ typedef mailbox #(tst_gen) tst_gen_mbx;
 typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
 typedef enum {self_id, any_id, invalid_id, fix_source ,normal_id} gen_ag_id_modo;
 typedef enum {bus_push, bus_pop} monitor_modo;
-typedef enum {normal, broadcast, one_to_all, all_to_one} Generador_modo;
+typedef enum {normal, broadcast, one_to_all, all_to_one, rand_payload} Generador_modo;
