@@ -121,7 +121,7 @@ initial begin
       		chk_sb_m.mon_chk_sb_mbx[k] = mon_chk_sb_mbx[k];
       		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx[k];
             driver[k].ag_dr_mbx = ag_dr_mbx[k];
-            driver[k].v_if = v_if;
+            driver[k].fifo_in.v_if = v_if;
       		monitor[k].v_if = v_if;
            $display("Driver %0d",driver[k].drv_num);
         end

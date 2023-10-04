@@ -1,0 +1,6 @@
+*design* DebussyLib (btIdent Verdi_R-2020.12-SP2)
+Command arguments:  -lib  /mnt/vol_NFS_rh003/Est_Verif_II2023/JavierEspinozaR_II_2023/Proyectos_Verificacion/Proyecto_1/development/Javier/salida.daidir/work  -saveLevel  -elab  /mnt/vol_NFS_rh003/Est_Verif_II2023/JavierEspinozaR_II_2023/Proyectos_Verificacion/Proyecto_1/development/Javier/salida.daidir/kdb  -simflow  -simdir  /mnt/vol_NFS_rh003/Est_Verif_II2023/JavierEspinozaR_II_2023/Proyectos_Verificacion/Proyecto_1/development/Javier/salida.daidir/kdb_libs  -topfile  /mnt/vol_NFS_rh003/Est_Verif_II2023/JavierEspinozaR_II_2023/Proyectos_Verificacion/Proyecto_1/development/Javier/salida.daidir/.elabcomTopFile  -pkgfile  /mnt/vol_NFS_rh003/Est_Verif_II2023/JavierEspinozaR_II_2023/Proyectos_Verificacion/Proyecto_1/development/Javier/salida.daidir/.elabcomPkgFile  -ssz  -ssv  -ssy  -Lf  work  +disable_message+C00380+C00381  +disable_message+C00388+C00389  -SNPS_ELABCOM  -saveElab 
+
+*Warning* 'mon_chk_sb' is not a parameter type.
+"Monitor.sv", 3: 
+Total	0 error(s),   1 warning(s)

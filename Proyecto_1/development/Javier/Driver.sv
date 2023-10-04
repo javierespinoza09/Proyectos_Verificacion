@@ -2,7 +2,7 @@
 `include "Clases_mailbox.sv"
 `include "e_fifo.sv"
 class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 8);
-    	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
+    	//virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
     	int drv_num;
 	fifo_in #(.packagesize(pckg_sz), .drvrs(drvrs), .fifo_size(fifo_size)) fifo_in;
     	ag_dr_mbx ag_dr_mbx;
@@ -15,7 +15,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 		this.ag_dr_transaction = new();
 		this.ag_dr_mbx = new();
 		this.fifo_in = new(drv_num);
-		this.fifo_in.v_if = v_if;
+		//this.fifo_in.v_if = v_if;
 		//this.v_if.pndng[0][this.drv_num] = 0;
     	endfunction
 
@@ -25,7 +25,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 	*/
 	
 	virtual task run();
-		this.v_if.pndng[0][this.drv_num] = 0;
+		//this.v_if.pndng[0][this.drv_num] = 0;
 		fifo_in.if_signal();
 		forever begin	
 			this.ag_dr_mbx.get(ag_dr_transaction);

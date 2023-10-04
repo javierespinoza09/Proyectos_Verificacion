@@ -1,0 +1,122 @@
+{
+    "vcs_paramclassrepository": [
+        "vcs_paramclassrepository",
+        "hEeZs",
+        "module",
+        1
+    ],
+    "_vcs_unit__2372689572": [
+        "_vcs_unit__2372689572",
+        "dECgz",
+        "module",
+        2
+    ],
+    "std": [
+        "std",
+        "reYIK",
+        "module",
+        3
+    ],
+    "bus_if": [
+        "bus_if",
+        "mWbA5",
+        "module",
+        4
+    ],
+    "prll_d_reg": [
+        "prll_d_reg",
+        "HY5Uv",
+        "module",
+        5
+    ],
+    "prll_d_ltch_no_rst": [
+        "prll_d_ltch_no_rst",
+        "FEgfp",
+        "module",
+        6
+    ],
+    "prll_d_ltch": [
+        "prll_d_ltch",
+        "TsJub",
+        "module",
+        7
+    ],
+    "pos_edge": [
+        "pos_edge",
+        "EqKNN",
+        "module",
+        8
+    ],
+    "neg_edge": [
+        "neg_edge",
+        "k0NrH",
+        "module",
+        9
+    ],
+    "tri_buf": [
+        "tri_buf",
+        "g9v9W",
+        "module",
+        10
+    ],
+    "parallel_serial": [
+        "parallel_serial",
+        "maQnz",
+        "module",
+        11
+    ],
+    "serializer_0000": [
+        "serializer_0000",
+        "yI6HV",
+        "module",
+        12
+    ],
+    "Read_st_Mchn": [
+        "Read_st_Mchn",
+        "LUjI7",
+        "module",
+        13
+    ],
+    "Write_st_Mchn": [
+        "Write_st_Mchn",
+        "atLs2",
+        "module",
+        14
+    ],
+    "bs_ntrfs": [
+        "bs_ntrfs",
+        "tSaKw",
+        "module",
+        15
+    ],
+    "bs_gnrtr": [
+        "bs_gnrtr",
+        "V7vhV",
+        "module",
+        16
+    ],
+    "bs_ntrfs_n_rbtr": [
+        "bs_ntrfs_n_rbtr",
+        "hSZxw",
+        "module",
+        17
+    ],
+    "bs_gnrtr_n_rbtr_0000": [
+        "bs_gnrtr_n_rbtr_0000",
+        "tn8Y7",
+        "module",
+        18
+    ],
+    "agente_driver_tb": [
+        "agente_driver_tb",
+        "xjxkJ",
+        "module",
+        19
+    ],
+    "...MASTER...": [
+        "SIM",
+        "amcQw",
+        "module",
+        20
+    ]
+}
