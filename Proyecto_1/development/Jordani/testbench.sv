@@ -1,23 +1,24 @@
 // Code your testbench here
 // or browse Examples
 `timescale 1ns/10ps
-`include "Driver"
-`include "example_agente"
-`include "checker_scoreboard"
-`include "Generador"
-`include "monitor"
-`include "Test"
-//`include "bus_if.sv"
+`include "Driver.sv"
+`include "agente.sv"
+`include "checker_scoreboard.sv"
+`include "Generador.sv"
+`include "Monitor.sv"
+`include "Test.sv"
+//`include "Library.sv"
 
 
 
 module agente_driver_tb;
 reg reset_tb,clk_tb;
-parameter Drivers = 4;
-parameter pckg_sz = 16;
+parameter Drivers = 6;
+parameter pckg_sz = 32;
+parameter fifo_size = 8;
 
   //Clases de los módulos//
-    Driver #(.drvrs(Drivers)) driver [Drivers];
+    Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
   	Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor[Drivers];
     bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
@@ -30,9 +31,21 @@ parameter pckg_sz = 16;
   //inicializar los mailbox//
   ///////////////////////////
     //ag_chk_sb_mbx ag_chk_sb_mbx = new();
-    ag_dr_mbx ag_dr_mbx[Drivers];
+    ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx[Drivers];
   	mon_chk_sb_mbx mon_chk_sb_mbx[Drivers];
-    initial begin
+    
+  
+  gen_ag_mbx gen_ag_mbx= new();
+  ag_chk_sb_mbx #(.packagesize(pckg_sz)) ag_chk_sb_mbx = new();
+  
+  tst_gen_mbx tst_gen_mbx = new ();
+  //////////////////
+  //instanciar DUT//
+  //////////////////
+  
+  
+  
+  initial begin
 	    for(int i = 0; i < Drivers; i++) begin
 		   automatic int k = i;
 		   ag_dr_mbx[k] = new();
@@ -41,14 +54,8 @@ parameter pckg_sz = 16;
     end
     end
   
-  gen_ag_mbx gen_ag_mbx = new();
-  ag_chk_sb_mbx ag_chk_sb_mbx = new();
   
-  tst_gen_mbx tst_gen_mbx = new ();
-  //////////////////
-  //instanciar DUT//
-  //////////////////
-  bs_gnrtr_n_rbtr  #(.drvrs(Drivers)) DUT_0 (.clk(v_if.clk),
+  bs_gnrtr_n_rbtr  #(.drvrs(Drivers), .pckg_sz(pckg_sz)) DUT_0 (.clk(v_if.clk),
                          .reset(reset_tb),
                          .pndng(v_if.pndng),
                          .push(v_if.push),
@@ -121,7 +128,7 @@ initial begin
       		chk_sb_m.mon_chk_sb_mbx[k] = mon_chk_sb_mbx[k];
       		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx[k];
             driver[k].ag_dr_mbx = ag_dr_mbx[k];
-            driver[k].v_if = v_if;
+            driver[k].fifo_in.v_if = v_if;
       		monitor[k].v_if = v_if;
            $display("Driver %0d",driver[k].drv_num);
         end
