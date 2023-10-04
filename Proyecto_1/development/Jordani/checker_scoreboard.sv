@@ -1,9 +1,9 @@
 class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
-  ag_chk_sb_mbx ag_chk_sb_mbx;
-  ag_chk_sb	ag_chk_sb_transaction;
+  ag_chk_sb_mbx #(.packagesize(pckg_sz)) ag_chk_sb_mbx;
+  ag_chk_sb #(.packagesize(pckg_sz)) ag_chk_sb_transaction;
   mon_chk_sb_mbx mon_chk_sb_mbx [drvrs];
   mon_chk_sb mon_chk_sb_transaction;
-  ag_chk_sb q_instrucciones [$];
+  ag_chk_sb #(.packagesize(pckg_sz)) q_instrucciones [$];
   mon_chk_sb q_resultados [$];
   
   function new();
