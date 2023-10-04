@@ -1,57 +1,38 @@
 `include "bus_if.sv"
 `include "Clases_mailbox.sv"
-class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
-    virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
-    int drv_num;
-	bit [pckg_sz-1:0] q_in[$];
-    bit [pckg_sz-1:0] q_out[$];
-    ag_dr_mbx ag_dr_mbx;
+`include "e_fifo.sv"
+class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 8);
+    	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
+    	int drv_num;
+	fifo_in #(.packagesize(pckg_sz), .drvrs(drvrs), .fifo_size(fifo_size)) fifo_in;
+    	ag_dr_mbx ag_dr_mbx;
 	
 	ag_dr #(.pckg_sz(pckg_sz)) ag_dr_transaction;
 	
 	function new(int drv_num);
-        	this.q_in={};
-        	this.q_out={};
 		this.drv_num = drv_num;
 		$display("Driver %d a iniciado",this.drv_num);
 		this.ag_dr_transaction = new();
 		this.ag_dr_mbx = new();
-    endfunction
+		this.fifo_in = new(drv_num);
+		this.fifo_in.v_if = v_if;
+		//this.v_if.pndng[0][this.drv_num] = 0;
+    	endfunction
 
 	/*
 	Tarea run(): Se ejecuta una función recurrente que evalúa la cantidad de datos en la cola de entrada "q_in"
 	para el control de la bandera "pndng", además de la obtención de paquetes tipo "ag_dr" para ser cargado en la cola 
 	*/
 	
-	virtual task run();				//Tarea principal del driver
-
-		//$display("Driver %d running",this.drv_num);	//Print para indicar el inicio de la ejecución del driver
-		forever begin									//Función recurrente del driver
-			@(posedge this.v_if.clk);					//Se evalúa en el flanco del reloj (Emulando sincronía)
-			//bit [pckg_sz-1:0] front_data = 0;
-			if (this.q_in.size==0) begin				//Evaluación de datos en la cola de entrada "q_in"; True en caso de estar vacía
-				this.v_if.pndng[0][this.drv_num] = 0;	//Se setea la bandera "pndng" a 0 (No hay datos pendientes en la cola)
-				this.v_if.D_pop[0][this.drv_num] = 0;	//Se coloca en la salida 0
-		       	end
-			else begin 									//Evaluación de datos en la cola de entrada "q_in"; True en caso de No estar vacía
-				this.v_if.pndng[0][this.drv_num] = 1;	//Se setea la bandera "pndng" a 1 (No hay datos pendientes en la cola)
-				this.v_if.D_pop[0][this.drv_num] = q_in[0];	//Se coloca en la salida el dato que se cargó en la cola
+	virtual task run();
+		this.v_if.pndng[0][this.drv_num] = 0;
+		fifo_in.if_signal();
+		forever begin	
+			this.ag_dr_mbx.get(ag_dr_transaction);
+			if(this.fifo_in.d_q.size < fifo_size) begin
+				this.fifo_in.fifo_push({this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
 			end
-			if(this.v_if.pop[0][this.drv_num]) begin	//Se evalúa señal de pop 
-				//$display("pop %d dato %b",this.drv_num, v_if.D_pop[0][this.drv_num]); 
-				q_in.delete(0);
-			end
-			if(this.ag_dr_mbx.try_get(this.ag_dr_transaction)) begin 	//Se intenta extraer un dato del mailbox 
-				//$display("Transaccion ag_dr recibida en %d en el tiempo %d", this.drv_num,$time);
-				q_in.push_back({this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
-				//$display("Dato cargado: %b", {this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
-			end
-			//	this.v_if.pndng[0][this.drv_num] = 1;
-			if (this.v_if.push[0][this.drv_num]) begin 
-				this.q_out.push_back(this.v_if.D_push[0][this.drv_num]);
-				$display("Push a %d en el tiempo %d del dato %b",this.drv_num, $time,this.q_out[$]);
-			end
-	
+			else $display("FIFO %d FULL MISSED_PKG %b", this.drv_num,{this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
 			#10;	
 				
 		end
@@ -60,11 +41,10 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16);
 
 	function report();
 		$display("Driver %d",this.drv_num);
-		foreach(this.q_out[i]) $display("Pos %d de la cola es = %b",i,this.q_out[i]);
+		//foreach(this.q_out[i]) $display("Pos %d de la cola es = %b",i,this.q_out[i]);
 	endfunction
 	
 
 
 
 endclass
-
