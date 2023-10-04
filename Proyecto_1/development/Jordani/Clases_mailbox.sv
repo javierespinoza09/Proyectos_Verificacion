@@ -39,10 +39,10 @@ class mon_chk_sb;
   int id;
   int payload;
   int receiver;
-  int sender;
   int tiempo;
-  int tipo_interaccion;
-  function new ();
+  function new (int receiver);
+	  this.receiver = receiver;
+	  this.tiempo = $time;
   endfunction;
 endclass
 

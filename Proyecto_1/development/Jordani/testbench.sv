@@ -7,13 +7,13 @@
 `include "Generador.sv"
 `include "Monitor.sv"
 `include "Test.sv"
-//`include "Library.sv"
+
 
 
 
 module agente_driver_tb;
 reg reset_tb,clk_tb;
-parameter Drivers = 6;
+parameter Drivers = 4;
 parameter pckg_sz = 32;
 parameter fifo_size = 8;
 
@@ -25,12 +25,10 @@ parameter fifo_size = 8;
   	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
     Test #(.drvrs(Drivers), .pckg_sz(pckg_sz)) test;
   	checker_scoreboard #(.drvrs(Drivers), .pckg_sz(pckg_sz)) chk_sb_m;
-  //  v_if.rst = reset_tb;
    
   ///////////////////////////
   //inicializar los mailbox//
   ///////////////////////////
-    //ag_chk_sb_mbx ag_chk_sb_mbx = new();
     ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx[Drivers];
   	mon_chk_sb_mbx mon_chk_sb_mbx[Drivers];
     
@@ -39,13 +37,9 @@ parameter fifo_size = 8;
   ag_chk_sb_mbx #(.packagesize(pckg_sz)) ag_chk_sb_mbx = new();
   
   tst_gen_mbx tst_gen_mbx = new ();
-  //////////////////
-  //instanciar DUT//
-  //////////////////
   
   
-  
-  initial begin
+    initial begin
 	    for(int i = 0; i < Drivers; i++) begin
 		   automatic int k = i;
 		   ag_dr_mbx[k] = new();
@@ -55,7 +49,10 @@ parameter fifo_size = 8;
     end
   
   
-  bs_gnrtr_n_rbtr  #(.drvrs(Drivers), .pckg_sz(pckg_sz)) DUT_0 (.clk(v_if.clk),
+  //////////////////
+  //instanciar DUT//
+  //////////////////
+  bs_gnrtr_n_rbtr  #(.drvrs(Drivers)) DUT_0 (.clk(v_if.clk),
                          .reset(reset_tb),
                          .pndng(v_if.pndng),
                          .push(v_if.push),

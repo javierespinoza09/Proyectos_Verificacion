@@ -11,7 +11,7 @@ class fifo_in #(parameter packagesize = 16, parameter drvrs = 4, parameter fifo_
 	endfunction
 	
 
-	function fifo_push(bit dato);
+	function fifo_push(bit [packagesize-1:0] dato);
 		if(this.d_q.size < fifo_size) begin 
 			this.d_q.push_back(dato);
 			this.v_if.D_pop[0][this.fifo_num] = d_q[0];
@@ -21,6 +21,7 @@ class fifo_in #(parameter packagesize = 16, parameter drvrs = 4, parameter fifo_
 	endfunction
 
 	task if_signal();
+		$display("Funcion if_signal %d",this.fifo_num);
 		forever begin	
 			@(posedge this.v_if.pop[0][this.fifo_num]);
 			this.v_if.D_pop[0][this.fifo_num] = d_q[0];
