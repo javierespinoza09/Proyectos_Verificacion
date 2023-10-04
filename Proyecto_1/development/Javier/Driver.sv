@@ -1,6 +1,6 @@
 `include "bus_if.sv"
 `include "Clases_mailbox.sv"
-`include "e_fifo.sv"
+`include "fifo_in.sv"
 class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 8);
     	//virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
     	int drv_num;
@@ -26,9 +26,12 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 	
 	virtual task run();
 		//this.v_if.pndng[0][this.drv_num] = 0;
-		fifo_in.if_signal();
+		fork
+			fifo_in.if_signal();
+		join_none
 		forever begin	
 			this.ag_dr_mbx.get(ag_dr_transaction);
+			$display("Transaccion ag_dr en %d",this.drv_num);
 			if(this.fifo_in.d_q.size < fifo_size) begin
 				this.fifo_in.fifo_push({this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
 			end
