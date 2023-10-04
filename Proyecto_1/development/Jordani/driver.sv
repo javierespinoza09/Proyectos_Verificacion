@@ -4,8 +4,9 @@
 class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 8);
     	//virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
     	int drv_num;
-	fifo_in #(.packagesize(pckg_sz), .drvrs(drvrs), .fifo_size(fifo_size)) fifo_in;
-    ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_mbx;
+	    fifo_in #(.packagesize(pckg_sz), .drvrs(drvrs), .fifo_size(fifo_size)) fifo_in;
+    	ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz))ag_dr_mbx;
+	
 	ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;
 	
 	function new(int drv_num);
@@ -15,7 +16,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 		this.ag_dr_mbx = new();
 		this.fifo_in = new(drv_num);
 		//this.fifo_in.v_if = v_if;
-		//this.v_if.pndng[0][this.drv_num] = 0;
+		
     	endfunction
 
 	/*
@@ -27,6 +28,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 		//this.v_if.pndng[0][this.drv_num] = 0;
 		fork
 			fifo_in.if_signal();
+        
 		join_none
 		forever begin	
 			this.ag_dr_mbx.get(ag_dr_transaction);
@@ -35,7 +37,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 				this.fifo_in.fifo_push({this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
 			end
 			else $display("FIFO %d FULL MISSED_PKG %b", this.drv_num,{this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
-			#10;	
+			
 				
 		end
 		

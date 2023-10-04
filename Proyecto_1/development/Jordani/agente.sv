@@ -3,14 +3,13 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
   
 	//Mailboxes
     ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_mbx_array [drvrs];
-  	gen_ag_mbx gen_ag_mbx;
-  	ag_chk_sb_mbx #(.packagesize(pckg_sz)) ag_chk_sb_mbx;
+    gen_ag_mbx gen_ag_mbx;
+    ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx;
     //Transacciones
 	gen_ag gen_ag_transaction;
-    ag_chk_sb #(.packagesize(pckg_sz)) ag_chk_sb_transaction;
-  	ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;
+    ag_chk_sb #(.pckg_sz(pckg_sz)) ag_chk_sb_transaction;
   
-	
+	ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;
 
 	//Atributos principales
     int num_transacciones;
@@ -20,7 +19,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
 	
   
     function new();
-	
+	this.ag_dr_transaction = new();
    
 	for(int i = 0;i < drvrs; i++) begin
 		automatic int k = i;	
@@ -34,8 +33,6 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
   
     task run();
       	forever begin
-        
-        this.ag_dr_transaction = new();
       	//get desde el generador al agente//
         this.gen_ag_mbx.get(this.gen_ag_transaction);
         this.num_transacciones = this.gen_ag_transaction.cant_datos;
@@ -59,55 +56,46 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
 				self_id: begin 
 					ag_dr_transaction.self_addrs.constraint_mode(0);
 					ag_dr_transaction.valid_addrs.constraint_mode(1);
-                  	ag_dr_transaction.source_addrs.constraint_mode(1);
-                  	ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.source_addrs.constraint_mode(1);
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				any_id: begin 
 					ag_dr_transaction.self_addrs.constraint_mode(0);
 					ag_dr_transaction.valid_addrs.constraint_mode(0);
-                  	ag_dr_transaction.source_addrs.constraint_mode(1);
-                  	ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.source_addrs.constraint_mode(1);
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				invalid_id: begin 
 					ag_dr_transaction.self_addrs.constraint_mode(1);
 					ag_dr_transaction.valid_addrs.constraint_mode(0);
-                  	ag_dr_transaction.source_addrs.constraint_mode(1);
-                  	ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.source_addrs.constraint_mode(1);
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
-				
+				fix_source: begin 
+					ag_dr_transaction.self_addrs.constraint_mode(1);
+                  	ag_dr_transaction.valid_addrs.constraint_mode(1);
+                    ag_dr_transaction.source_addrs.constraint_mode(0);
+                  	ag_dr_transaction.pos_source_addrs.constraint_mode(0);
+                  	ag_dr_transaction.fixed_source.constraint_mode(1);
+				end
               	normal_id: begin 
 					ag_dr_transaction.self_addrs.constraint_mode(1);
                   	ag_dr_transaction.valid_addrs.constraint_mode(1);
-                  	ag_dr_transaction.source_addrs.constraint_mode(1);
-                  	ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.source_addrs.constraint_mode(1);
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				default: begin 
 					ag_dr_transaction.self_addrs.constraint_mode(1);
-                  	ag_dr_transaction.valid_addrs.constraint_mode(1);
-                  	ag_dr_transaction.source_addrs.constraint_mode(1);
-                  	ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+					ag_dr_transaction.valid_addrs.constraint_mode(1);
 				end
 			endcase
 			///Se randomizan los parámetros según las restricciones
-          this.ag_dr_transaction.randomize();
-          if(this.gen_ag_transaction.source_rand==0) begin
-            this.ag_dr_transaction.source = gen_ag_transaction.source;
-            if(this.ag_dr_transaction.source == this.ag_dr_transaction.id)begin
-              if(this.ag_dr_transaction.id>0)  this.ag_dr_transaction.id = this.ag_dr_transaction.id -1;
-              else this.ag_dr_transaction.id = this.ag_dr_transaction.id + 1;
-            end
-            
-          end
-          
-          if(this.gen_ag_transaction.id_rand==0) begin
-            this.ag_dr_transaction.id = gen_ag_transaction.id;
-            if(this.ag_dr_transaction.source == this.ag_dr_transaction.id)begin
-              if(this.ag_dr_transaction.source>0)  this.ag_dr_transaction.source = this.ag_dr_transaction.source -1;
-              else this.ag_dr_transaction.source = this.ag_dr_transaction.source + 1;
-            end
-            
-          end
-			
+            if(this.gen_ag_transaction.source_rand==0) ag_dr_transaction.fix_source = gen_ag_transaction.source;
+			this.ag_dr_transaction.randomize();
           	
 			///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
          	if(this.gen_ag_transaction.id_rand==0) ag_dr_transaction.id = gen_ag_transaction.id;

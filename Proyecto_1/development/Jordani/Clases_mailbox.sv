@@ -35,7 +35,7 @@ class gen_ag;
   endfunction;
 endclass
 
-class mon_chk_sb;
+class mon_chk_sb ;
   int id;
   int payload;
   int receiver;
@@ -47,7 +47,7 @@ class mon_chk_sb;
 endclass
 
 
-class ag_dr #(parameter drvrs = 4, parameter pckg_sz = 16);
+class ag_dr #(parameter pckg_sz = 16, parameter drvrs = 4);
   rand bit [pckg_sz-9:0] dato;
   rand bit [7:0] id;
   rand int source;
@@ -64,7 +64,7 @@ class ag_dr #(parameter drvrs = 4, parameter pckg_sz = 16);
   //Respecto al DATO
   constraint data_variablility {dato inside {{(pckg_sz-8){1'b1}},{(pckg_sz-8){1'b0}}};};
   
-  //constraint fixed_source {source == fix_source;};
+  constraint fixed_source {source == fix_source;};
   
   
 
@@ -82,13 +82,13 @@ class ag_dr #(parameter drvrs = 4, parameter pckg_sz = 16);
 endclass
 
 
-class ag_chk_sb #(parameter packagesize = 16);
-  bit [packagesize-9:0] payload ;
+class ag_chk_sb #(parameter pckg_sz = 16);
+  bit [pckg_sz-9:0] payload ;
   bit [7:0] id ;
   int transaction_time;
   int source;
   
-  function new(bit [packagesize-1:0] info, [7:0] destino, tiempo, source);
+  function new(bit [pckg_sz-1:0] info, [7:0] destino, tiempo, source);
     this.payload = info;
     this.id = destino;
     this.transaction_time = tiempo;
@@ -104,7 +104,6 @@ endclass
 
 
 ////Mailboxes//////
- 
 typedef mailbox #(ag_chk_sb) ag_chk_sb_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
@@ -116,4 +115,4 @@ typedef mailbox #(tst_gen) tst_gen_mbx;
 typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
 typedef enum {self_id, any_id, invalid_id, fix_source ,normal_id} gen_ag_id_modo;
 typedef enum {bus_push, bus_pop} monitor_modo;
-typedef enum {normal, broadcast, one_to_all, all_to_one, rand_payload} Generador_modo;
+typedef enum {normal, broadcast, one_to_all, all_to_one} Generador_modo;

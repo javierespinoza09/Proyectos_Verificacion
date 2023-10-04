@@ -3,7 +3,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
   gen_ag_mbx gen_ag_mbx;
   gen_ag gen_ag_transaction;
   tst_gen tst_gen_transaction;
-	
+
   function new();
     this.gen_ag_transaction = new();
     this.tst_gen_transaction = new();
@@ -27,7 +27,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         gen_ag_mbx.put(gen_ag_transaction);
       end
       broadcast:begin
-        this.gen_ag_transaction.cant_datos = 4;
+        this.gen_ag_transaction.cant_datos = 1;
         this.gen_ag_transaction.id_rand = 0;
         this.gen_ag_transaction.id_modo = normal_id;
         this.gen_ag_transaction.data_modo = max_aleatoriedad;
@@ -39,7 +39,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
       one_to_all:begin
         this.gen_ag_transaction.data_modo = max_aleatoriedad;
         this.gen_ag_transaction.cant_datos = 10;
-        this.gen_ag_transaction.id_modo = normal_id;
+        this.gen_ag_transaction.id_modo = fix_source;
         this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id = 0;
         this.gen_ag_transaction.source_rand = 0;
@@ -47,19 +47,10 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         gen_ag_mbx.put(gen_ag_transaction);
       end
       all_to_one:begin
-        this.gen_ag_transaction.cant_datos = 10;
-        this.gen_ag_transaction.data_modo = max_aleatoriedad;
-        this.gen_ag_transaction.id_modo = normal_id;
-        this.gen_ag_transaction.id_rand = 0;
+        this.gen_ag_transaction.cant_datos = drvrs-1;
         this.gen_ag_transaction.id = 0;
-        this.gen_ag_transaction.source_rand = 1;
-        this.gen_ag_transaction.source = 1;
-        gen_ag_mbx.put(gen_ag_transaction);        
+        gen_ag_mbx.put(gen_ag_transaction);
       end
-      rand_payload:begin
-        
-      end
-      
       default: begin
         this.gen_ag_transaction.cant_datos = 10;
         gen_ag_mbx.put(gen_ag_transaction);

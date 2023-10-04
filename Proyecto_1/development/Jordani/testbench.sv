@@ -7,52 +7,51 @@
 `include "Generador.sv"
 `include "Monitor.sv"
 `include "Test.sv"
-
+//`include "Library.sv"
 
 
 
 module agente_driver_tb;
 reg reset_tb,clk_tb;
-parameter Drivers = 4;
+parameter Drivers = 12;
 parameter pckg_sz = 32;
-parameter fifo_size = 8;
+parameter fifo_size = 15;
+parameter bits = 1;
+parameter broadcast = {8{1'b1}};
 
   //Clases de los módulos//
     Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) driver [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
   	Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor[Drivers];
-    bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
+  	bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz),.bits(bits) ) v_if (.clk(clk_tb));
   	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
     Test #(.drvrs(Drivers), .pckg_sz(pckg_sz)) test;
   	checker_scoreboard #(.drvrs(Drivers), .pckg_sz(pckg_sz)) chk_sb_m;
+  //  v_if.rst = reset_tb;
    
   ///////////////////////////
   //inicializar los mailbox//
   ///////////////////////////
+    //ag_chk_sb_mbx ag_chk_sb_mbx = new();
     ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx[Drivers];
-  	mon_chk_sb_mbx mon_chk_sb_mbx[Drivers];
-    
-  
-  gen_ag_mbx gen_ag_mbx= new();
-  ag_chk_sb_mbx #(.packagesize(pckg_sz)) ag_chk_sb_mbx = new();
-  
-  tst_gen_mbx tst_gen_mbx = new ();
-  
-  
     initial begin
 	    for(int i = 0; i < Drivers; i++) begin
 		   automatic int k = i;
 		   ag_dr_mbx[k] = new();
-           mon_chk_sb_mbx[k] = new();
+           
 
     end
     end
   
+  gen_ag_mbx gen_ag_mbx = new();
+  mon_chk_sb_mbx mon_chk_sb_mbx = new();
+  ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx = new();
   
+  tst_gen_mbx tst_gen_mbx = new ();
   //////////////////
   //instanciar DUT//
   //////////////////
-  bs_gnrtr_n_rbtr  #(.drvrs(Drivers)) DUT_0 (.clk(v_if.clk),
+  bs_gnrtr_n_rbtr  #(.bits(bits),.drvrs(Drivers), .pckg_sz(pckg_sz),.broadcast(broadcast)) DUT_0 (.clk(v_if.clk),
                          .reset(reset_tb),
                          .pndng(v_if.pndng),
                          .push(v_if.push),
@@ -112,6 +111,7 @@ initial begin
     //gen_ag_mbx.put(gen_ag_transaction);
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
+ 	chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
   	//chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
 	for (int i = 0; i<Drivers; i++ ) begin
 
@@ -122,8 +122,7 @@ initial begin
             //constraints//
             ///////////////
             agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
-      		chk_sb_m.mon_chk_sb_mbx[k] = mon_chk_sb_mbx[k];
-      		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx[k];
+      		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx;
             driver[k].ag_dr_mbx = ag_dr_mbx[k];
             driver[k].fifo_in.v_if = v_if;
       		monitor[k].v_if = v_if;
@@ -133,7 +132,8 @@ initial begin
  
   	fork
 		agente.run();
-        chk_sb_m.run();
+        chk_sb_m.run_ag();
+        chk_sb_m.run_mon();
 
 		for(int i = 0; i<Drivers; i++ ) begin
 			fork	
@@ -161,7 +161,7 @@ initial begin
 end
   
 initial begin
-#10000
+#30000
   $finish;
 end
 endmodule

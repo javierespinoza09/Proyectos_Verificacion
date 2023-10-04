@@ -1,7 +1,7 @@
 //`include "fifo_out.sv"
 class Monitor #(parameter pckg_sz = 16, parameter drvrs = 4);
 	mon_chk_sb_mbx mon_chk_sb_mbx;
-	mon_chk_sb #(.pckg_sz(pckg_sz)) mon_chk_sb_transaction;
+	mon_chk_sb mon_chk_sb_transaction;
 	bit [pckg_sz-1:0] d_q[$];
 	//fifo_out #(.packagesize(pckg_sz), .drvrs(drvrs)) fifo_out;
 	virtual bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz)) v_if;
