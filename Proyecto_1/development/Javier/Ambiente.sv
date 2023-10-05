@@ -78,8 +78,8 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_si
   //////////////////////////////////
   //Genera el reporte de los Datos//
   //////////////////////////////////
-	task resport();
-		this.chk_sb.report_sb();
+	task resport(int num);
+		this.chk_sb.report_sb(num);
 	endtask
 
 	function display();

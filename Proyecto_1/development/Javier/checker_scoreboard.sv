@@ -17,6 +17,8 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   int res[$];
   int prom = 0;
   int tiempo = 0;
+  int fa;
+  string file_name;
 
   //El constructor vacía las colas e inicia el mbx//
   function new();
@@ -48,9 +50,11 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   /*SISTEMA DE REPORTE DE DATOS*/
   /*                           */
   
-  function report_sb();
-    int fa;
-    fa = $fopen("Reporte.csv","a");
+  function report_sb(int num);
+	  $display("Reporte %d",num);
+	 
+	  this.file_name = $sformatf("Reporte%0d.csv",num);
+    this.fa = $fopen(this.file_name,"a");
     $fdisplay(fa,"Reporte Scoreboard");
     
     
@@ -69,6 +73,7 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
       prom = prom + tiempo;
     end
     $fdisplay(fa,"El retraso promedio es de: [%g]",prom/this.q_resultados_array.size());
+    $fclose(fa);
   
   endfunction
   
