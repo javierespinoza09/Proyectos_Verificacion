@@ -5,7 +5,7 @@
 `include "Generador.sv"
 `include "Monitor.sv"
 `include "Test.sv"
-//`include "Library.sv"
+`include "Library.sv"
 `include "Ambiente.sv"
 
 ////////////////////
