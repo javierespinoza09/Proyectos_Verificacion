@@ -13,12 +13,13 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
     //this.gen_ag_transaction.cant_datos = 10;
     //this.gen_ag_transaction.data_modo = max_variabilidad;
     //gen_ag_mbx.put(gen_ag_transaction);
+    forever begin
     tst_gen_mbx.get(tst_gen_transaction);
-    
+	$display("GENERADOR: Transaccion recivida de TEST recibida en %d",$time);    
     case (this.tst_gen_transaction.caso)
       normal:begin
         this.gen_ag_transaction.data_modo = max_aleatoriedad;
-        this.gen_ag_transaction.cant_datos = 10;
+        this.gen_ag_transaction.cant_datos = 100;
         this.gen_ag_transaction.id_modo = normal_id;
         this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id = 0;
@@ -27,7 +28,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         gen_ag_mbx.put(gen_ag_transaction);
       end
       broadcast:begin
-        this.gen_ag_transaction.cant_datos = 1;
+        this.gen_ag_transaction.cant_datos = 5;
         this.gen_ag_transaction.id_rand = 0;
         this.gen_ag_transaction.id_modo = normal_id;
         this.gen_ag_transaction.data_modo = max_aleatoriedad;
@@ -57,6 +58,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
       end 
       
 	endcase
+end
     
     
     
