@@ -1,3 +1,7 @@
+///////////////////////////////////
+//Conecta el DUT con el Testbench//
+///////////////////////////////////
+
 interface bus_if #(parameter drvrs = 4, parameter pckg_sz = 16, parameter bits = 1)
 (input clk);
     logic rst;
