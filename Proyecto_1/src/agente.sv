@@ -2,14 +2,14 @@
 class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
   
 	//Mailboxes
-    ag_dr_mbx ag_dr_mbx_array [drvrs];
-  	gen_ag_mbx gen_ag_mbx;
-  	ag_chk_sb_mbx ag_chk_sb_mbx;
+    ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_mbx_array [drvrs];
+    gen_ag_mbx gen_ag_mbx;
+    ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx;
     //Transacciones
 	gen_ag gen_ag_transaction;
-  	ag_chk_sb ag_chk_sb_transaction;
+    ag_chk_sb #(.pckg_sz(pckg_sz)) ag_chk_sb_transaction;
   
-	ag_dr #(.pckg_sz(pckg_sz),.drvrs(drvrs)) ag_dr_transaction;
+	ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;
 
 	//Atributos principales
     int num_transacciones;
@@ -36,8 +36,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
       	//get desde el generador al agente//
         this.gen_ag_mbx.get(this.gen_ag_transaction);
         this.num_transacciones = this.gen_ag_transaction.cant_datos;
-        $display("Transaccion gen_ag recibida cant %d en el tiempo %d", this.num_transacciones,$time);
-		
+        		
         for (int i = 0; i < this.num_transacciones; i++) begin
 			this.ag_dr_transaction = new();
 			case (this.gen_ag_transaction.data_modo)
@@ -110,7 +109,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
           	this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
           
           
-	        $display("Mensaje enviado a %d con id: %d y payload: %d",this.ag_dr_transaction.source,this.ag_dr_transaction.id, this.ag_dr_transaction.dato);
+	        
 	    #1;
         end
         end 

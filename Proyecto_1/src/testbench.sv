@@ -1,163 +1,83 @@
-// Code your testbench here
-// or browse Examples
-`timescale 1ns/10ps
-`include "Driver"
-`include "example_agente"
-`include "checker_scoreboard"
-`include "Generador"
-`include "monitor"
-`include "Test"
-//`include "bus_if.sv"
+`timescale 1ns/1ps
+`include "driver.sv"
+`include "agente.sv"
+`include "checker_scoreboard.sv"
+`include "Generador.sv"
+`include "Monitor.sv"
+`include "Test.sv"
+`include "Library.sv"
+`include "Ambiente.sv"
 
-
-
-module agente_driver_tb;
-reg reset_tb,clk_tb;
-parameter Drivers = 4;
+module testbench;
+tst_gen_mbx tst_gen_mbx = new();
+parameter drvrs = 4;
 parameter pckg_sz = 16;
-
-  //Clases de los módulos//
-    Driver #(.drvrs(Drivers)) driver [Drivers];
-    Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz)) agente;
-  	Monitor #(.drvrs(Drivers), .pckg_sz(pckg_sz)) monitor[Drivers];
-    bus_if #(.drvrs(Drivers), .pckg_sz(pckg_sz)) v_if (.clk(clk_tb));
-  	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
-    Test #(.drvrs(Drivers), .pckg_sz(pckg_sz)) test;
-  	checker_scoreboard #(.drvrs(Drivers), .pckg_sz(pckg_sz)) chk_sb_m;
-  //  v_if.rst = reset_tb;
-   
-  ///////////////////////////
-  //inicializar los mailbox//
-  ///////////////////////////
-    //ag_chk_sb_mbx ag_chk_sb_mbx = new();
-    ag_dr_mbx ag_dr_mbx[Drivers];
-  	mon_chk_sb_mbx mon_chk_sb_mbx[Drivers];
-    initial begin
-	    for(int i = 0; i < Drivers; i++) begin
-		   automatic int k = i;
-		   ag_dr_mbx[k] = new();
-           mon_chk_sb_mbx[k] = new();
-
-    end
-    end
-  
-  gen_ag_mbx gen_ag_mbx = new();
-  ag_chk_sb_mbx ag_chk_sb_mbx = new();
-  
-  tst_gen_mbx tst_gen_mbx = new ();
-  //////////////////
-  //instanciar DUT//
-  //////////////////
-  bs_gnrtr_n_rbtr  #(.drvrs(Drivers)) DUT_0 (.clk(v_if.clk),
-                         .reset(reset_tb),
-                         .pndng(v_if.pndng),
-                         .push(v_if.push),
-                         .pop(v_if.pop),
-                         .D_pop(v_if.D_pop),
-                         .D_push(v_if.D_push)
-                        );
-  
-  
-  
-  
-//clase de prueba
-  //gen_ag gen_ag_transaction;
-  //tst_gen tst_gen_transaction;
-  
-///////////////////////  
-//Ciclo de ejecución// 
-/////////////////////
-  
+parameter fifo_size = 8;
+parameter bits = 1;
+parameter broadcast = {8{1'b1}};
+reg clk_tb,reset_tb;
 initial begin
   $dumpfile("test_bus.vcd");
-  $dumpvars(0,agente_driver_tb);
+  $dumpvars(0,testbench);
 end
 
-initial begin
-forever begin
-	#5
-	clk_tb = ~clk_tb;
-end
-end
+bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz),.bits(bits)) _if (.clk(clk_tb));
+bs_gnrtr_n_rbtr  #(.bits(bits),.drvrs(drvrs), .pckg_sz(pckg_sz),.broadcast(broadcast)) DUT_0 (.clk(_if.clk),.reset(_if.rst), .pndng(_if.pndng), .push(_if.push), .pop(_if.pop), .D_pop(_if.D_pop), .D_push(_if.D_push));
+
+Ambiente #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) ambiente_0;
+Test t_0;
+
 
 initial begin
     clk_tb = 0;
     reset_tb = 1;
+    _if.rst = reset_tb;
     #50
     reset_tb = 0;
-    
+    _if.rst = reset_tb;
+
 end
+
 initial begin
-	//monitor = new(0);
-	agente = new();
-    generador = new();
-    test = new();
-    //tst_gen_transaction = new();
-  	//tst_gen_transaction.caso = normal;
-  	generador.tst_gen_mbx = tst_gen_mbx;
-  	test.tst_gen_mbx = tst_gen_mbx;
-    //tst_gen_mbx.put(tst_gen_transaction);
-    test.run();
-  	agente.gen_ag_mbx = gen_ag_mbx;
-  	generador.gen_ag_mbx = gen_ag_mbx;
-  	agente.ag_chk_sb_mbx = ag_chk_sb_mbx;
-  	
-    generador.run();
-  	//gen_ag_transaction = new();
-	//gen_ag_transaction.cant_datos = 10;
-    //gen_ag_mbx.put(gen_ag_transaction);
-  	chk_sb_m = new();
-  	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
-  	//chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
-	for (int i = 0; i<Drivers; i++ ) begin
+forever begin
+        #5
+        clk_tb = ~clk_tb;
+end
+end
 
-            automatic int k = i;
-            driver[k] = new(k);
-     		monitor[k] = new(k);
-            ///////////////
-            //constraints//
-            ///////////////
-            agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
-      		chk_sb_m.mon_chk_sb_mbx[k] = mon_chk_sb_mbx[k];
-      		monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx[k];
-            driver[k].ag_dr_mbx = ag_dr_mbx[k];
-            driver[k].v_if = v_if;
-      		monitor[k].v_if = v_if;
-           $display("Driver %0d",driver[k].drv_num);
-        end
 
- 
-  	fork
-		agente.run();
-        chk_sb_m.run();
 
-		for(int i = 0; i<Drivers; i++ ) begin
-			fork	
-              automatic int k = i;
-              driver[k].run();
-              monitor[k].run();
-				
-			join_none	
+	initial begin
+		Test t_0;
+		t_0 = new();
+		t_0.tst_gen_mbx = tst_gen_mbx;
+
+		ambiente_0 = new();
+		ambiente_0.display();
+		ambiente_0.generador.tst_gen_mbx = tst_gen_mbx;
+		//ambiente_0.v_if = _if;
+		for (int i = 0; i<drvrs; i++ ) begin
+
+                        automatic int k = i;
+			ambiente_0.driver[k].fifo_in.v_if = _if;
+                	ambiente_0.monitor[k].v_if = _if;
+		
 		end
-//		agente.run();
+
+		fork
+			t_0.run();
+		ambiente_0.run();
 	join_none
-  
-end
-  
+		#30000
+		ambiente_0.resport();
+
+	end
 initial begin
-  #5000
-  for(int i = 0; i<Drivers; i++ ) begin
-    fork	
-      automatic int k = i;
-      driver[k].report();
-    
-    join_none	
-  end
-  chk_sb_m.report_sb();
-end
-  
-initial begin
-#10000
+#1100000
   $finish;
 end
+
+
 endmodule
+
+
