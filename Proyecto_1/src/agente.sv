@@ -105,7 +105,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
             this.ag_dr_mbx_array[this.ag_dr_transaction.source].put(this.ag_dr_transaction);
 
 
-          	this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, this.ag_dr_transaction.tiempo, this.ag_dr_transaction.source);
+          	this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, $time, this.ag_dr_transaction.source);
           	this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
           
           

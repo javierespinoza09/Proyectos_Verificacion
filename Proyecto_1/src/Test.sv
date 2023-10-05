@@ -23,9 +23,9 @@ class Test #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 
     	tst_gen_mbx.put(tst_gen_transaction);
 	this.tst_chk_sb_transaction.test = normal;
 	this.tst_chk_sb_transaction.drvrs = drvrs;
-	this.tst_chk_sb_transaction.pckg.sz = pckg_sz;
+	this.tst_chk_sb_transaction.pckg_sz = pckg_sz;
 	this.tst_chk_sb_transaction.fifo_size = fifo_size;
-	tst_chk_sb_mbx.put(tst_chk_sb_transaction);
+	//tst_chk_sb_mbx.put(tst_chk_sb_transaction);
     	$display("TEST: CASO-NORMAL",$time);
 
 	#50000
@@ -36,9 +36,9 @@ class Test #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 
         tst_gen_mbx.put(tst_gen_transaction);
         this.tst_chk_sb_transaction.test = normal;
         this.tst_chk_sb_transaction.drvrs = drvrs;
-        this.tst_chk_sb_transaction.pckg.sz = pckg_sz;
+        this.tst_chk_sb_transaction.pckg_sz = pckg_sz;
         this.tst_chk_sb_transaction.fifo_size = fifo_size;
-        tst_chk_sb_mbx.put(tst_chk_sb_transaction);
+        //tst_chk_sb_mbx.put(tst_chk_sb_transaction);
         $display("TEST: BROADCAST",$time);
 
     	#50000
@@ -49,9 +49,9 @@ class Test #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 
         tst_gen_mbx.put(tst_gen_transaction);
         this.tst_chk_sb_transaction.test = normal;
         this.tst_chk_sb_transaction.drvrs = drvrs;
-        this.tst_chk_sb_transaction.pckg.sz = pckg_sz;
+        this.tst_chk_sb_transaction.pckg_sz = pckg_sz;
         this.tst_chk_sb_transaction.fifo_size = fifo_size;
-        tst_chk_sb_mbx.put(tst_chk_sb_transaction);
+        //tst_chk_sb_mbx.put(tst_chk_sb_transaction);
         $display("TEST: BROADCAST",$time);
   endtask
   
