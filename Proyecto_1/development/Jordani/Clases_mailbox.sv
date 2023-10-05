@@ -109,6 +109,7 @@ typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx ;
 typedef mailbox #(mon_chk_sb) mon_chk_sb_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
+typedef mailbox #(tst_chk_sb) tst_chk_sb_mbx;
 
 
 ////

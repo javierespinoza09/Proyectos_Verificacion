@@ -13,7 +13,7 @@
 
 module agente_driver_tb;
 reg reset_tb,clk_tb;
-parameter Drivers = 4;
+parameter Drivers = 12;
 parameter pckg_sz = 16;
 parameter fifo_size = 15;
 parameter bits = 1;
@@ -42,7 +42,7 @@ parameter broadcast = {8{1'b1}};
 
     end
     end
-  
+  tst_chk_sb_mbx tst_chk_sb_mbx = new();
   gen_ag_mbx gen_ag_mbx = new();
   mon_chk_sb_mbx mon_chk_sb_mbx = new();
   ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx = new();
@@ -99,6 +99,7 @@ initial begin
   	//tst_gen_transaction.caso = normal;
   	generador.tst_gen_mbx = tst_gen_mbx;
   	test.tst_gen_mbx = tst_gen_mbx;
+  	test.tst_chk_sb_mbx = tst_chk_sb_mbx;
     //tst_gen_mbx.put(tst_gen_transaction);
     test.run();
   	agente.gen_ag_mbx = gen_ag_mbx;
@@ -112,6 +113,7 @@ initial begin
   	chk_sb_m = new();
   	chk_sb_m.ag_chk_sb_mbx = ag_chk_sb_mbx;
  	chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
+  	chk_sb_m.tst_chk_sb_mbx = tst_chk_sb_mbx;
   	//chk_sb_m.mon_chk_sb_mbx = mon_chk_sb_mbx;
 	for (int i = 0; i<Drivers; i++ ) begin
 
@@ -158,10 +160,11 @@ initial begin
     join_none	
   end
   chk_sb_m.report_sb();
+  chk_sb_m.report_sb_r();
 end
   
 initial begin
-#30000
+#50000
   $finish;
 end
 endmodule
