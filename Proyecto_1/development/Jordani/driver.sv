@@ -11,7 +11,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 	
 	function new(int drv_num);
 		this.drv_num = drv_num;
-		$display("Driver %d a iniciado",this.drv_num);
+		//$display("Driver %d a iniciado",this.drv_num);
 		this.ag_dr_transaction = new();
 		this.ag_dr_mbx = new();
 		this.fifo_in = new(drv_num);
@@ -32,7 +32,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 		join_none
 		forever begin	
 			this.ag_dr_mbx.get(ag_dr_transaction);
-			$display("Transaccion ag_dr en %d",this.drv_num);
+			//$display("Transaccion ag_dr en %d",this.drv_num);
 			if(this.fifo_in.d_q.size < fifo_size) begin
 				this.fifo_in.fifo_push({this.ag_dr_transaction.id,this.ag_dr_transaction.dato});
 			end
@@ -44,7 +44,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 	endtask
 
 	function report();
-		$display("Driver %d",this.drv_num);
+		//$display("Driver %d",this.drv_num);
 		//foreach(this.q_out[i]) $display("Pos %d de la cola es = %b",i,this.q_out[i]);
 	endfunction
 	

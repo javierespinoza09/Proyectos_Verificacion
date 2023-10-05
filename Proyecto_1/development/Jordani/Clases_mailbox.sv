@@ -72,11 +72,11 @@ class ag_dr #(parameter pckg_sz = 16, parameter drvrs = 4);
     //this.tiempo = tiempo;
     //this.source = driver;
     variability = pckg_sz - 9;
-    $display("Se inicializa la clase ag_dr");
+    //$display("Se inicializa la clase ag_dr");
   endfunction;
   
   function void print(string tag = "");
-    $display("[%g] %s Tiempo=%g dato=%b",$time,tag,this.tiempo,this.dato);
+    //$display("[%g] %s Tiempo=%g dato=%b",$time,tag,this.tiempo,this.dato);
   endfunction 
   
 endclass

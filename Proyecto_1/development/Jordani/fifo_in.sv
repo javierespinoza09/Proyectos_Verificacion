@@ -15,11 +15,11 @@ class fifo_in #(parameter packagesize = 16, parameter drvrs = 4, parameter fifo_
 			this.d_q.push_back(dato);
 			this.v_if.D_pop[0][this.fifo_num] = d_q[0];
 			this.v_if.pndng[0][this.fifo_num] = 1;
-      		$display("FIFO %d, SE CARGÓ DATO %d", this.fifo_num, dato);
+      		//$display("FIFO %d, SE CARGÓ DATO %d", this.fifo_num, dato);
 	endfunction
 
 	task if_signal();
-		$display("Funcion if_signal %d",this.fifo_num);
+		//$display("Funcion if_signal %d",this.fifo_num);
       	this.v_if.pndng[0][this.fifo_num] = 0;
 		forever begin	
 			

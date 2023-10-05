@@ -13,8 +13,8 @@
 
 module agente_driver_tb;
 reg reset_tb,clk_tb;
-parameter Drivers = 12;
-parameter pckg_sz = 32;
+parameter Drivers = 4;
+parameter pckg_sz = 16;
 parameter fifo_size = 15;
 parameter bits = 1;
 parameter broadcast = {8{1'b1}};
@@ -78,7 +78,7 @@ end
 
 initial begin
 forever begin
-	#5
+	#1
 	clk_tb = ~clk_tb;
 end
 end
