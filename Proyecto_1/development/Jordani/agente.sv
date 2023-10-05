@@ -36,8 +36,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
       	//get desde el generador al agente//
         this.gen_ag_mbx.get(this.gen_ag_transaction);
         this.num_transacciones = this.gen_ag_transaction.cant_datos;
-        //$display("Transaccion gen_ag recibida cant %d en el tiempo %d", this.num_transacciones,$time);
-		
+        //Casos para la variabilidad de los Datos//
         for (int i = 0; i < this.num_transacciones; i++) begin
 			this.ag_dr_transaction = new();
 			case (this.gen_ag_transaction.data_modo)
@@ -51,46 +50,48 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
                   	ag_dr_transaction.data_variablility.constraint_mode(0);
                 end
 			endcase
-
+          	/////////////////////////////////////////////////
+			//Casos para las pruebas que se desean ejecutar//
+            /////////////////////////////////////////////////
 			case (this.gen_ag_transaction.id_modo)
 				self_id: begin 
-					ag_dr_transaction.self_addrs.constraint_mode(0);
-					ag_dr_transaction.valid_addrs.constraint_mode(1);
+                  ag_dr_transaction.self_addrs.constraint_mode(0); 
+                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				any_id: begin 
-					ag_dr_transaction.self_addrs.constraint_mode(0);
-					ag_dr_transaction.valid_addrs.constraint_mode(0);
+                  ag_dr_transaction.self_addrs.constraint_mode(0); 
+                  ag_dr_transaction.valid_addrs.constraint_mode(0); 
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				invalid_id: begin 
-					ag_dr_transaction.self_addrs.constraint_mode(1);
-					ag_dr_transaction.valid_addrs.constraint_mode(0);
+                  ag_dr_transaction.self_addrs.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs.constraint_mode(0);  
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				fix_source: begin 
-					ag_dr_transaction.self_addrs.constraint_mode(1);
-                  	ag_dr_transaction.valid_addrs.constraint_mode(1);
-                    ag_dr_transaction.source_addrs.constraint_mode(0);
-                  	ag_dr_transaction.pos_source_addrs.constraint_mode(0);
-                  	ag_dr_transaction.fixed_source.constraint_mode(1);
+                  ag_dr_transaction.self_addrs.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
+                  ag_dr_transaction.source_addrs.constraint_mode(0); 
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(0); 
+                  ag_dr_transaction.fixed_source.constraint_mode(1); 
 				end
               	normal_id: begin 
-					ag_dr_transaction.self_addrs.constraint_mode(1);
-                  	ag_dr_transaction.valid_addrs.constraint_mode(1);
-                  ag_dr_transaction.source_addrs.constraint_mode(1);
+                  ag_dr_transaction.self_addrs.constraint_mode(1);  
+                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
+                  ag_dr_transaction.source_addrs.constraint_mode(1); 
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   ag_dr_transaction.fixed_source.constraint_mode(0);
 				end
 				default: begin 
-					ag_dr_transaction.self_addrs.constraint_mode(1);
-					ag_dr_transaction.valid_addrs.constraint_mode(1);
+                  ag_dr_transaction.self_addrs.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
 				end
 			endcase
 			///Se randomizan los parámetros según las restricciones
@@ -106,11 +107,11 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
             this.ag_dr_mbx_array[this.ag_dr_transaction.source].put(this.ag_dr_transaction);
 
 
-          	this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, this.ag_dr_transaction.tiempo, this.ag_dr_transaction.source);
+          	this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, $time, this.ag_dr_transaction.source);
           	this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
           
           
-	        //$display("Mensaje enviado a %d con id: %d y payload: %d",this.ag_dr_transaction.source,this.ag_dr_transaction.id, this.ag_dr_transaction.dato);
+	        
 	    #1;
         end
         end 
@@ -118,10 +119,3 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
     endtask 
 endclass
 
-
-/*
-Agente #(.drvrs(), .pckg_sz()) agente;
-agente.new(num_transacciones)
-agente.ag_dr_mbx = ag_dr_mbx //Arreglo de mdb tipo "ag_dr"
-agente.run();
-*/
