@@ -25,7 +25,7 @@ bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz),.bits(bits)) _if (.clk(clk_tb));
 bs_gnrtr_n_rbtr  #(.bits(bits),.drvrs(drvrs), .pckg_sz(pckg_sz),.broadcast(broadcast)) DUT_0 (.clk(_if.clk),.reset(_if.rst), .pndng(_if.pndng), .push(_if.push), .pop(_if.pop), .D_pop(_if.D_pop), .D_push(_if.D_push));
 
 Ambiente #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) ambiente_0;
-Test t_0;
+Test #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) t_0;
 
 
 initial begin
@@ -68,12 +68,13 @@ end
 			t_0.run();
 		ambiente_0.run();
 	join_none
-		#30000
-		ambiente_0.resport();
+		
+		#200000
+                ambiente_0.resport();
 
 	end
 initial begin
-#1100000
+#500000
   $finish;
 end
 

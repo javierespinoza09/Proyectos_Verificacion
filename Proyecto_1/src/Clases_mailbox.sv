@@ -96,7 +96,7 @@ class ag_chk_sb #(parameter pckg_sz = 16);
   int transaction_time;
   int source;
   
-  function new(bit [pckg_sz-1:0] info, [7:0] destino, tiempo, source);
+  function new(bit [pckg_sz-1:0] info,bit [7:0] destino,int tiempo,int source);
     this.payload = info;
     this.id = destino;
     this.transaction_time = tiempo;
