@@ -24,6 +24,8 @@ endclass
 
 class tst_gen;
   int caso;
+  int id;
+  int source;
   function new ();
   endfunction;
 endclass

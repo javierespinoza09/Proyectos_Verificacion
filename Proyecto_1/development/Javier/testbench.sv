@@ -51,13 +51,9 @@ end
 		
 		t_0 = new(all_to_one);
 		t_0.tst_gen_mbx = tst_gen_mbx;
+		t_0.source = 0;
+		t_0.id = 2;
 		
-		t_1 = new(normal);
-                t_1.tst_gen_mbx = tst_gen_mbx;
-
-		t_2 = new(all_to_one);
-                t_2.tst_gen_mbx = tst_gen_mbx;
-
 		ambiente_0 = new();
 		ambiente_0.display();
 		ambiente_0.generador.tst_gen_mbx = tst_gen_mbx;
