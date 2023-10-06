@@ -58,7 +58,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.id_modo = fix_source;
         this.gen_ag_transaction.id_rand = 0;
         this.gen_ag_transaction.id = 1;
-        this.gen_ag_transaction.source_rand = 0;
+        this.gen_ag_transaction.source_rand = 1;
         this.gen_ag_transaction.source = 1;
         gen_ag_mbx.put(gen_ag_transaction);
       end

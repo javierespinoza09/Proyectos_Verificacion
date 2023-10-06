@@ -25,7 +25,7 @@ bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz),.bits(bits)) _if (.clk(clk_tb));
 bs_gnrtr_n_rbtr  #(.bits(bits),.drvrs(drvrs), .pckg_sz(pckg_sz),.broadcast(broadcast)) DUT_0 (.clk(_if.clk),.reset(_if.rst), .pndng(_if.pndng), .push(_if.push), .pop(_if.pop), .D_pop(_if.D_pop), .D_push(_if.D_push));
 
 Ambiente #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) ambiente_0;
-Test #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) t_0,t_1;
+Test #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) t_0,t_1,t_2;
 
 
 initial begin
@@ -48,12 +48,15 @@ end
 
 
 	initial begin
-		Test t_0;
-		t_0 = new(one_to_all);
+		
+		t_0 = new(all_to_one);
 		t_0.tst_gen_mbx = tst_gen_mbx;
 		
 		t_1 = new(normal);
                 t_1.tst_gen_mbx = tst_gen_mbx;
+
+		t_2 = new(all_to_one);
+                t_2.tst_gen_mbx = tst_gen_mbx;
 
 		ambiente_0 = new();
 		ambiente_0.display();
@@ -74,7 +77,9 @@ end
 		
 		#200000
                 ambiente_0.resport(0);
-		
+/*		
+		disable fork;
+		////////////////////////////////////////////////////
 		t_1 = new(normal);
                 t_1.tst_gen_mbx = tst_gen_mbx;
                 ambiente_0 = new();
@@ -95,10 +100,34 @@ end
         	join_none
 		#200000
                 ambiente_0.resport(1);
+		//////////////////////////////////////////////////
 
+		disable fork;
+
+                t_2 = new(all_to_one);
+                t_2.tst_gen_mbx = tst_gen_mbx;
+                ambiente_0 = new();
+                ambiente_0.display();
+                ambiente_0.generador.tst_gen_mbx = tst_gen_mbx;
+                //ambiente_0.v_if = _if;
+                for (int i = 0; i<drvrs; i++ ) begin
+
+                        automatic int k = i;
+                        ambiente_0.driver[k].fifo_in.v_if = _if;
+                        ambiente_0.monitor[k].v_if = _if;
+
+                end
+
+                fork
+                        t_2.run();
+                ambiente_0.run();
+                join_none
+                #200000
+                ambiente_0.resport(2);
+*/
 	end
 initial begin
-#500000
+#700000
   $finish;
 end
 

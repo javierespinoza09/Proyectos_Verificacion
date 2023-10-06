@@ -59,48 +59,58 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 16);
                   ag_dr_transaction.valid_addrs.constraint_mode(1); 
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
-                  ag_dr_transaction.fixed_source.constraint_mode(0);
+                  
 				end
 				any_id: begin 
                   ag_dr_transaction.self_addrs.constraint_mode(0); 
                   ag_dr_transaction.valid_addrs.constraint_mode(0); 
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
-                  ag_dr_transaction.fixed_source.constraint_mode(0);
+                  
 				end
 				invalid_id: begin 
                   ag_dr_transaction.self_addrs.constraint_mode(1); 
                   ag_dr_transaction.valid_addrs.constraint_mode(0);  
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
-                  ag_dr_transaction.fixed_source.constraint_mode(0);
+                  
 				end
 				fix_source: begin 
                   ag_dr_transaction.self_addrs.constraint_mode(1); 
                   ag_dr_transaction.valid_addrs.constraint_mode(1); 
-                  ag_dr_transaction.source_addrs.constraint_mode(0); 
-                  ag_dr_transaction.pos_source_addrs.constraint_mode(0); 
-                  ag_dr_transaction.fixed_source.constraint_mode(1); 
+                  ag_dr_transaction.source_addrs.constraint_mode(1); 
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1); 
+                   
 				end
               	normal_id: begin 
                   ag_dr_transaction.self_addrs.constraint_mode(1);  
                   ag_dr_transaction.valid_addrs.constraint_mode(1); 
                   ag_dr_transaction.source_addrs.constraint_mode(1); 
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
-                  ag_dr_transaction.fixed_source.constraint_mode(0);
+                  
 				end
 				default: begin 
                   ag_dr_transaction.self_addrs.constraint_mode(1); 
                   ag_dr_transaction.valid_addrs.constraint_mode(1); 
 				end
 			endcase
+		this.ag_dr_transaction.randomize();
 			///Se randomizan los parámetros según las restricciones
-            if(this.gen_ag_transaction.source_rand==0) ag_dr_transaction.fix_source = gen_ag_transaction.source;
-			this.ag_dr_transaction.randomize();
-          	
+		if(this.gen_ag_transaction.source_rand==0) begin 
+			ag_dr_transaction.source = gen_ag_transaction.source;
+                        if(ag_dr_transaction.id == ag_dr_transaction.source) begin
+                                if(ag_dr_transaction.id == 0) ag_dr_transaction.id = ag_dr_transaction.id+1;
+                                else ag_dr_transaction.id = ag_dr_transaction.id-1;
+                        end
+                end	
 			///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
-         	if(this.gen_ag_transaction.id_rand==0) ag_dr_transaction.id = gen_ag_transaction.id;
-          	
+		if(this.gen_ag_transaction.id_rand==0) begin
+		       	ag_dr_transaction.id = gen_ag_transaction.id;
+			if(ag_dr_transaction.id == ag_dr_transaction.source) begin
+				if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.id+1;
+				else ag_dr_transaction.source = ag_dr_transaction.source-1;
+			end
+		end
 			///Se carga el tiempo de la transacción 
           	this.ag_dr_transaction.tiempo = $time;
 			///Se envía el paquete al mailbox corresponciente

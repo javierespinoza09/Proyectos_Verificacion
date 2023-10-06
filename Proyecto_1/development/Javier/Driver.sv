@@ -29,6 +29,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size 
 		join_none
 		forever begin
           this.ag_dr_mbx.get(ag_dr_transaction);                                          //Comunicación con el agente
+	  $display("DRIVER %d: Transaction received",this.drv_num);
           while(this.fifo_in.d_q.size >= fifo_size) #5; 								  //Evita la pérdida de paquetes
           this.fifo_in.fifo_push({this.ag_dr_transaction.id,this.ag_dr_transaction.dato});//Manda un paquete a la FIFO  
 		end
