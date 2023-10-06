@@ -1,55 +1,29 @@
 class Test #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_size = 8);
-    /*       */
-    /*Mailbox*/
-    /*       */
-	tst_gen_mbx tst_gen_mbx;
-    tst_gen tst_gen_transaction;
-	tst_chk_sb tst_chk_sb_transaction;
-	tst_chk_sb_mbx tst_chk_sb_mbx;
-
-  function new();
-    	this.tst_gen_transaction = new();
-	this.tst_chk_sb_transaction = new();
+  tst_gen_mbx tst_gen_mbx;
+  tst_gen tst_gen_transaction;
+  tst_chk_sb_mbx tst_chk_sb_mbx;
+  tst_chk_sb tst_chk_sb_transaction;
+	int test;
+       int source;
+       int id;
+  function new(int test);
+    this.tst_gen_transaction = new();
+    this.tst_chk_sb_transaction = new();
+	this.test = test;
   endfunction 
   
-  ///////////////////////////////////////////
-  //Corre 3 Pruebas distintas en el sistema//
-  ///////////////////////////////////////////
-  
   task run();
-	this.tst_gen_transaction = new();  
-	this.tst_chk_sb_transaction = new();
-    tst_gen_transaction.caso = normal;  
-    tst_gen_mbx.put(tst_gen_transaction);
-	this.tst_chk_sb_transaction.test = normal;
-	this.tst_chk_sb_transaction.drvrs = drvrs;
-	this.tst_chk_sb_transaction.pckg_sz = pckg_sz;
-	this.tst_chk_sb_transaction.fifo_size = fifo_size;
-    	$display("TEST: CASO-NORMAL",$time);
-
-	#50000
-
-	this.tst_gen_transaction = new();
-        this.tst_chk_sb_transaction = new();
-        tst_gen_transaction.caso = broadcast;
-        tst_gen_mbx.put(tst_gen_transaction);
-        this.tst_chk_sb_transaction.test = normal;
-        this.tst_chk_sb_transaction.drvrs = drvrs;
-        this.tst_chk_sb_transaction.pckg_sz = pckg_sz;
-        this.tst_chk_sb_transaction.fifo_size = fifo_size;
-        $display("TEST: BROADCAST",$time);
-
-    	#50000
-
-	this.tst_gen_transaction = new();
-        this.tst_chk_sb_transaction = new();
-        tst_gen_transaction.caso = one_to_all;
-        tst_gen_mbx.put(tst_gen_transaction);
-        this.tst_chk_sb_transaction.test = normal;
-        this.tst_chk_sb_transaction.drvrs = drvrs;
-        this.tst_chk_sb_transaction.pckg_sz = pckg_sz;
-        this.tst_chk_sb_transaction.fifo_size = fifo_size;
-    $display("TEST: ONE TO ALL",$time);
+	tst_gen_transaction.id = this.id;
+	tst_gen_transaction.source = this.source;
+    tst_gen_transaction.caso = this.test;
+  	tst_gen_mbx.put(tst_gen_transaction);
+    
+    tst_chk_sb_transaction.test = this.test;
+    tst_chk_sb_transaction.drvrs = this.drvrs;
+    tst_chk_sb_transaction.pckg_sz = this.pckg_sz;
+    tst_chk_sb_transaction.fifo_size = this.fifo_size;
+    tst_chk_sb_mbx.put(tst_chk_sb_transaction);
+    
   endtask
   
   

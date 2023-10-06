@@ -52,6 +52,7 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_si
             		this.monitor[k].mon_chk_sb_mbx = mon_chk_sb_mbx;
             		this.agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
             		this.driver[k].ag_dr_mbx = ag_dr_mbx[k];
+          			this.driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
 
         	end
 
@@ -78,8 +79,8 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_si
   //////////////////////////////////
   //Genera el reporte de los Datos//
   //////////////////////////////////
-	task resport();
-		this.chk_sb.report_sb();
+	task resport(int num);
+		this.chk_sb.report_sb(num);
 	endtask
 
 	function display();

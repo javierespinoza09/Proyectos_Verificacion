@@ -24,12 +24,12 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
     case (this.tst_gen_transaction.caso)
       normal:begin
         this.gen_ag_transaction.data_modo = max_aleatoriedad;
-        this.gen_ag_transaction.cant_datos = 100;
+        this.gen_ag_transaction.cant_datos = 15;
         this.gen_ag_transaction.id_modo = normal_id;
         this.gen_ag_transaction.id_rand = 1;
-        this.gen_ag_transaction.id = 0;
+        this.gen_ag_transaction.id = tst_gen_transaction.id;
         this.gen_ag_transaction.source_rand = 1;
-        this.gen_ag_transaction.source = 1;
+        this.gen_ag_transaction.source = tst_gen_transaction.source;
         gen_ag_mbx.put(gen_ag_transaction);
       end
       broadcast:begin
@@ -39,7 +39,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.data_modo = max_aleatoriedad;
         this.gen_ag_transaction.id = {8{1'b1}};
         this.gen_ag_transaction.source_rand = 1;
-        this.gen_ag_transaction.source = 1;
+        this.gen_ag_transaction.source = tst_gen_transaction.source;
         gen_ag_mbx.put(gen_ag_transaction);
       end
       one_to_all:begin
@@ -47,9 +47,9 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.cant_datos = 10;
         this.gen_ag_transaction.id_modo = fix_source;
         this.gen_ag_transaction.id_rand = 1;
-        this.gen_ag_transaction.id = 0;
+        this.gen_ag_transaction.id = tst_gen_transaction.id;
         this.gen_ag_transaction.source_rand = 0;
-        this.gen_ag_transaction.source = 1;
+        this.gen_ag_transaction.source = tst_gen_transaction.source;
         gen_ag_mbx.put(gen_ag_transaction);
       end
       all_to_one:begin
@@ -57,9 +57,9 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.cant_datos = 10;
         this.gen_ag_transaction.id_modo = fix_source;
         this.gen_ag_transaction.id_rand = 0;
-        this.gen_ag_transaction.id = 1;
-        this.gen_ag_transaction.source_rand = 0;
-        this.gen_ag_transaction.source = 1;
+        this.gen_ag_transaction.id = tst_gen_transaction.id;
+        this.gen_ag_transaction.source_rand = 1;
+        this.gen_ag_transaction.source = tst_gen_transaction.source;
         gen_ag_mbx.put(gen_ag_transaction);
       end
       default: begin

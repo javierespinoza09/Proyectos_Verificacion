@@ -35,8 +35,7 @@ class fifo_in #(parameter packagesize = 16, parameter drvrs = 4, parameter fifo_
           	@(posedge this.v_if.pop[0][this.fifo_num]);
 			this.v_if.D_pop[0][this.fifo_num] = d_q[0];
 			@(posedge this.v_if.clk);
-			this.d_q.delete(0);
-          
+			if(this.d_q.size>0) this.d_q.delete(0);
 		end
 	endtask
   

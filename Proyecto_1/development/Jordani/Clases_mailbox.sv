@@ -24,6 +24,8 @@ endclass
 
 class tst_gen;
   int caso;
+  int id;
+  int source;
   function new ();
   endfunction;
 endclass
@@ -69,7 +71,6 @@ class ag_dr #(parameter pckg_sz = 16, parameter drvrs = 4);
   constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
   constraint data_variablility {dato inside {{(pckg_sz-8){1'b1}},{(pckg_sz-8){1'b0}}};};
-  constraint fixed_source {source == fix_source;};
   
   
 

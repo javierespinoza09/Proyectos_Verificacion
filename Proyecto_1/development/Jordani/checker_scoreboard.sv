@@ -17,6 +17,8 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   int res[$];
   int prom = 0;
   int tiempo = 0;
+  int fa;
+  string file_name;
 
   //El constructor vacía las colas e inicia el mbx//
   function new();
@@ -29,7 +31,8 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   task run_ag();
     forever begin
       this.ag_chk_sb_mbx.get(this.ag_chk_sb_transaction);
-      this.q_instrucciones.push_back(this.ag_chk_sb_transaction);  
+      this.q_instrucciones.push_back(this.ag_chk_sb_transaction);
+      this.tst_chk_sb_mbx.try_get(this.tst_chk_sb_transaction);
     end 
   endtask
   
@@ -48,27 +51,40 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   /*SISTEMA DE REPORTE DE DATOS*/
   /*                           */
   
-  function report_sb();
-    int fa;
-    fa = $fopen("Reporte.csv","a");
-    $fdisplay(fa,"Reporte Scoreboard");
+  function report_sb(int num);
+	  $display("Reporte %d",num);
+	 
+    this.file_name = $sformatf("Reporte%0d_%0dD_%0dPS_%0dFS.csv",num,this.tst_chk_sb_transaction.drvrs, this.tst_chk_sb_transaction.pckg_sz, this.tst_chk_sb_transaction.fifo_size);
+    this.fa = $fopen(this.file_name,"a");
+    $fdisplay(fa,"**********************");
+    $fdisplay(fa," REPORTE SCOREBOARD");
+    $fdisplay(fa,"**********************\n");
+    
+    $fdisplay(fa,"PARAMETROS DE LA PRUEBA:");
+    $fdisplay(fa,"Prueba: %d \nDrivers: %d \nPayload: %d\nFiFo size: %d\n",this.tst_chk_sb_transaction.test,this.tst_chk_sb_transaction.drvrs, this.tst_chk_sb_transaction.pckg_sz-8, this.tst_chk_sb_transaction.fifo_size);
+    
+    $fdisplay(fa,"RESULTADOS GENERALES:");
+    $fdisplay(fa,"TOTAL DE TRANSACCIONES ENVIADAS: %d",this.q_instrucciones.size() );
+    $fdisplay(fa,"TOTAL DE TRANSACCIONES RECIBIDAS: %d",this.q_resultados_array.size() );
+    $fdisplay(fa,"TOTAL DE TRANSACCIONES PERDIDAS: %d\n", this.q_instrucciones.size() - this.q_resultados_array.size() );
     
     
     $fdisplay(fa,"REPORTE DE TRANSACCIONES REALIZADAS");
-    foreach(this.q_instrucciones[i]) $fdisplay(fa,"Posición %d de la cola, dato = %d , id = %d, instante [%g], salió del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source);
-    $fdisplay(fa,"REPORTE DE TRANSACCIONES RECIBIDAS");
-    foreach(this.q_resultados_array[i]) $fdisplay(fa,"Posición %d de la cola, dato = %d , id = %d, instante [%g], llegó al: %g",i,this.q_resultados_array[i].payload,this.q_resultados_array[i].id, this.q_resultados_array[i].tiempo,this.q_resultados_array[i].receiver);
+    foreach(this.q_instrucciones[i]) $fdisplay(fa,"Posicion %d de la cola, dato = %d , id = %d, instante [%g], salio del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source);
+    $fdisplay(fa,"\nREPORTE DE TRANSACCIONES RECIBIDAS");
+    foreach(this.q_resultados_array[i]) $fdisplay(fa,"Posicion %d de la cola, dato = %d , id = %d, instante [%g], llego al: %g",i,this.q_resultados_array[i].payload,this.q_resultados_array[i].id, this.q_resultados_array[i].tiempo,this.q_resultados_array[i].receiver);
     
     
     
-    $fdisplay(fa,"REPORTE DE RETRASOS EN LAS TRANSACCIONES");
+    $fdisplay(fa,"\nREPORTE DE RETRASOS EN LAS TRANSACCIONES");
     foreach(this.q_instrucciones[i]) begin
       res = q_resultados_array.find_index with (item.id == this.q_instrucciones[i].id & item.payload == this.q_instrucciones[i].payload );
       tiempo =q_resultados_array[res[0]].tiempo - this.q_instrucciones[i].transaction_time;
       $fdisplay(fa,"El retraso Salida-Entrada en el Dato: %d con ID: %d es de [%g]",this.q_instrucciones[i].payload, this.q_instrucciones[i].id,tiempo);
       prom = prom + tiempo;
     end
-    $fdisplay(fa,"El retraso promedio es de: [%g]",prom/this.q_resultados_array.size());
+    $fdisplay(fa,"\nEl retraso promedio de la prueba es de: [%g]",prom/this.q_resultados_array.size());
+    $fclose(fa);
   
   endfunction
   
