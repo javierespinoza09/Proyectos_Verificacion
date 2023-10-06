@@ -11,6 +11,8 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
   ag_chk_sb #(.pckg_sz(pckg_sz)) q_instrucciones [$];
   mon_chk_sb q_resultados [$];
   mon_chk_sb q_resultados_array [];
+  gen_chk_sb_mbx gen_chk_sb_mbx;
+  gen_chk_sb gen_chk_sb_transaction;
   
   
   //Variables para el manejo de los datos del reporte//
@@ -33,6 +35,7 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
       this.ag_chk_sb_mbx.get(this.ag_chk_sb_transaction);
       this.q_instrucciones.push_back(this.ag_chk_sb_transaction);
       this.tst_chk_sb_mbx.try_get(this.tst_chk_sb_transaction);
+      this.gen_chk_sb_mbx.try_get(this.gen_chk_sb_transaction);
     end 
   endtask
   
@@ -68,6 +71,9 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
     $fdisplay(fa,"TOTAL DE TRANSACCIONES RECIBIDAS: %d",this.q_resultados_array.size() );
     $fdisplay(fa,"TOTAL DE TRANSACCIONES PERDIDAS: %d\n", this.q_instrucciones.size() - this.q_resultados_array.size() );
     
+    
+    $fdisplay(fa,"REPORTE DEL GENERADOR:");
+    $fdisplay(fa,"TOTAL DE DATOS CREADOS: %d\n",this.gen_chk_sb_transaction.cant_datos);
     
     $fdisplay(fa,"REPORTE DE TRANSACCIONES REALIZADAS");
     foreach(this.q_instrucciones[i]) $fdisplay(fa,"Posicion %d de la cola, dato = %d , id = %d, instante [%g], salio del: %g",i,this.q_instrucciones[i].payload,this.q_instrucciones[i].id, this.q_instrucciones[i].transaction_time,this.q_instrucciones[i].source);

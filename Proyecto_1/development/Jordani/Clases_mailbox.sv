@@ -101,6 +101,13 @@ class ag_chk_sb #(parameter pckg_sz = 16);
 endclass
 
 
+class gen_chk_sb;
+  int cant_datos;
+  function new ();
+  endfunction;
+endclass
+
+
 ///////////////////
 ////Mailboxes//////
 ///////////////////
@@ -110,6 +117,7 @@ typedef mailbox #(gen_ag) gen_ag_mbx ;
 typedef mailbox #(mon_chk_sb) mon_chk_sb_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
 typedef mailbox #(tst_chk_sb) tst_chk_sb_mbx;
+typedef mailbox #(gen_chk_sb) gen_chk_sb_mbx;
 
 /////////////////////////////////////////////
 //Set de variables para los casos de prueba//

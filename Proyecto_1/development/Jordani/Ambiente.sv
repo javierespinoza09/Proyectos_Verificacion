@@ -15,6 +15,7 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_si
 	/////////////////////////////////
 	tst_chk_sb_mbx tst_chk_sb_mbx;
 	gen_ag_mbx gen_ag_mbx;
+  	gen_chk_sb_mbx gen_chk_sb_mbx;
 	ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx;
 	tst_gen_mbx tst_gen_mbx;
 	ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_mbx[drvrs];
@@ -31,6 +32,7 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_si
 		this.gen_ag_mbx = new();
   		this.ag_chk_sb_mbx = new();
   		this.tst_gen_mbx = new ();
+        this.gen_chk_sb_mbx = new();
 		////////////////////////////////////////////////////////////////////
 		//Se inicializan las clases agente, generador y checker_scoreboard//
 		//	Se instancian los mailbox de cada modulo		              //
@@ -41,9 +43,11 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 16, parameter fifo_si
 		this.generador = new();
 		this.generador.gen_ag_mbx = gen_ag_mbx;
 		this.generador.tst_gen_mbx = tst_gen_mbx;
+        this.generador.gen_chk_sb_mbx = gen_chk_sb_mbx;
 		this.chk_sb = new();
-        	this.chk_sb.ag_chk_sb_mbx = ag_chk_sb_mbx;
+        this.chk_sb.ag_chk_sb_mbx = ag_chk_sb_mbx;
 		this.chk_sb.mon_chk_sb_mbx = mon_chk_sb_mbx;
+        this.chk_sb.gen_chk_sb_mbx = gen_chk_sb_mbx;
 		for (int i = 0; i<drvrs; i++ ) begin
 
 			automatic int k = i;
