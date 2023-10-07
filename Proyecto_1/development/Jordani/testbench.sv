@@ -76,15 +76,17 @@ end
 		
 		#200000
                 ambiente_0.resport(0);
-/*		
+		
 		disable fork;
 		////////////////////////////////////////////////////
-		t_1 = new(normal);
+				t_1 = new(normal);
                 t_1.tst_gen_mbx = tst_gen_mbx;
+                t_1.tst_chk_sb_mbx = tst_chk_sb_mbx;
+                
                 ambiente_0 = new();
                 ambiente_0.display();
                 ambiente_0.generador.tst_gen_mbx = tst_gen_mbx;
-                t_1.tst_chk_sb_mbx = tst_chk_sb_mbx;
+                ambiente_0.chk_sb.tst_chk_sb_mbx = tst_chk_sb_mbx;
                 //ambiente_0.v_if = _if;
                 for (int i = 0; i<drvrs; i++ ) begin
 
@@ -104,12 +106,14 @@ end
 
 		disable fork;
 
-                t_2 = new(all_to_one);
+          t_2 = new(one_to_all);
                 t_2.tst_gen_mbx = tst_gen_mbx;
                 t_2.tst_chk_sb_mbx = tst_chk_sb_mbx;
+                
                 ambiente_0 = new();
                 ambiente_0.display();
                 ambiente_0.generador.tst_gen_mbx = tst_gen_mbx;
+          		ambiente_0.chk_sb.tst_chk_sb_mbx = tst_chk_sb_mbx;
                 //ambiente_0.v_if = _if;
                 for (int i = 0; i<drvrs; i++ ) begin
 
@@ -125,7 +129,7 @@ end
                 join_none
                 #200000
                 ambiente_0.resport(2);
-*/
+
 	end
 initial begin
 #700000
