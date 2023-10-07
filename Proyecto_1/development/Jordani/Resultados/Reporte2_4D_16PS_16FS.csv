@@ -1,0 +1,145 @@
+**********************
+ REPORTE SCOREBOARD
+**********************
+
+PARAMETROS DE LA PRUEBA:
+Prueba:           2 
+Drivers:           4 
+Payload:           8
+FiFo size:          16
+
+RESULTADOS GENERALES:
+TOTAL DE TRANSACCIONES ENVIADAS:          40
+TOTAL DE TRANSACCIONES RECIBIDAS:          40
+TOTAL DE TRANSACCIONES PERDIDAS:           0
+
+REPORTE DEL GENERADOR:
+TOTAL DE DATOS CREADOS:          40
+
+REPORTE DE TRANSACCIONES REALIZADAS
+Posicion           0 de la cola, dato = 120 , id =   2, instante [400000], salio del: 0
+Posicion           1 de la cola, dato = 193 , id =   3, instante [400001], salio del: 0
+Posicion           2 de la cola, dato = 248 , id =   3, instante [400002], salio del: 0
+Posicion           3 de la cola, dato = 112 , id =   2, instante [400003], salio del: 0
+Posicion           4 de la cola, dato = 213 , id =   2, instante [400004], salio del: 0
+Posicion           5 de la cola, dato =  86 , id =   2, instante [400005], salio del: 0
+Posicion           6 de la cola, dato = 175 , id =   3, instante [400006], salio del: 0
+Posicion           7 de la cola, dato =   5 , id =   1, instante [400007], salio del: 0
+Posicion           8 de la cola, dato =  52 , id =   3, instante [400008], salio del: 0
+Posicion           9 de la cola, dato = 158 , id =   2, instante [400009], salio del: 0
+Posicion          10 de la cola, dato =  14 , id =   1, instante [400010], salio del: 0
+Posicion          11 de la cola, dato =  70 , id =   1, instante [400011], salio del: 0
+Posicion          12 de la cola, dato = 187 , id =   2, instante [400012], salio del: 0
+Posicion          13 de la cola, dato = 234 , id =   3, instante [400013], salio del: 0
+Posicion          14 de la cola, dato =  41 , id =   1, instante [400014], salio del: 0
+Posicion          15 de la cola, dato = 198 , id =   2, instante [400015], salio del: 0
+Posicion          16 de la cola, dato = 195 , id =   1, instante [400026], salio del: 0
+Posicion          17 de la cola, dato = 175 , id =   1, instante [400266], salio del: 0
+Posicion          18 de la cola, dato = 101 , id =   1, instante [400516], salio del: 0
+Posicion          19 de la cola, dato = 224 , id =   1, instante [400766], salio del: 0
+Posicion          20 de la cola, dato =  50 , id =   2, instante [401016], salio del: 0
+Posicion          21 de la cola, dato = 189 , id =   3, instante [401266], salio del: 0
+Posicion          22 de la cola, dato = 132 , id =   1, instante [401516], salio del: 0
+Posicion          23 de la cola, dato =  65 , id =   1, instante [401766], salio del: 0
+Posicion          24 de la cola, dato = 109 , id =   1, instante [402016], salio del: 0
+Posicion          25 de la cola, dato = 122 , id =   1, instante [402266], salio del: 0
+Posicion          26 de la cola, dato =  80 , id =   2, instante [402516], salio del: 0
+Posicion          27 de la cola, dato =  56 , id =   1, instante [402766], salio del: 0
+Posicion          28 de la cola, dato = 191 , id =   1, instante [403016], salio del: 0
+Posicion          29 de la cola, dato = 182 , id =   1, instante [403266], salio del: 0
+Posicion          30 de la cola, dato =  18 , id =   3, instante [403516], salio del: 0
+Posicion          31 de la cola, dato =  91 , id =   1, instante [403766], salio del: 0
+Posicion          32 de la cola, dato = 203 , id =   2, instante [404016], salio del: 0
+Posicion          33 de la cola, dato =   4 , id =   2, instante [404266], salio del: 0
+Posicion          34 de la cola, dato =  80 , id =   1, instante [404516], salio del: 0
+Posicion          35 de la cola, dato =  65 , id =   1, instante [404766], salio del: 0
+Posicion          36 de la cola, dato = 194 , id =   2, instante [405016], salio del: 0
+Posicion          37 de la cola, dato =  80 , id =   2, instante [405266], salio del: 0
+Posicion          38 de la cola, dato =  27 , id =   3, instante [405516], salio del: 0
+Posicion          39 de la cola, dato = 198 , id =   1, instante [405766], salio del: 0
+
+REPORTE DE TRANSACCIONES RECIBIDAS
+Posicion           0 de la cola, dato =         120 , id =           2, instante [400225], llego al: 2
+Posicion           1 de la cola, dato =         193 , id =           3, instante [400475], llego al: 3
+Posicion           2 de la cola, dato =         248 , id =           3, instante [400725], llego al: 3
+Posicion           3 de la cola, dato =         112 , id =           2, instante [400975], llego al: 2
+Posicion           4 de la cola, dato =         213 , id =           2, instante [401225], llego al: 2
+Posicion           5 de la cola, dato =          86 , id =           2, instante [401475], llego al: 2
+Posicion           6 de la cola, dato =         175 , id =           3, instante [401725], llego al: 3
+Posicion           7 de la cola, dato =           5 , id =           1, instante [401975], llego al: 1
+Posicion           8 de la cola, dato =          52 , id =           3, instante [402225], llego al: 3
+Posicion           9 de la cola, dato =         158 , id =           2, instante [402475], llego al: 2
+Posicion          10 de la cola, dato =          14 , id =           1, instante [402725], llego al: 1
+Posicion          11 de la cola, dato =          70 , id =           1, instante [402975], llego al: 1
+Posicion          12 de la cola, dato =         187 , id =           2, instante [403225], llego al: 2
+Posicion          13 de la cola, dato =         234 , id =           3, instante [403475], llego al: 3
+Posicion          14 de la cola, dato =          41 , id =           1, instante [403725], llego al: 1
+Posicion          15 de la cola, dato =         198 , id =           2, instante [403975], llego al: 2
+Posicion          16 de la cola, dato =         195 , id =           1, instante [404225], llego al: 1
+Posicion          17 de la cola, dato =         175 , id =           1, instante [404475], llego al: 1
+Posicion          18 de la cola, dato =         101 , id =           1, instante [404725], llego al: 1
+Posicion          19 de la cola, dato =         224 , id =           1, instante [404975], llego al: 1
+Posicion          20 de la cola, dato =          50 , id =           2, instante [405225], llego al: 2
+Posicion          21 de la cola, dato =         189 , id =           3, instante [405475], llego al: 3
+Posicion          22 de la cola, dato =         132 , id =           1, instante [405725], llego al: 1
+Posicion          23 de la cola, dato =          65 , id =           1, instante [405975], llego al: 1
+Posicion          24 de la cola, dato =         109 , id =           1, instante [406225], llego al: 1
+Posicion          25 de la cola, dato =         122 , id =           1, instante [406475], llego al: 1
+Posicion          26 de la cola, dato =          80 , id =           2, instante [406725], llego al: 2
+Posicion          27 de la cola, dato =          56 , id =           1, instante [406975], llego al: 1
+Posicion          28 de la cola, dato =         191 , id =           1, instante [407225], llego al: 1
+Posicion          29 de la cola, dato =         182 , id =           1, instante [407475], llego al: 1
+Posicion          30 de la cola, dato =          18 , id =           3, instante [407725], llego al: 3
+Posicion          31 de la cola, dato =          91 , id =           1, instante [407975], llego al: 1
+Posicion          32 de la cola, dato =         203 , id =           2, instante [408225], llego al: 2
+Posicion          33 de la cola, dato =           4 , id =           2, instante [408475], llego al: 2
+Posicion          34 de la cola, dato =          80 , id =           1, instante [408725], llego al: 1
+Posicion          35 de la cola, dato =          65 , id =           1, instante [408975], llego al: 1
+Posicion          36 de la cola, dato =         194 , id =           2, instante [409225], llego al: 2
+Posicion          37 de la cola, dato =          80 , id =           2, instante [409475], llego al: 2
+Posicion          38 de la cola, dato =          27 , id =           3, instante [409725], llego al: 3
+Posicion          39 de la cola, dato =         198 , id =           1, instante [409975], llego al: 1
+
+REPORTE DE RETRASOS EN LAS TRANSACCIONES
+El retraso Salida-Entrada en el Dato: 120 con ID:   2 es de [225]
+El retraso Salida-Entrada en el Dato: 193 con ID:   3 es de [474]
+El retraso Salida-Entrada en el Dato: 248 con ID:   3 es de [723]
+El retraso Salida-Entrada en el Dato: 112 con ID:   2 es de [972]
+El retraso Salida-Entrada en el Dato: 213 con ID:   2 es de [1221]
+El retraso Salida-Entrada en el Dato:  86 con ID:   2 es de [1470]
+El retraso Salida-Entrada en el Dato: 175 con ID:   3 es de [1719]
+El retraso Salida-Entrada en el Dato:   5 con ID:   1 es de [1968]
+El retraso Salida-Entrada en el Dato:  52 con ID:   3 es de [2217]
+El retraso Salida-Entrada en el Dato: 158 con ID:   2 es de [2466]
+El retraso Salida-Entrada en el Dato:  14 con ID:   1 es de [2715]
+El retraso Salida-Entrada en el Dato:  70 con ID:   1 es de [2964]
+El retraso Salida-Entrada en el Dato: 187 con ID:   2 es de [3213]
+El retraso Salida-Entrada en el Dato: 234 con ID:   3 es de [3462]
+El retraso Salida-Entrada en el Dato:  41 con ID:   1 es de [3711]
+El retraso Salida-Entrada en el Dato: 198 con ID:   2 es de [3960]
+El retraso Salida-Entrada en el Dato: 195 con ID:   1 es de [4199]
+El retraso Salida-Entrada en el Dato: 175 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 101 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 224 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato:  50 con ID:   2 es de [4209]
+El retraso Salida-Entrada en el Dato: 189 con ID:   3 es de [4209]
+El retraso Salida-Entrada en el Dato: 132 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato:  65 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 109 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 122 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato:  80 con ID:   2 es de [4209]
+El retraso Salida-Entrada en el Dato:  56 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 191 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 182 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato:  18 con ID:   3 es de [4209]
+El retraso Salida-Entrada en el Dato:  91 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato: 203 con ID:   2 es de [4209]
+El retraso Salida-Entrada en el Dato:   4 con ID:   2 es de [4209]
+El retraso Salida-Entrada en el Dato:  80 con ID:   1 es de [4209]
+El retraso Salida-Entrada en el Dato:  65 con ID:   1 es de [1209]
+El retraso Salida-Entrada en el Dato: 194 con ID:   2 es de [4209]
+El retraso Salida-Entrada en el Dato:  80 con ID:   2 es de [1459]
+El retraso Salida-Entrada en el Dato:  27 con ID:   3 es de [4209]
+El retraso Salida-Entrada en el Dato: 198 con ID:   1 es de [4209]
+
+El retraso promedio de la prueba es de: [3218]

@@ -1,0 +1,110 @@
+**********************
+ REPORTE SCOREBOARD
+**********************
+
+PARAMETROS DE LA PRUEBA:
+Prueba:           1 
+Drivers:          16 
+Payload:           8
+FiFo size:           8
+
+RESULTADOS GENERALES:
+TOTAL DE TRANSACCIONES ENVIADAS:           5
+TOTAL DE TRANSACCIONES RECIBIDAS:          75
+TOTAL DE TRANSACCIONES PERDIDAS:           0
+
+REPORTE DEL GENERADOR:
+TOTAL DE DATOS CREADOS:           5
+
+REPORTE DE TRANSACCIONES REALIZADAS
+Posicion           0 de la cola, dato = 131 , id = 255, instante [600000], salio del: 4
+Posicion           1 de la cola, dato = 223 , id = 255, instante [600001], salio del: 13
+Posicion           2 de la cola, dato = 228 , id = 255, instante [600002], salio del: 15
+Posicion           3 de la cola, dato = 121 , id = 255, instante [600003], salio del: 2
+Posicion           4 de la cola, dato = 205 , id = 255, instante [600004], salio del: 11
+
+REPORTE DE TRANSACCIONES RECIBIDAS
+Posicion           0 de la cola, dato =         121 , id =         255, instante [600205], llego al: 0
+Posicion           1 de la cola, dato =         121 , id =         255, instante [600205], llego al: 1
+Posicion           2 de la cola, dato =         121 , id =         255, instante [600205], llego al: 3
+Posicion           3 de la cola, dato =         121 , id =         255, instante [600205], llego al: 4
+Posicion           4 de la cola, dato =         121 , id =         255, instante [600205], llego al: 5
+Posicion           5 de la cola, dato =         121 , id =         255, instante [600205], llego al: 6
+Posicion           6 de la cola, dato =         121 , id =         255, instante [600205], llego al: 7
+Posicion           7 de la cola, dato =         121 , id =         255, instante [600205], llego al: 8
+Posicion           8 de la cola, dato =         121 , id =         255, instante [600205], llego al: 9
+Posicion           9 de la cola, dato =         121 , id =         255, instante [600205], llego al: 10
+Posicion          10 de la cola, dato =         121 , id =         255, instante [600205], llego al: 11
+Posicion          11 de la cola, dato =         121 , id =         255, instante [600205], llego al: 12
+Posicion          12 de la cola, dato =         121 , id =         255, instante [600205], llego al: 13
+Posicion          13 de la cola, dato =         121 , id =         255, instante [600205], llego al: 14
+Posicion          14 de la cola, dato =         121 , id =         255, instante [600205], llego al: 15
+Posicion          15 de la cola, dato =         131 , id =         255, instante [600415], llego al: 0
+Posicion          16 de la cola, dato =         131 , id =         255, instante [600415], llego al: 1
+Posicion          17 de la cola, dato =         131 , id =         255, instante [600415], llego al: 2
+Posicion          18 de la cola, dato =         131 , id =         255, instante [600415], llego al: 3
+Posicion          19 de la cola, dato =         131 , id =         255, instante [600415], llego al: 5
+Posicion          20 de la cola, dato =         131 , id =         255, instante [600415], llego al: 6
+Posicion          21 de la cola, dato =         131 , id =         255, instante [600415], llego al: 7
+Posicion          22 de la cola, dato =         131 , id =         255, instante [600415], llego al: 8
+Posicion          23 de la cola, dato =         131 , id =         255, instante [600415], llego al: 9
+Posicion          24 de la cola, dato =         131 , id =         255, instante [600415], llego al: 10
+Posicion          25 de la cola, dato =         131 , id =         255, instante [600415], llego al: 11
+Posicion          26 de la cola, dato =         131 , id =         255, instante [600415], llego al: 12
+Posicion          27 de la cola, dato =         131 , id =         255, instante [600415], llego al: 13
+Posicion          28 de la cola, dato =         131 , id =         255, instante [600415], llego al: 14
+Posicion          29 de la cola, dato =         131 , id =         255, instante [600415], llego al: 15
+Posicion          30 de la cola, dato =         205 , id =         255, instante [600725], llego al: 0
+Posicion          31 de la cola, dato =         205 , id =         255, instante [600725], llego al: 1
+Posicion          32 de la cola, dato =         205 , id =         255, instante [600725], llego al: 2
+Posicion          33 de la cola, dato =         205 , id =         255, instante [600725], llego al: 3
+Posicion          34 de la cola, dato =         205 , id =         255, instante [600725], llego al: 4
+Posicion          35 de la cola, dato =         205 , id =         255, instante [600725], llego al: 5
+Posicion          36 de la cola, dato =         205 , id =         255, instante [600725], llego al: 6
+Posicion          37 de la cola, dato =         205 , id =         255, instante [600725], llego al: 7
+Posicion          38 de la cola, dato =         205 , id =         255, instante [600725], llego al: 8
+Posicion          39 de la cola, dato =         205 , id =         255, instante [600725], llego al: 9
+Posicion          40 de la cola, dato =         205 , id =         255, instante [600725], llego al: 10
+Posicion          41 de la cola, dato =         205 , id =         255, instante [600725], llego al: 12
+Posicion          42 de la cola, dato =         205 , id =         255, instante [600725], llego al: 13
+Posicion          43 de la cola, dato =         205 , id =         255, instante [600725], llego al: 14
+Posicion          44 de la cola, dato =         205 , id =         255, instante [600725], llego al: 15
+Posicion          45 de la cola, dato =         223 , id =         255, instante [600935], llego al: 0
+Posicion          46 de la cola, dato =         223 , id =         255, instante [600935], llego al: 1
+Posicion          47 de la cola, dato =         223 , id =         255, instante [600935], llego al: 2
+Posicion          48 de la cola, dato =         223 , id =         255, instante [600935], llego al: 3
+Posicion          49 de la cola, dato =         223 , id =         255, instante [600935], llego al: 4
+Posicion          50 de la cola, dato =         223 , id =         255, instante [600935], llego al: 5
+Posicion          51 de la cola, dato =         223 , id =         255, instante [600935], llego al: 6
+Posicion          52 de la cola, dato =         223 , id =         255, instante [600935], llego al: 7
+Posicion          53 de la cola, dato =         223 , id =         255, instante [600935], llego al: 8
+Posicion          54 de la cola, dato =         223 , id =         255, instante [600935], llego al: 9
+Posicion          55 de la cola, dato =         223 , id =         255, instante [600935], llego al: 10
+Posicion          56 de la cola, dato =         223 , id =         255, instante [600935], llego al: 11
+Posicion          57 de la cola, dato =         223 , id =         255, instante [600935], llego al: 12
+Posicion          58 de la cola, dato =         223 , id =         255, instante [600935], llego al: 14
+Posicion          59 de la cola, dato =         223 , id =         255, instante [600935], llego al: 15
+Posicion          60 de la cola, dato =         228 , id =         255, instante [601145], llego al: 0
+Posicion          61 de la cola, dato =         228 , id =         255, instante [601145], llego al: 1
+Posicion          62 de la cola, dato =         228 , id =         255, instante [601145], llego al: 2
+Posicion          63 de la cola, dato =         228 , id =         255, instante [601145], llego al: 3
+Posicion          64 de la cola, dato =         228 , id =         255, instante [601145], llego al: 4
+Posicion          65 de la cola, dato =         228 , id =         255, instante [601145], llego al: 5
+Posicion          66 de la cola, dato =         228 , id =         255, instante [601145], llego al: 6
+Posicion          67 de la cola, dato =         228 , id =         255, instante [601145], llego al: 7
+Posicion          68 de la cola, dato =         228 , id =         255, instante [601145], llego al: 8
+Posicion          69 de la cola, dato =         228 , id =         255, instante [601145], llego al: 9
+Posicion          70 de la cola, dato =         228 , id =         255, instante [601145], llego al: 10
+Posicion          71 de la cola, dato =         228 , id =         255, instante [601145], llego al: 11
+Posicion          72 de la cola, dato =         228 , id =         255, instante [601145], llego al: 12
+Posicion          73 de la cola, dato =         228 , id =         255, instante [601145], llego al: 13
+Posicion          74 de la cola, dato =         228 , id =         255, instante [601145], llego al: 14
+
+REPORTE DE RETRASOS EN LAS TRANSACCIONES
+El retraso Salida-Entrada en el Dato: 131 con ID: 255 es de [415]
+El retraso Salida-Entrada en el Dato: 223 con ID: 255 es de [934]
+El retraso Salida-Entrada en el Dato: 228 con ID: 255 es de [1143]
+El retraso Salida-Entrada en el Dato: 121 con ID: 255 es de [202]
+El retraso Salida-Entrada en el Dato: 205 con ID: 255 es de [721]
+
+El retraso promedio de la prueba es de: [45]

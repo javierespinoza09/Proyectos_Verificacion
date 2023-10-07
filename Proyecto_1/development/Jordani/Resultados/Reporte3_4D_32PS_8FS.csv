@@ -1,0 +1,50 @@
+**********************
+ REPORTE SCOREBOARD
+**********************
+
+PARAMETROS DE LA PRUEBA:
+Prueba:           1 
+Drivers:           4 
+Payload:          24
+FiFo size:           8
+
+RESULTADOS GENERALES:
+TOTAL DE TRANSACCIONES ENVIADAS:           5
+TOTAL DE TRANSACCIONES RECIBIDAS:          15
+TOTAL DE TRANSACCIONES PERDIDAS:           0
+
+REPORTE DEL GENERADOR:
+TOTAL DE DATOS CREADOS:           5
+
+REPORTE DE TRANSACCIONES REALIZADAS
+Posicion           0 de la cola, dato =  8067226 , id = 255, instante [600000], salio del: 2
+Posicion           1 de la cola, dato = 12144906 , id = 255, instante [600001], salio del: 2
+Posicion           2 de la cola, dato =  7807199 , id = 255, instante [600002], salio del: 2
+Posicion           3 de la cola, dato = 10272216 , id = 255, instante [600003], salio del: 1
+Posicion           4 de la cola, dato =  1110460 , id = 255, instante [600004], salio del: 3
+
+REPORTE DE TRANSACCIONES RECIBIDAS
+Posicion           0 de la cola, dato =     1110460 , id =         255, instante [600365], llego al: 0
+Posicion           1 de la cola, dato =     1110460 , id =         255, instante [600365], llego al: 1
+Posicion           2 de la cola, dato =     1110460 , id =         255, instante [600365], llego al: 2
+Posicion           3 de la cola, dato =    10272216 , id =         255, instante [600735], llego al: 0
+Posicion           4 de la cola, dato =    10272216 , id =         255, instante [600735], llego al: 2
+Posicion           5 de la cola, dato =    10272216 , id =         255, instante [600735], llego al: 3
+Posicion           6 de la cola, dato =     8067226 , id =         255, instante [601095], llego al: 0
+Posicion           7 de la cola, dato =     8067226 , id =         255, instante [601095], llego al: 1
+Posicion           8 de la cola, dato =     8067226 , id =         255, instante [601095], llego al: 3
+Posicion           9 de la cola, dato =    12144906 , id =         255, instante [601505], llego al: 0
+Posicion          10 de la cola, dato =    12144906 , id =         255, instante [601505], llego al: 1
+Posicion          11 de la cola, dato =    12144906 , id =         255, instante [601505], llego al: 3
+Posicion          12 de la cola, dato =     7807199 , id =         255, instante [601915], llego al: 0
+Posicion          13 de la cola, dato =     7807199 , id =         255, instante [601915], llego al: 1
+Posicion          14 de la cola, dato =     7807199 , id =         255, instante [601915], llego al: 3
+
+REPORTE DE RETRASOS EN LAS TRANSACCIONES
+El retraso Salida-Entrada en el Dato:  8067226 con ID: 255 es de [1095]
+El retraso Salida-Entrada en el Dato: 12144906 con ID: 255 es de [1504]
+El retraso Salida-Entrada en el Dato:  7807199 con ID: 255 es de [1913]
+El retraso Salida-Entrada en el Dato: 10272216 con ID: 255 es de [732]
+El retraso Salida-Entrada en el Dato:  1110460 con ID: 255 es de [361]
+
+El retraso promedio de la prueba es de: [373]

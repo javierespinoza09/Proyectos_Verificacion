@@ -1,0 +1,130 @@
+**********************
+ REPORTE SCOREBOARD
+**********************
+
+PARAMETROS DE LA PRUEBA:
+Prueba:           0 
+Drivers:           4 
+Payload:           8
+FiFo size:           8
+
+RESULTADOS GENERALES:
+TOTAL DE TRANSACCIONES ENVIADAS:          35
+TOTAL DE TRANSACCIONES RECIBIDAS:          35
+TOTAL DE TRANSACCIONES PERDIDAS:           0
+
+REPORTE DEL GENERADOR:
+TOTAL DE DATOS CREADOS:          35
+
+REPORTE DE TRANSACCIONES REALIZADAS
+Posicion           0 de la cola, dato = 235 , id =   3, instante [200000], salio del: 0
+Posicion           1 de la cola, dato = 145 , id =   3, instante [200001], salio del: 2
+Posicion           2 de la cola, dato = 224 , id =   3, instante [200002], salio del: 0
+Posicion           3 de la cola, dato =  67 , id =   3, instante [200003], salio del: 2
+Posicion           4 de la cola, dato = 175 , id =   1, instante [200004], salio del: 0
+Posicion           5 de la cola, dato = 225 , id =   0, instante [200005], salio del: 1
+Posicion           6 de la cola, dato = 234 , id =   3, instante [200006], salio del: 2
+Posicion           7 de la cola, dato = 183 , id =   3, instante [200007], salio del: 2
+Posicion           8 de la cola, dato =  63 , id =   2, instante [200008], salio del: 1
+Posicion           9 de la cola, dato =  77 , id =   3, instante [200009], salio del: 1
+Posicion          10 de la cola, dato = 212 , id =   0, instante [200010], salio del: 1
+Posicion          11 de la cola, dato = 148 , id =   2, instante [200011], salio del: 3
+Posicion          12 de la cola, dato = 201 , id =   2, instante [200012], salio del: 3
+Posicion          13 de la cola, dato = 105 , id =   1, instante [200013], salio del: 0
+Posicion          14 de la cola, dato = 198 , id =   3, instante [200014], salio del: 2
+Posicion          15 de la cola, dato = 195 , id =   0, instante [200015], salio del: 3
+Posicion          16 de la cola, dato = 250 , id =   1, instante [200016], salio del: 3
+Posicion          17 de la cola, dato = 201 , id =   0, instante [200017], salio del: 1
+Posicion          18 de la cola, dato =  30 , id =   2, instante [200018], salio del: 3
+Posicion          19 de la cola, dato =  63 , id =   3, instante [200019], salio del: 1
+Posicion          20 de la cola, dato = 194 , id =   2, instante [200020], salio del: 0
+Posicion          21 de la cola, dato = 194 , id =   2, instante [200021], salio del: 1
+Posicion          22 de la cola, dato = 143 , id =   2, instante [200022], salio del: 3
+Posicion          23 de la cola, dato = 229 , id =   0, instante [200023], salio del: 1
+Posicion          24 de la cola, dato =  42 , id =   0, instante [200025], salio del: 2
+Posicion          25 de la cola, dato = 173 , id =   0, instante [200026], salio del: 2
+Posicion          26 de la cola, dato = 125 , id =   2, instante [200028], salio del: 0
+Posicion          27 de la cola, dato =  21 , id =   1, instante [200029], salio del: 2
+Posicion          28 de la cola, dato = 121 , id =   1, instante [200030], salio del: 3
+Posicion          29 de la cola, dato = 212 , id =   0, instante [200031], salio del: 2
+Posicion          30 de la cola, dato = 215 , id =   1, instante [200032], salio del: 0
+Posicion          31 de la cola, dato = 100 , id =   2, instante [200033], salio del: 3
+Posicion          32 de la cola, dato =  59 , id =   0, instante [200039], salio del: 1
+Posicion          33 de la cola, dato = 115 , id =   0, instante [200039], salio del: 3
+Posicion          34 de la cola, dato =  32 , id =   2, instante [200259], salio del: 1
+
+REPORTE DE TRANSACCIONES RECIBIDAS
+Posicion           0 de la cola, dato =         225 , id =           0, instante [200215], llego al: 0
+Posicion           1 de la cola, dato =         145 , id =           3, instante [200415], llego al: 3
+Posicion           2 de la cola, dato =         148 , id =           2, instante [200615], llego al: 2
+Posicion           3 de la cola, dato =         235 , id =           3, instante [200815], llego al: 3
+Posicion           4 de la cola, dato =          63 , id =           2, instante [201015], llego al: 2
+Posicion           5 de la cola, dato =          67 , id =           3, instante [201215], llego al: 3
+Posicion           6 de la cola, dato =         201 , id =           2, instante [201415], llego al: 2
+Posicion           7 de la cola, dato =         224 , id =           3, instante [201615], llego al: 3
+Posicion           8 de la cola, dato =          77 , id =           3, instante [201815], llego al: 3
+Posicion           9 de la cola, dato =         234 , id =           3, instante [202015], llego al: 3
+Posicion          10 de la cola, dato =         195 , id =           0, instante [202215], llego al: 0
+Posicion          11 de la cola, dato =         175 , id =           1, instante [202415], llego al: 1
+Posicion          12 de la cola, dato =         212 , id =           0, instante [202615], llego al: 0
+Posicion          13 de la cola, dato =         183 , id =           3, instante [202815], llego al: 3
+Posicion          14 de la cola, dato =         250 , id =           1, instante [203015], llego al: 1
+Posicion          15 de la cola, dato =         105 , id =           1, instante [203215], llego al: 1
+Posicion          16 de la cola, dato =         201 , id =           0, instante [203415], llego al: 0
+Posicion          17 de la cola, dato =         198 , id =           3, instante [203615], llego al: 3
+Posicion          18 de la cola, dato =          30 , id =           2, instante [203815], llego al: 2
+Posicion          19 de la cola, dato =         194 , id =           2, instante [204015], llego al: 2
+Posicion          20 de la cola, dato =          63 , id =           3, instante [204215], llego al: 3
+Posicion          21 de la cola, dato =          42 , id =           0, instante [204415], llego al: 0
+Posicion          22 de la cola, dato =         143 , id =           2, instante [204615], llego al: 2
+Posicion          23 de la cola, dato =         125 , id =           2, instante [204815], llego al: 2
+Posicion          24 de la cola, dato =         194 , id =           2, instante [205015], llego al: 2
+Posicion          25 de la cola, dato =         173 , id =           0, instante [205215], llego al: 0
+Posicion          26 de la cola, dato =         121 , id =           1, instante [205415], llego al: 1
+Posicion          27 de la cola, dato =         215 , id =           1, instante [205615], llego al: 1
+Posicion          28 de la cola, dato =         229 , id =           0, instante [205815], llego al: 0
+Posicion          29 de la cola, dato =          21 , id =           1, instante [206015], llego al: 1
+Posicion          30 de la cola, dato =         100 , id =           2, instante [206215], llego al: 2
+Posicion          31 de la cola, dato =          59 , id =           0, instante [206425], llego al: 0
+Posicion          32 de la cola, dato =         212 , id =           0, instante [206625], llego al: 0
+Posicion          33 de la cola, dato =         115 , id =           0, instante [206825], llego al: 0
+Posicion          34 de la cola, dato =          32 , id =           2, instante [207035], llego al: 2
+
+REPORTE DE RETRASOS EN LAS TRANSACCIONES
+El retraso Salida-Entrada en el Dato: 235 con ID:   3 es de [815]
+El retraso Salida-Entrada en el Dato: 145 con ID:   3 es de [414]
+El retraso Salida-Entrada en el Dato: 224 con ID:   3 es de [1613]
+El retraso Salida-Entrada en el Dato:  67 con ID:   3 es de [1212]
+El retraso Salida-Entrada en el Dato: 175 con ID:   1 es de [2411]
+El retraso Salida-Entrada en el Dato: 225 con ID:   0 es de [210]
+El retraso Salida-Entrada en el Dato: 234 con ID:   3 es de [2009]
+El retraso Salida-Entrada en el Dato: 183 con ID:   3 es de [2808]
+El retraso Salida-Entrada en el Dato:  63 con ID:   2 es de [1007]
+El retraso Salida-Entrada en el Dato:  77 con ID:   3 es de [1806]
+El retraso Salida-Entrada en el Dato: 212 con ID:   0 es de [2605]
+El retraso Salida-Entrada en el Dato: 148 con ID:   2 es de [604]
+El retraso Salida-Entrada en el Dato: 201 con ID:   2 es de [1403]
+El retraso Salida-Entrada en el Dato: 105 con ID:   1 es de [3202]
+El retraso Salida-Entrada en el Dato: 198 con ID:   3 es de [3601]
+El retraso Salida-Entrada en el Dato: 195 con ID:   0 es de [2200]
+El retraso Salida-Entrada en el Dato: 250 con ID:   1 es de [2999]
+El retraso Salida-Entrada en el Dato: 201 con ID:   0 es de [3398]
+El retraso Salida-Entrada en el Dato:  30 con ID:   2 es de [3797]
+El retraso Salida-Entrada en el Dato:  63 con ID:   3 es de [4196]
+El retraso Salida-Entrada en el Dato: 194 con ID:   2 es de [3995]
+El retraso Salida-Entrada en el Dato: 194 con ID:   2 es de [3994]
+El retraso Salida-Entrada en el Dato: 143 con ID:   2 es de [4593]
+El retraso Salida-Entrada en el Dato: 229 con ID:   0 es de [5792]
+El retraso Salida-Entrada en el Dato:  42 con ID:   0 es de [4390]
+El retraso Salida-Entrada en el Dato: 173 con ID:   0 es de [5189]
+El retraso Salida-Entrada en el Dato: 125 con ID:   2 es de [4787]
+El retraso Salida-Entrada en el Dato:  21 con ID:   1 es de [5986]
+El retraso Salida-Entrada en el Dato: 121 con ID:   1 es de [5385]
+El retraso Salida-Entrada en el Dato: 212 con ID:   0 es de [2584]
+El retraso Salida-Entrada en el Dato: 215 con ID:   1 es de [5583]
+El retraso Salida-Entrada en el Dato: 100 con ID:   2 es de [6182]
+El retraso Salida-Entrada en el Dato:  59 con ID:   0 es de [6386]
+El retraso Salida-Entrada en el Dato: 115 con ID:   0 es de [6786]
+El retraso Salida-Entrada en el Dato:  32 con ID:   2 es de [6776]
+
+El retraso promedio de la prueba es de: [3449]

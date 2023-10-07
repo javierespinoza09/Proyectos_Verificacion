@@ -1,0 +1,50 @@
+**********************
+ REPORTE SCOREBOARD
+**********************
+
+PARAMETROS DE LA PRUEBA:
+Prueba:           1 
+Drivers:           4 
+Payload:           8
+FiFo size:          16
+
+RESULTADOS GENERALES:
+TOTAL DE TRANSACCIONES ENVIADAS:           5
+TOTAL DE TRANSACCIONES RECIBIDAS:          15
+TOTAL DE TRANSACCIONES PERDIDAS:           0
+
+REPORTE DEL GENERADOR:
+TOTAL DE DATOS CREADOS:           5
+
+REPORTE DE TRANSACCIONES REALIZADAS
+Posicion           0 de la cola, dato = 123 , id = 255, instante [600000], salio del: 2
+Posicion           1 de la cola, dato = 185 , id = 255, instante [600001], salio del: 2
+Posicion           2 de la cola, dato = 119 , id = 255, instante [600002], salio del: 2
+Posicion           3 de la cola, dato = 156 , id = 255, instante [600003], salio del: 1
+Posicion           4 de la cola, dato =  16 , id = 255, instante [600004], salio del: 3
+
+REPORTE DE TRANSACCIONES RECIBIDAS
+Posicion           0 de la cola, dato =          16 , id =         255, instante [600205], llego al: 0
+Posicion           1 de la cola, dato =          16 , id =         255, instante [600205], llego al: 1
+Posicion           2 de la cola, dato =          16 , id =         255, instante [600205], llego al: 2
+Posicion           3 de la cola, dato =         156 , id =         255, instante [600415], llego al: 0
+Posicion           4 de la cola, dato =         156 , id =         255, instante [600415], llego al: 2
+Posicion           5 de la cola, dato =         156 , id =         255, instante [600415], llego al: 3
+Posicion           6 de la cola, dato =         123 , id =         255, instante [600615], llego al: 0
+Posicion           7 de la cola, dato =         123 , id =         255, instante [600615], llego al: 1
+Posicion           8 de la cola, dato =         123 , id =         255, instante [600615], llego al: 3
+Posicion           9 de la cola, dato =         185 , id =         255, instante [600865], llego al: 0
+Posicion          10 de la cola, dato =         185 , id =         255, instante [600865], llego al: 1
+Posicion          11 de la cola, dato =         185 , id =         255, instante [600865], llego al: 3
+Posicion          12 de la cola, dato =         119 , id =         255, instante [601115], llego al: 0
+Posicion          13 de la cola, dato =         119 , id =         255, instante [601115], llego al: 1
+Posicion          14 de la cola, dato =         119 , id =         255, instante [601115], llego al: 3
+
+REPORTE DE RETRASOS EN LAS TRANSACCIONES
+El retraso Salida-Entrada en el Dato: 123 con ID: 255 es de [615]
+El retraso Salida-Entrada en el Dato: 185 con ID: 255 es de [864]
+El retraso Salida-Entrada en el Dato: 119 con ID: 255 es de [1113]
+El retraso Salida-Entrada en el Dato: 156 con ID: 255 es de [412]
+El retraso Salida-Entrada en el Dato:  16 con ID: 255 es de [201]
+
+El retraso promedio de la prueba es de: [213]
