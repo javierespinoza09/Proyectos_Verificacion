@@ -125,4 +125,4 @@ typedef mailbox #(gen_chk_sb) gen_chk_sb_mbx;
 typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
 typedef enum {self_id, any_id, invalid_id, fix_source ,normal_id} gen_ag_id_modo;
 typedef enum {bus_push, bus_pop} monitor_modo;
-typedef enum {normal, broadcast, one_to_all, all_to_one} Generador_modo;
+typedef enum {normal, broadcastt, one_to_all, all_to_one} Generador_modo;

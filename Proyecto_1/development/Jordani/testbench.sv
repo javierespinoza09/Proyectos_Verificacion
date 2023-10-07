@@ -26,7 +26,7 @@ bus_if #(.drvrs(drvrs), .pckg_sz(pckg_sz),.bits(bits)) _if (.clk(clk_tb));
 bs_gnrtr_n_rbtr  #(.bits(bits),.drvrs(drvrs), .pckg_sz(pckg_sz),.broadcast(broadcast)) DUT_0 (.clk(_if.clk),.reset(_if.rst), .pndng(_if.pndng), .push(_if.push), .pop(_if.pop), .D_pop(_if.D_pop), .D_push(_if.D_push));
 
 Ambiente #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) ambiente_0;
-Test #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) t_0,t_1,t_2;
+  Test #(.drvrs(drvrs), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) t_0,t_1,t_2,t_3;
 
 
 initial begin
@@ -129,10 +129,40 @@ end
                 join_none
                 #200000
                 ambiente_0.resport(2);
+          
+         //////////////////////////////////////////////////
+          disable fork;
+            
+            	t_3 = new(broadcastt);
+                t_3.tst_gen_mbx = tst_gen_mbx;
+                t_3.tst_chk_sb_mbx = tst_chk_sb_mbx;
+                
+                ambiente_0 = new();
+                ambiente_0.display();
+                ambiente_0.generador.tst_gen_mbx = tst_gen_mbx;
+                ambiente_0.chk_sb.tst_chk_sb_mbx = tst_chk_sb_mbx;
+                //ambiente_0.v_if = _if;
+                for (int i = 0; i<drvrs; i++ ) begin
+
+                        automatic int k = i;
+                        ambiente_0.driver[k].fifo_in.v_if = _if;
+                        ambiente_0.monitor[k].v_if = _if;
+
+                end
+
+		fork
+                        t_3.run();
+                ambiente_0.run();
+        	join_none
+		#200000
+            ambiente_0.resport(3);
+		//////////////////////////////////////////////////
+
+		//disable fork;
 
 	end
 initial begin
-#700000
+#1000000
   $finish;
 end
 

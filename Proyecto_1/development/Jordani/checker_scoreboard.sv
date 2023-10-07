@@ -69,7 +69,8 @@ class checker_scoreboard #(parameter drvrs = 4, parameter pckg_sz = 16);
     $fdisplay(fa,"RESULTADOS GENERALES:");
     $fdisplay(fa,"TOTAL DE TRANSACCIONES ENVIADAS: %d",this.q_instrucciones.size() );
     $fdisplay(fa,"TOTAL DE TRANSACCIONES RECIBIDAS: %d",this.q_resultados_array.size() );
-    $fdisplay(fa,"TOTAL DE TRANSACCIONES PERDIDAS: %d\n", this.q_instrucciones.size() - this.q_resultados_array.size() );
+    if(this.tst_chk_sb_transaction.test == 1) $fdisplay(fa,"TOTAL DE TRANSACCIONES PERDIDAS: %d\n", ((this.q_instrucciones.size() * drvrs)- this.q_instrucciones.size()) - this.q_resultados_array.size());
+	else $fdisplay(fa,"TOTAL DE TRANSACCIONES PERDIDAS: %d\n", this.q_instrucciones.size() - this.q_resultados_array.size() );
     
     
     $fdisplay(fa,"REPORTE DEL GENERADOR:");
