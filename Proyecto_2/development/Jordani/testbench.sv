@@ -1,16 +1,26 @@
 `timescale 1ns/10ps
-`include "router_if.sv"
+//`include "router_if.sv"
+`include "driver.sv"
 
 module router_tb;
 reg clk_tb,reset_tb;
-parameter Drivers = 4;
-parameter pckg_sz = 40;
+
+parameter pckg_sz = 20;
 parameter fifo_size = 4;
 parameter broadcast = {8{1'b1}};
 parameter id_column = 0;
 parameter id_row = 0;
 parameter column = 2;
 parameter row = 2;
+parameter Drivers = column*row;
+  
+  Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .row(row), .column(column)) driver [row*column];
+  
+  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [column*row];//Mailbox con el agente
+  ag_dr #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_transaction;
+  
+  
+  
 
 initial begin
   $dumpfile("test_router.vcd");
@@ -18,15 +28,13 @@ initial begin
 end
 
 
-
-
-router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(pckg_sz),.fifo_depth(fifo_size), .bdcst(broadcast)) v_if (.clk(clk_tb));
+	router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(pckg_sz),.fifo_depth(fifo_size), .bdcst(broadcast)) v_if (.clk(clk_tb));
   
   
 
   mesh_gnrtr #(.ROWS(row), .COLUMS(column), .pckg_sz(pckg_sz),.fifo_depth(fifo_size), .bdcst(broadcast)) DUT (
   .clk(clk_tb),
-    .reset(v_if.reset),
+  .reset(v_if.reset),
   .pndng(v_if.pndng),
   .data_out(v_if.data_out),
   .popin(v_if.popin),
@@ -52,30 +60,42 @@ initial begin
   #50
   reset_tb = 0;
   v_if.reset = reset_tb;
-  /*
-  for(int i = 0; i<Drivers; i++ ) begin
-    fork begin
-      automatic int k = i;
-      driver[k] = new(k);
-      driver[k].v_if = v_if;
-      driver[k].randomize();
-      driver[k].display();
+  
+  
+  for(int i = 0; i < column*row; i++) begin
+    automatic int k = i;
+    ag_dr_mbx[k] = new();
+    
+  end
+  
+  
+  for (int i = 0; i<row*column; i++ ) begin
+    automatic int k = i;
+    driver[k] = new(k);
+    driver[k].ag_dr_mbx = ag_dr_mbx[k];
+    driver[k].fifo_in.v_if = v_if;
+    //this.driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
+  end
+  
+  for(int i = 0; i<column*row; i++ ) begin
+    fork
+    automatic int k = i;
       driver[k].run();
-      $display("Driver_0x%0d",driver[k].drv_num);
-    end 
-    join
-  end 
+    join_none
+  end
+  
+  for(int i = 0; i < 4; i++) begin
+    automatic int k = i;
+     ag_dr_transaction = new();
+     ag_dr_transaction.randomize();
+     ag_dr_transaction.Nxt_jump = 0;
+     ag_dr_mbx[k].put(ag_dr_transaction);
+     $display("Nxt_jump = %b id_row = %b id_col = %b mode = %b dato = %b", ag_dr_transaction.Nxt_jump,ag_dr_transaction.id_row,ag_dr_transaction.id_colum,ag_dr_transaction.mode,ag_dr_transaction.dato);
+    
+  end
   
   
-  for(int i = 0; i<Drivers; i++ ) begin
-    fork begin
-      automatic int k = i;
-      driver[i+1].recibido();
-    end 
-    join_any
-  end 
   
-    */
 end
   
 
