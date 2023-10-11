@@ -1,8 +1,8 @@
-class fifo_in #(parameter column = 4, parameter row = 4, parameter packagesize = 40, parameter drvrs = 4, parameter fifo_size = 8);
+class fifo_in #(parameter column = 2, parameter row = 2, parameter packagesize = 20, parameter drvrs = 4, parameter fifo_size = 4);
 
 	bit [packagesize-1:0] d_q[$];
 	int fifo_num;
-	virtual router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(packagesize)) v_if;
+	virtual router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(packagesize),.fifo_depth(fifo_size)) v_if;
 	parameter default_data = 0;
 	function new (int fifo_num);
 		d_q = {};
