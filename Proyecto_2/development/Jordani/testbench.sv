@@ -12,11 +12,10 @@ parameter id_column = 0;
 parameter id_row = 0;
 parameter column = 2;
 parameter row = 2;
-parameter Drivers = column*row;
+parameter Drivers = column*2+row*2;
   
-  Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .row(row), .column(column)) driver [row*column];
-  
-  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [column*row];//Mailbox con el agente
+  Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .row(row), .column(column)) driver [row*2+column*2];
+  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [column*2+row*2];//Mailbox con el agente
   ag_dr #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_transaction;
   
   
@@ -62,29 +61,29 @@ initial begin
   v_if.reset = reset_tb;
   
   
-  for(int i = 0; i < column*row; i++) begin
+  for(int i = 0; i < column*2+row*2; i++) begin
     automatic int k = i;
     ag_dr_mbx[k] = new();
     
   end
   
   
-  for (int i = 0; i<row*column; i++ ) begin
+  for (int i = 0; i<row*2+column*2; i++ ) begin
     automatic int k = i;
     driver[k] = new(k);
     driver[k].ag_dr_mbx = ag_dr_mbx[k];
     driver[k].fifo_in.v_if = v_if;
-    //this.driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
+    //driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
   end
   
-  for(int i = 0; i<column*row; i++ ) begin
+  for(int i = 0; i<column*2+row*2; i++ ) begin
     fork
     automatic int k = i;
       driver[k].run();
     join_none
   end
   
-  for(int i = 0; i < 4; i++) begin
+  for(int i = 0; i < 6; i++) begin
     automatic int k = i;
      ag_dr_transaction = new();
      ag_dr_transaction.randomize();

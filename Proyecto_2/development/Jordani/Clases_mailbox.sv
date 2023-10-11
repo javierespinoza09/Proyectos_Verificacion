@@ -71,7 +71,7 @@ class ag_dr #(parameter pckg_sz = 40, parameter row = 4, parameter colum = 4);
   
   //Respecto al Source
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
-  constraint source_addrs {source < colum*row;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
+  constraint source_addrs {source < colum*2+row*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
   //Respecto al ID
   constraint valid_addrs {id_row < row; id_row >= 0; id_colum < colum; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
@@ -87,7 +87,7 @@ class ag_dr #(parameter pckg_sz = 40, parameter row = 4, parameter colum = 4);
 endclass
 
 
-class ag_chk #(parameter pckg_sz = 40);
+class ag_chk #(parameter pckg_sz = 20);
   bit [pckg_sz-18:0] payload ;
   bit [3:0] row;
   bit [3:0] colum;
