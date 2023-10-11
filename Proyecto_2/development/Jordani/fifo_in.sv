@@ -13,6 +13,7 @@ class fifo_in #(parameter column = 2, parameter row = 2, parameter packagesize =
 
 	function fifo_push(bit [packagesize-1:0] dato); 
 			this.d_q.push_back(dato);
+      		$display("Se recibió %b",d_q[0]);
 			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
 			this.v_if.pndng_i_in[this.fifo_num] = 1;
 	endfunction
@@ -32,7 +33,7 @@ class fifo_in #(parameter column = 2, parameter row = 2, parameter packagesize =
 			end
           
           
-          	@(posedge this.v_if.pop[0][this.fifo_num]);
+          	@(posedge this.v_if.popin[this.fifo_num]);
 			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
 			@(posedge this.v_if.clk);
 			if(this.d_q.size>0) this.d_q.delete(0);
