@@ -1,6 +1,9 @@
 `timescale 1ns/10ps
 //`include "router_if.sv"
 `include "driver.sv"
+`include "Monitor.sv"
+
+
 
 module router_tb;
 reg clk_tb,reset_tb;
@@ -15,8 +18,9 @@ parameter row = 2;
 parameter Drivers = column*2+row*2;
   
   Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .row(row), .column(column)) driver [row*2+column*2];
-  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [column*2+row*2];//Mailbox con el agente
+  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [Drivers];//Mailbox con el agente
   ag_dr #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_transaction;
+  Monitor #(.ROWS(row), .COLUMS(column), .pckg_sz(pckg_sz)) monitor [Drivers];
   
   
   
@@ -73,6 +77,8 @@ initial begin
     driver[k] = new(k);
     driver[k].ag_dr_mbx = ag_dr_mbx[k];
     driver[k].fifo_in.v_if = v_if;
+    monitor[k] = new(k);
+    monitor[k].v_if = v_if;
     //driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
   end
   
@@ -80,6 +86,7 @@ initial begin
     fork
     automatic int k = i;
       driver[k].run();
+      monitor[k].run();
     join_none
   end
   
