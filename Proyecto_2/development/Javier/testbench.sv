@@ -1,13 +1,17 @@
 `timescale 1ns/10ps
 //`include "router_if.sv"
 `include "driver.sv"
+`include "Monitor.sv"
+//`define LIB
 `include "Router_library.sv"
+//DEBUG
+
 module router_tb;
 reg clk_tb,reset_tb;
 
-parameter pckg_sz = 20;
+parameter pckg_sz = 40;
 parameter fifo_size = 4;
-parameter broadcast = {8{1'b1}};
+parameter broadcast = {pckg_sz-18{1'b1}};
 parameter id_column = 0;
 parameter id_row = 0;
 parameter column = 2;
@@ -15,8 +19,9 @@ parameter row = 2;
 parameter Drivers = column*2+row*2;
   
   Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .row(row), .column(column)) driver [row*2+column*2];
-  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [column*2+row*2];//Mailbox con el agente
+  ag_dr_mbx #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_mbx [Drivers];//Mailbox con el agente
   ag_dr #(.drvrs(Drivers), .pckg_sz(pckg_sz)) ag_dr_transaction;
+  Monitor #(.ROWS(row), .COLUMS(column), .packagesize(pckg_sz)) monitor [Drivers];
   
   
   
@@ -27,7 +32,7 @@ initial begin
 end
 
 
-	router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(pckg_sz),.fifo_depth(fifo_size), .bdcst(broadcast)) v_if (.clk(clk_tb));
+	router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) v_if (.clk(clk_tb));
   
   
 
@@ -59,7 +64,9 @@ initial begin
   #50
   reset_tb = 0;
   v_if.reset = reset_tb;
-  
+ end
+
+ initial begin 
   
   for(int i = 0; i < column*2+row*2; i++) begin
     automatic int k = i;
@@ -73,6 +80,8 @@ initial begin
     driver[k] = new(k);
     driver[k].ag_dr_mbx = ag_dr_mbx[k];
     driver[k].fifo_in.v_if = v_if;
+    monitor[k] = new(k);
+    monitor[k].v_if = v_if;
     //driver[k].ag_chk_sb_mbx = ag_chk_sb_mbx;
   end
   
@@ -80,6 +89,7 @@ initial begin
     fork
     automatic int k = i;
       driver[k].run();
+      monitor[k].run();
     join_none
   end
   
