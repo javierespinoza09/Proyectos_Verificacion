@@ -116,7 +116,7 @@ initial begin
     join_none
   end
   
-  for(int i = 0; i < 6; i++) begin
+   for(int i = 0; i < 16; i++) begin
     automatic int k = i;
      ag_dr_transaction = new();
      ag_dr_transaction.randomize();

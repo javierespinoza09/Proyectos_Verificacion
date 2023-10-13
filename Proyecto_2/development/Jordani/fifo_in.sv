@@ -13,7 +13,7 @@ class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20
 
 	function fifo_push(bit [pckg_sz-1:0] dato); 
 			this.d_q.push_back(dato);
-      		$display("Se recibió %b",d_q[0]);
+      		$display("Se recibió %b",dato);
 			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
 			this.v_if.pndng_i_in[this.fifo_num] = 1;
 	endfunction
@@ -21,8 +21,7 @@ class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20
 	task if_signal();
 		$display("FIFO%d: if_signal running",this.fifo_num);
       	this.v_if.pndng_i_in[this.fifo_num] = 0;
-		forever begin	
-			
+		forever begin
 			if(this.d_q.size==0) begin 
 				this.v_if.pndng_i_in[this.fifo_num] = 0;
 				this.v_if.data_out_i_in[this.fifo_num] = 0;
@@ -34,8 +33,9 @@ class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20
           
           
           	@(posedge this.v_if.popin[this.fifo_num]);
-			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
-			@(posedge this.v_if.clk);
+			//this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
+			//@(posedge this.v_if.clk);
+            $display("Tamano %0d FIFO %0d ", this.d_q.size,fifo_num);
 			if(this.d_q.size>0) this.d_q.delete(0);
 		end
 	endtask
