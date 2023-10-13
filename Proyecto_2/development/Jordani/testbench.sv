@@ -100,8 +100,6 @@ initial begin
      driver[i+COLUMS*3].self_row = i+1;
    end
    
-    
-   
    
    for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
     automatic int k = i;
@@ -123,15 +121,15 @@ initial begin
      ag_dr_transaction = new();
      ag_dr_transaction.randomize();
      ag_dr_transaction.Nxt_jump = 0;
+    //Este if verifica si se va a enviar un paquete a él mismo, invierte la dirección si es necesario
      if(ag_dr_transaction.id_row == driver[ag_dr_transaction.source].self_row  & ag_dr_transaction.id_colum == driver[ag_dr_transaction.source].self_col) begin
        ag_dr_transaction.id_row = driver[ag_dr_transaction.source].self_col;
        ag_dr_transaction.id_colum = driver[ag_dr_transaction.source].self_row;
      end
       ag_dr_mbx[ag_dr_transaction.source].put(ag_dr_transaction);
-    $display("Nxt_jump = %b id_row = %0d id_col = %0d mode = %b dato = %b", ag_dr_transaction.Nxt_jump,ag_dr_transaction.id_row,ag_dr_transaction.id_colum,ag_dr_transaction.mode,ag_dr_transaction.dato);
+    $display("source = %0d id_row = %0d id_col = %0d mode = %b dato = %b", ag_dr_transaction.source,ag_dr_transaction.id_row,ag_dr_transaction.id_colum,ag_dr_transaction.mode,ag_dr_transaction.dato);
     
   end
-  
   
   
 end
