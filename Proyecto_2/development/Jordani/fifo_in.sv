@@ -1,8 +1,8 @@
-class fifo_in #(parameter column = 2, parameter row = 2, parameter packagesize = 20, parameter drvrs = 4, parameter fifo_size = 4);
+class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20, parameter drvrs = 4, parameter fifo_size = 4);
 
-	bit [packagesize-1:0] d_q[$];
+	bit [pckg_sz-1:0] d_q[$];
 	int fifo_num;
-	virtual router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(packagesize),.fifo_depth(fifo_size)) v_if;
+	virtual router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) v_if;
 	parameter default_data = 0;
 	function new (int fifo_num);
 		d_q = {};
@@ -11,7 +11,7 @@ class fifo_in #(parameter column = 2, parameter row = 2, parameter packagesize =
 	endfunction
 	
 
-	function fifo_push(bit [packagesize-1:0] dato); 
+	function fifo_push(bit [pckg_sz-1:0] dato); 
 			this.d_q.push_back(dato);
       		$display("Se recibió %b",d_q[0]);
 			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];

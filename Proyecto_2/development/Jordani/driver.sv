@@ -4,11 +4,11 @@
 
 //Driver se cominica de forma directa con la FIFO y por medio de un mailbox con el agente//
 
-class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter row = 2, parameter column = 2);
+class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter ROWS = 2, parameter COLUMS = 2);
     	int drv_num;
-  		fifo_in #(.ROWS(row), .COLUMS(column), .packagesize(pckg_sz)) fifo_in;//instancia de la FIFO que se comunica al DUT
-  		ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz))ag_dr_mbx;						   //Mailbox con el agente
-  		ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;  			   	   //Transacción para comunicarse con el agente
+  		fifo_in #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) fifo_in;//instancia de la FIFO que se comunica al DUT
+ 		ag_dr_mbx #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_mbx;				   //Mailbox con el agente
+  		ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;		   	   //Transacción para comunicarse con el agente
   		//ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx;
     	//Transacciones
   		//ag_chk_sb #(.pckg_sz(pckg_sz)) ag_chk_sb_transaction;

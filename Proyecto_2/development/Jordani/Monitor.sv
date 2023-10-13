@@ -1,11 +1,11 @@
-class Monitor #(parameter column = 2, parameter row = 2, parameter packagesize = 20, parameter drvrs = 4, parameter fifo_size = 4);
+class Monitor #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20, parameter drvrs = 4, parameter fifo_size = 4);
   /*       */
   /*Mailbox*/
   /*       */
 	//mon_chk_sb_mbx mon_chk_sb_mbx;
 	//mon_chk_sb mon_chk_sb_transaction;
-	bit [packagesize-1:0] d_q[$];
-	virtual router_if #(.ROWS(row), .COLUMS(column), .pckg_sz(packagesize),.fifo_depth(fifo_size)) v_if;
+	bit [pckg_sz-1:0] d_q[$];
+    virtual router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz), .fifo_depth(fifo_size)) v_if;
 	int mnt_num;
 
 	function new(int mnt_num);
@@ -24,7 +24,7 @@ class Monitor #(parameter column = 2, parameter row = 2, parameter packagesize =
       forever begin
         @(posedge this.v_if.clk);
         if(this.v_if.pndng[this.mnt_num] == 1)begin
-		this.v_if.pop[this.mnt_num] = 1;
+			this.v_if.pop[this.mnt_num] = 1;
         	this.d_q.push_back(this.v_if.data_out[this.mnt_num]);
         	$display("\nDATO ENTRÓ A LA FIFO %d",this.mnt_num);
         	$display("DATO: %b\n",this.d_q[0]);
@@ -35,10 +35,13 @@ class Monitor #(parameter column = 2, parameter row = 2, parameter packagesize =
         //this.mon_chk_sb_mbx.put(mon_chk_sb_transaction);
             //#15;
             //#15;
-	    	@(posedge this.v_if.clk);
-		this.v_if.pop[this.mnt_num] = 0;
+	    @(posedge this.v_if.clk);
+        this.v_if.pop[this.mnt_num] = 0;
         end
-	else this.v_if.pop[this.mnt_num] = 0;
+        
+        else this.v_if.pop[this.mnt_num] = 0;
+        	
+	//else this.v_if.pop[this.mnt_num] = 0;
       end
      
       //#5;

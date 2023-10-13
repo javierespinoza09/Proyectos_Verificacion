@@ -58,10 +58,10 @@ class mon_sb;
 endclass
 
 
-class ag_dr #(parameter pckg_sz = 40, parameter row = 2, parameter colum = 2);
+class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   rand bit [pckg_sz-18:0] dato;
-  rand bit [3:0] id_row;
-  rand bit [3:0] id_colum;
+  randc bit [3:0] id_row;
+  randc bit [3:0] id_colum;
   rand bit mode;
   rand int source;
   bit [7:0] Nxt_jump;
@@ -71,11 +71,12 @@ class ag_dr #(parameter pckg_sz = 40, parameter row = 2, parameter colum = 2);
   
   //Respecto al Source
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
-  constraint source_addrs {source < colum*2+row*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
+  constraint source_addrs {source < COLUMS*2+ROWS*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
   //Respecto al ID
-  constraint valid_addrs {id_row <= row+1; id_row >= 0; id_colum <= colum+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
-  constraint valid_addrs_col {if(id_row == 0 | id_row == row+1)id_colum <= colum & id_colum > 0;};
-  constraint valid_addrs_row {if(id_colum == 0 | id_colum == colum+1) id_row <= row & id_row > 0;};
+  constraint valid_addrs {id_row <= ROWS+1; id_row >= 0; id_colum <= COLUMS+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
+  constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
+  constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
+  constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
   //constraint data_variablility {dato inside {{(pckg_sz-18){1'b1}},{(pckg_sz-18){1'b0}}};};
