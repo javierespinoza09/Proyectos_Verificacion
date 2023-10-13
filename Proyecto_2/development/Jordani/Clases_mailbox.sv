@@ -77,6 +77,7 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
   constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
   constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
+  
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
   //constraint data_variablility {dato inside {{(pckg_sz-18){1'b1}},{(pckg_sz-18){1'b0}}};};
