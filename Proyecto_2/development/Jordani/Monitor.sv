@@ -27,7 +27,7 @@ class Monitor #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20
 			this.v_if.pop[this.mnt_num] = 1;
         	this.d_q.push_back(this.v_if.data_out[this.mnt_num]);
         	$display("\nDATO ENTRÓ A LA FIFO %d",this.mnt_num);
-        	$display("DATO: %b\n",this.v_if.data_out[this.mnt_num]);
+        	$display("DATO: %b",this.v_if.data_out[this.mnt_num]);
         
 		//this.mon_chk_sb_transaction = new(this.mnt_num);
         //this.mon_chk_sb_transaction.id = this.v_if.D_push[0][this.mnt_num][pckg_sz-1:pckg_sz-8];

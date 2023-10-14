@@ -37,7 +37,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 	  $display("DRIVER %d: Transaction received",this.drv_num);
           while(this.fifo_in.d_q.size >= fifo_size) #5;
           this.fifo_in.fifo_push({this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});//Manda un paquete a la FIFO  
-          $display("Se envió %b", {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});
+          //$display("Se envió %b", {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});
           //this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, $time, this.ag_dr_transaction.source);
           //this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
 		end

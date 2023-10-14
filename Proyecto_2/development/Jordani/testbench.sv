@@ -3,7 +3,7 @@
 `include "driver.sv"
 `include "Monitor.sv"
 //`define LIB
-//`include "Router_library.sv"
+`include "Router_library.sv"
 //DEBUG
 
 module router_tb;

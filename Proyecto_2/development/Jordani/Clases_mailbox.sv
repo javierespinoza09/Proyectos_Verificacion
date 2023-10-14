@@ -153,8 +153,8 @@ class listener;
   
   task run();
     forever begin
-      wait(real_path[this.id_r][this.id_c].triggered);
-      list_chk_transaction = new(this.id_r, this.id_c);
+      //wait(real_path[this.id_r][this.id_c].triggered);
+      //list_chk_transaction = new(this.id_r, this.id_c);
       //list_chk_mbx.put(list_chk_transaction);
       $display("EVENTO [%0d][%0d]",this.id_r,this.id_c);
     end 
@@ -168,7 +168,7 @@ endclass
 ///////////////////
 typedef mailbox #(ag_chk) ag_chk_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
-typedef mailbox #(gen_ag) gen_ag_mbx ;
+typedef mailbox #(gen_ag) gen_ag_mbx;
 typedef mailbox #(mon_sb) mon_sb_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
 typedef mailbox #(tst_sb) tst_sb_mbx;
