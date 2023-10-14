@@ -121,6 +121,48 @@ class gen_chk;
 endclass
 
 
+class list_chk;
+  int id_r;
+  int id_c;
+  int time_list;
+  
+  
+  function new(int row, int col);
+    this.id_r = row;
+    this.id_c = col;
+    this.time_list = $time;
+  endfunction
+  
+  
+endclass
+
+
+class listener;
+  //list_chk_mbx list_chk_mbx;
+  list_chk list_chk_transaction;
+  
+  
+  int id_c;
+  int id_r;
+  
+  function new(int row, int col);
+    this.id_c = col;
+    this.id_r = row;
+    //this.list_chk_mbx = new();
+  endfunction
+  
+  task run();
+    forever begin
+      wait(real_path[this.id_r][this.id_c].triggered);
+      list_chk_transaction = new(this.id_r, this.id_c);
+      //list_chk_mbx.put(list_chk_transaction);
+      $display("EVENTO [%0d][%0d]",this.id_r,this.id_c);
+    end 
+    
+  endtask
+endclass
+
+
 ///////////////////
 ////Mailboxes//////
 ///////////////////
@@ -131,6 +173,8 @@ typedef mailbox #(mon_sb) mon_sb_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
 typedef mailbox #(tst_sb) tst_sb_mbx;
 typedef mailbox #(gen_chk) gen_chk_mbx;
+typedef mailbox #(list_chk) list_chk_mbx;
+
 
 /////////////////////////////////////////////
 //Set de variables para los casos de prueba//
