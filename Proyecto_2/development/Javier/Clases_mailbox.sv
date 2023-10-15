@@ -58,10 +58,10 @@ class mon_sb;
 endclass
 
 
-class ag_dr #(parameter pckg_sz = 40, parameter row = 2, parameter colum = 2);
+class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   rand bit [pckg_sz-18:0] dato;
-  rand bit [3:0] id_row;
-  rand bit [3:0] id_colum;
+  randc bit [3:0] id_row;
+  randc bit [3:0] id_colum;
   rand bit mode;
   rand int source;
   bit [7:0] Nxt_jump;
@@ -71,11 +71,13 @@ class ag_dr #(parameter pckg_sz = 40, parameter row = 2, parameter colum = 2);
   
   //Respecto al Source
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
-  constraint source_addrs {source < colum*2+row*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
+  constraint source_addrs {source < COLUMS*2+ROWS*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
   //Respecto al ID
-  constraint valid_addrs {id_row <= row+1; id_row >= 0; id_colum <= colum+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
-  constraint valid_addrs_col {if(id_row == 0 | id_row == row+1)id_colum <= colum & id_colum > 0;};
-  constraint valid_addrs_row {if(id_colum == 0 | id_colum == colum+1) id_row <= row & id_row > 0;};
+  constraint valid_addrs {id_row <= ROWS+1; id_row >= 0; id_colum <= COLUMS+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
+  constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
+  constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
+  constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
+  
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
   //constraint data_variablility {dato inside {{(pckg_sz-18){1'b1}},{(pckg_sz-18){1'b0}}};};
@@ -119,16 +121,60 @@ class gen_chk;
 endclass
 
 
+class list_chk;
+  int id_r;
+  int id_c;
+  int time_list;
+  
+  
+  function new(int row, int col);
+    this.id_r = row;
+    this.id_c = col;
+    this.time_list = $time;
+  endfunction
+  
+  
+endclass
+
+
+class listener;
+  //list_chk_mbx list_chk_mbx;
+  list_chk list_chk_transaction;
+  
+  
+  int id_c;
+  int id_r;
+  
+  function new(int row, int col);
+    this.id_c = col;
+    this.id_r = row;
+    //this.list_chk_mbx = new();
+  endfunction
+  
+  task run();
+    forever begin
+      //wait(real_path[this.id_r][this.id_c].triggered);
+      //list_chk_transaction = new(this.id_r, this.id_c);
+      //list_chk_mbx.put(list_chk_transaction);
+      $display("EVENTO [%0d][%0d]",this.id_r,this.id_c);
+    end 
+    
+  endtask
+endclass
+
+
 ///////////////////
 ////Mailboxes//////
 ///////////////////
 typedef mailbox #(ag_chk) ag_chk_mbx ;
 typedef mailbox #(ag_dr) ag_dr_mbx ;
-typedef mailbox #(gen_ag) gen_ag_mbx ;
+typedef mailbox #(gen_ag) gen_ag_mbx;
 typedef mailbox #(mon_sb) mon_sb_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
 typedef mailbox #(tst_sb) tst_sb_mbx;
 typedef mailbox #(gen_chk) gen_chk_mbx;
+typedef mailbox #(list_chk) list_chk_mbx;
+
 
 /////////////////////////////////////////////
 //Set de variables para los casos de prueba//

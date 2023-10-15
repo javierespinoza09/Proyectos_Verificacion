@@ -4,11 +4,13 @@
 
 //Driver se cominica de forma directa con la FIFO y por medio de un mailbox con el agente//
 
-class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter row = 2, parameter column = 2);
+class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter ROWS = 2, parameter COLUMS = 2);
     	int drv_num;
-  		fifo_in #(.ROWS(row), .COLUMS(column), .packagesize(pckg_sz)) fifo_in;//instancia de la FIFO que se comunica al DUT
-  		ag_dr_mbx #(.drvrs(drvrs), .pckg_sz(pckg_sz))ag_dr_mbx;						   //Mailbox con el agente
-  		ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;  			   	   //Transacción para comunicarse con el agente
+  		int self_row;
+  		int self_col;
+  		fifo_in #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) fifo_in;//instancia de la FIFO que se comunica al DUT
+ 		ag_dr_mbx #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_mbx;				   //Mailbox con el agente
+  		ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;		   	   //Transacción para comunicarse con el agente
   		//ag_chk_sb_mbx #(.pckg_sz(pckg_sz)) ag_chk_sb_mbx;
     	//Transacciones
   		//ag_chk_sb #(.pckg_sz(pckg_sz)) ag_chk_sb_transaction;
@@ -35,7 +37,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 	  $display("DRIVER %d: Transaction received",this.drv_num);
           while(this.fifo_in.d_q.size >= fifo_size) #5;
           this.fifo_in.fifo_push({this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});//Manda un paquete a la FIFO  
-          $display("Se envió %b", {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});
+          //$display("Se envió %b", {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});
           //this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, $time, this.ag_dr_transaction.source);
           //this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
 		end
