@@ -74,8 +74,7 @@ module router_bus_gnrtr #(parameter pck_sz = 40, parameter num_ntrfs=4, paramete
 endmodule 
 
 
-module router_bus_interface #(parameter pck_sz = 40, parameter num_ntrfs=4, parameter [7:0]ntrfs_id = 0, parameter broadcast = {8{1'b1}}, parameter fifo_depth=4, 
-parameter id_c=0,parameter id_r=0, parameter rows= 4, parameter columns=4) (
+module router_bus_interface #(parameter pck_sz = 40, parameter num_ntrfs=4, parameter [7:0]ntrfs_id = 0, parameter broadcast = {8{1'b1}}, parameter fifo_depth=4, parameter id_c=0,parameter id_r=0, parameter rows= 4, parameter columns=4) (
   input clk,
   input reset,
   input [pck_sz-1:0]data_in_i,
