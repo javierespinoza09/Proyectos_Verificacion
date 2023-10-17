@@ -37,10 +37,11 @@ class gen_ag;
   int data_modo;        
   int id_modo;
   int id_rand;
-  bit [3:0] row;
-  bit [3:0] colum;
+  bit [3:0] id_row;
+  bit [3:0] id_colum;
   int source_rand;
-  int source;
+  bit [3:0] source_row;
+  bit [3:0] source_colum;
   function new ();
   endfunction;
 endclass
@@ -57,6 +58,10 @@ class mon_sb;
   endfunction;
 endclass
 
+class r_c_mapping;
+  int column;
+  int row;
+endclass
 
 class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   rand bit [pckg_sz-18:0] dato;
@@ -68,10 +73,11 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   int tiempo;
   int variability;
   int fix_source;
-  
+  r_c_mapping drv_map [COLUMS*2+ROWS*2];
   //Respecto al Source
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
   constraint source_addrs {source < COLUMS*2+ROWS*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
+  constraint self_r_c {id_row != drv_map[source].row; id_colum != drv_map[source].column};
   //Respecto al ID
   constraint valid_addrs {id_row <= ROWS+1; id_row >= 0; id_colum <= COLUMS+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
@@ -186,3 +192,23 @@ typedef enum {normal, broadcastt, one_to_all, all_to_one} Generador_modo;
 
 //PROYECTO 2//
 typedef enum {col_first,row_firts} mode;
+
+
+//MACROS//
+`define mapping (int ROWS, int COLUMS) \
+               for (int i = 0; i<COLUMS;i++)begin \
+                  drv_map[i].row = 0;              \
+                  drv_map[i].colum = i+1; \
+                end \
+                for (int i = 0; i<ROWS;i++)begin \
+                  drv_map[i+COLUMS].colum = 0; \
+                  drv_map[i+COLUMS].row = i+1; \
+                end \
+                for (int i = 0; i<COLUMS;i++)begin \
+                  drv_map[i+ROWS*2].row = ROWS+1; \
+                  drv_map[i+ROWS*2].colum = i+1; \
+                end \
+                for (int i = 0; i<ROWS;i++)begin \
+                  drv_map[i+COLUMS*3].colum = COLUMS+1; \
+                  drv_map[i+COLUMS*3].row = i+1; \
+                end 
