@@ -77,7 +77,7 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   //Respecto al Source
   constraint pos_source_addrs {source >= 0;};  //**Restriccion necesaria
   constraint source_addrs {source < COLUMS*2+ROWS*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
-  constraint self_r_c {id_row != drv_map[source].row; id_colum != drv_map[source].column};
+  constraint self_r_c {id_row != drv_map[source].row; id_colum != drv_map[source].column;};
   //Respecto al ID
   constraint valid_addrs {id_row <= ROWS+1; id_row >= 0; id_colum <= COLUMS+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
