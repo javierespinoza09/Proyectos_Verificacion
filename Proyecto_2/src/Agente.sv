@@ -1,4 +1,25 @@
-`include "Clases_mailbox.sv"
+//`include "Clases_mailbox.sv"
+
+
+`define mapping(ROWS, COLUMS) \
+               for (int i = 0; i<COLUMS;i++)begin \
+                  drv_map[i].row = 0;              \
+                  drv_map[i].column = i+1; \
+                end \
+                for (int i = 0; i<ROWS;i++)begin \
+                  drv_map[i+COLUMS].column = 0; \
+                  drv_map[i+COLUMS].row = i+1; \
+                end \
+                for (int i = 0; i<COLUMS;i++)begin \
+                  drv_map[i+ROWS*2].row = ROWS+1; \
+                  drv_map[i+ROWS*2].column = i+1; \
+                end \
+                for (int i = 0; i<ROWS;i++)begin \
+                  drv_map[i+COLUMS*3].column = COLUMS+1; \
+                  drv_map[i+COLUMS*3].row = i+1; \
+                end 
+
+
 class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter ROWS = 2, parameter COLUMS = 2);
   
 	//Mailboxes
@@ -7,7 +28,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
     
     //Transacciones
 	gen_ag gen_ag_transaction;
-	ag_dr #(.drvrs(drvrs), .pckg_sz(pckg_sz)) ag_dr_transaction;
+  ag_dr #(.ROWS(ROWS), .pckg_sz(pckg_sz), .COLUMS(COLUMS)) ag_dr_transaction;
 
 	//Atributos principales
     int num_transacciones;
@@ -20,12 +41,13 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
   
     function new();
 		this.ag_dr_transaction = new();
-
+      	
 		for (int i = 0; i<ROWS*2+COLUMS*2; i++) begin
 			automatic int k = i;
-			drv_map[k] = new(k);
+          	this.ag_dr_mbx_array[k] = new();
+			drv_map[k] = new();
   		end
-		`mapping (ROWS,COLUMS)
+      `mapping(ROWS,COLUMS);
 		foreach (drv_map[i]) begin
 			$display("POS %d ROW=%0d COL=%0d",i,drv_map[i].row,drv_map[i].column);
 		end
@@ -67,21 +89,21 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
                   
 				end
 				any_id: begin 
-                  ag_dr_transaction.self_addrs.constraint_mode(0); 
+                  ag_dr_transaction.self_r_c.constraint_mode(0); 
                   ag_dr_transaction.valid_addrs.constraint_mode(0); 
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   
 				end
 				invalid_id: begin 
-                  ag_dr_transaction.self_addrs.constraint_mode(1); 
+                  ag_dr_transaction.self_r_c.constraint_mode(1); 
                   ag_dr_transaction.valid_addrs.constraint_mode(0);  
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   
 				end
 				fix_source: begin 
-                  ag_dr_transaction.self_addrs.constraint_mode(1); 
+                  ag_dr_transaction.self_r_c.constraint_mode(1); 
                   ag_dr_transaction.valid_addrs.constraint_mode(1); 
                   ag_dr_transaction.source_addrs.constraint_mode(1); 
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1); 
@@ -95,28 +117,43 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
                   
 				end
 				default: begin 
-                  ag_dr_transaction.self_addrs.constraint_mode(1); 
+                  ag_dr_transaction.self_r_c.constraint_mode(1); 
                   ag_dr_transaction.valid_addrs.constraint_mode(1); 
 				end
 			endcase
+          //////////////////
+          //ALEATORIZACION//
+          //////////////////
 		this.ag_dr_transaction.randomize();
-			///Se randomizan los parámetros según las restricciones
+			
+      	//////////////////////////////
+        //VALIDACION DE FILA-COLUMNA//
+        //////////////////////////////
 	
-		if(this.gen_ag_transaction.source_rand==0) begin 
-			ag_dr_transaction.source = gen_ag_transaction.source;
-                        if(ag_dr_transaction.id == ag_dr_transaction.source) begin
-                                if(ag_dr_transaction.id == 0) ag_dr_transaction.id = ag_dr_transaction.id+1;
-                                else ag_dr_transaction.id = ag_dr_transaction.id-1;
-                        end
-                end	
-			///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
-		if(this.gen_ag_transaction.id_rand==0) begin
-		       	ag_dr_transaction.id = gen_ag_transaction.id;
-			if(ag_dr_transaction.id == ag_dr_transaction.source) begin
-				if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.id+1;
-				else ag_dr_transaction.source = ag_dr_transaction.source-1;
+		if(this.gen_ag_transaction.source_rand==0) begin
+                        ag_dr_transaction.source = gen_ag_transaction.source;
+          
+          if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin  
+            if(ag_dr_transaction.id_row == 0 || ag_dr_transaction.id_row == ROWS + 1) begin
+              if(ag_dr_transaction.id_colum == 1) ag_dr_transaction.id_colum = ag_dr_transaction.id_colum + 1;
+              else ag_dr_transaction.id_colum = ag_dr_transaction.id_colum - 1;
+			end 
+            else begin 
+              if(ag_dr_transaction.id_row == 1) ag_dr_transaction.id_row = ag_dr_transaction.id_row + 1;
+              else ag_dr_transaction.id_row = ag_dr_transaction.id_row - 1; 
+            end
+          end
+        end
+                        ///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
+        if(this.gen_ag_transaction.id_rand==0) begin
+			ag_dr_transaction.id_row = gen_ag_transaction.id_row;
+          	ag_dr_transaction.id_colum = gen_ag_transaction.id_colum;
+     		if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin
+         		if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.source+1;
+             	else ag_dr_transaction.source = ag_dr_transaction.source-1;
 			end
 		end
+
 			///Se carga el tiempo de la transacción 
           	this.ag_dr_transaction.tiempo = $time;
 			///Se envía el paquete al mailbox corresponciente
@@ -134,3 +171,8 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
       
     endtask 
 endclass
+
+
+
+
+
