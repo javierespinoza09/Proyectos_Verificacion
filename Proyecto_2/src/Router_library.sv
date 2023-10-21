@@ -1,3 +1,4 @@
+// Code your design here
 `ifndef FIFOS
    `include "fifo.sv"
     `define FIFOS
@@ -115,7 +116,8 @@ module router_bus_interface #(parameter pck_sz = 40, parameter num_ntrfs=4, para
     $display("trgt_r: %g", data_out[pck_sz-9:pck_sz-12]);
     $display("trgt_c: %g", data_out[pck_sz-13:pck_sz-16]);
     $display("mode: %g",data_out[pck_sz-17]);
-    $display("src: %g",data_out[pck_sz-18:pck_sz-25]);
+    $display("src_R: %g",data_out[pck_sz-18:pck_sz-21]);
+    $display("src_C: %g",data_out[pck_sz-22:pck_sz-25]);
     $display("id: %g",data_out[pck_sz-26:pck_sz-33]);
     $display("pyld: %h",data_out[pck_sz-34:0]);
   end
@@ -124,7 +126,8 @@ module router_bus_interface #(parameter pck_sz = 40, parameter num_ntrfs=4, para
     $display("trgt_r: %g", data_out_i_in[pck_sz-9:pck_sz-12]);
     $display("trgt_c: %g", data_out_i_in[pck_sz-13:pck_sz-16]);
     $display("mode: %g",data_out_i_in[pck_sz-17]);
-    $display("src: %g",data_out_i_in[pck_sz-18:pck_sz-25]);
+    $display("src_R: %g",data_out_i_in[pck_sz-18:pck_sz-21]);
+    $display("src_C: %g",data_out_i_in[pck_sz-22:pck_sz-25]);
     $display("id: %g",data_out_i_in[pck_sz-26:pck_sz-33]);
     $display("pyld: %h",data_out_i_in[pck_sz-34:0]);
   end
@@ -873,3 +876,4 @@ module prll_bus_gnrtr_cn_rbtr #(parameter pck_sz = 40, parameter num_ntrfs=4, pa
   .data_in_i(data_in_i)
 );
 endmodule 
+

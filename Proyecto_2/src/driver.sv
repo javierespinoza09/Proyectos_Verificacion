@@ -6,8 +6,8 @@
 
 class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter ROWS = 2, parameter COLUMS = 2);
     	int drv_num;
-  		int self_row;
-  		int self_col;
+  bit [3:0] self_row;
+  bit [3:0] self_col;
   		fifo_in #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) fifo_in;//instancia de la FIFO que se comunica al DUT
  		ag_dr_mbx #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_mbx;				   //Mailbox con el agente
   		ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;		   	   //Transacción para comunicarse con el agente
@@ -36,7 +36,7 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
           this.ag_dr_mbx.get(ag_dr_transaction);                                          //Comunicación con el agente
 	  $display("DRIVER %d: Transaction received",this.drv_num);
           while(this.fifo_in.d_q.size >= fifo_size) #5;
-          this.fifo_in.fifo_push({this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});//Manda un paquete a la FIFO  
+          this.fifo_in.fifo_push({this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.self_row,this.self_col,this.ag_dr_transaction.dato[pckg_sz-26:0]});//Manda un paquete a la FIFO  
           //$display("Se envió %b", {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.ag_dr_transaction.dato});
           //this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, $time, this.ag_dr_transaction.source);
           //this.ag_chk_sb_mbx.put(ag_chk_sb_transaction);
@@ -48,3 +48,4 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 
 
 endclass
+
