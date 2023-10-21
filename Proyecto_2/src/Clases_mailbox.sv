@@ -40,8 +40,9 @@ class gen_ag;
   bit [3:0] id_row;
   bit [3:0] id_colum;
   int source_rand;
-  bit [3:0] source_row;
-  bit [3:0] source_colum;
+  bit [3:0] source;
+  //bit [3:0] source_row;
+  //bit [3:0] source_colum;
   function new ();
   endfunction;
 endclass
@@ -195,20 +196,4 @@ typedef enum {col_first,row_firts} mode;
 
 
 //MACROS//
-`define mapping (int ROWS, int COLUMS) \
-               for (int i = 0; i<COLUMS;i++)begin \
-                  drv_map[i].row = 0;              \
-                  drv_map[i].colum = i+1; \
-                end \
-                for (int i = 0; i<ROWS;i++)begin \
-                  drv_map[i+COLUMS].colum = 0; \
-                  drv_map[i+COLUMS].row = i+1; \
-                end \
-                for (int i = 0; i<COLUMS;i++)begin \
-                  drv_map[i+ROWS*2].row = ROWS+1; \
-                  drv_map[i+ROWS*2].colum = i+1; \
-                end \
-                for (int i = 0; i<ROWS;i++)begin \
-                  drv_map[i+COLUMS*3].colum = COLUMS+1; \
-                  drv_map[i+COLUMS*3].row = i+1; \
-                end 
+

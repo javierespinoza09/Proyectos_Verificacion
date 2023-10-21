@@ -2,8 +2,9 @@
 //`include "router_if.sv"
 `include "driver.sv"
 `include "Monitor.sv"
+`include "Agente.sv"
 //`define LIB
-`include "Router_library.sv"
+//`include "Router_library.sv"
 //DEBUG
 
 module router_tb;
@@ -22,8 +23,11 @@ parameter Drivers = COLUMS*2+ROWS*2;
   ag_dr_mbx #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_mbx [Drivers];//Mailbox con el agente
   ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;
   Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) monitor [Drivers];
+  Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
   
   
+  gen_ag_mbx gen_ag_mbx;
+  gen_ag gen_ag_transaction;
   
 
 initial begin
@@ -67,19 +71,23 @@ initial begin
  end
 
  initial begin 
-  
+   agente = new();
+   gen_ag_mbx = new();
   for(int i = 0; i < COLUMS*2+ROWS*2; i++) begin
     automatic int k = i;
     ag_dr_mbx[k] = new();
     
   end
   #50;
-  
+   agente = new();
+   agente.gen_ag_mbx = gen_ag_mbx;
   for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
     automatic int k = i;
     driver[k] = new(k);
     monitor[k] = new(k);
     driver[k].ag_dr_mbx = ag_dr_mbx[k];
+    agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
+    
   end
    
    //Asignación a cada Driver de su propia posición 
@@ -107,17 +115,34 @@ initial begin
     driver[k].fifo_in.v_if = v_if;
     monitor[k].v_if = v_if;
   end
-  
-  for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
-    fork
-    automatic int k = i;
-      driver[k].run();
-      monitor[k].run();
-    join_none
-  end
-  
-   for(int i = 0; i < 16; i++) begin
-    automatic int k = i;
+   
+   
+  fork
+    agente.run();
+    for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
+      fork
+      automatic int k = i;
+        driver[k].run();
+        monitor[k].run();
+      join_none
+    end
+  join_none
+   
+   
+   gen_ag_transaction = new();
+   gen_ag_transaction.cant_datos = 20;
+   gen_ag_transaction.data_modo = max_aleatoriedad;
+   gen_ag_transaction.id_modo = normal_id;
+   gen_ag_transaction.id_rand = 1;
+   gen_ag_transaction.id_row = 0;
+   gen_ag_transaction.id_colum = 0;
+   gen_ag_transaction.source_rand = 1;
+   gen_ag_transaction.source = 0;
+   
+   
+   gen_ag_mbx.put(gen_ag_transaction);
+     
+     /*
      ag_dr_transaction = new();
      ag_dr_transaction.randomize();
      ag_dr_transaction.Nxt_jump = 0;
@@ -128,9 +153,7 @@ initial begin
      end
       ag_dr_mbx[ag_dr_transaction.source].put(ag_dr_transaction);
     $display("source = %0d id_row = %0d id_col = %0d mode = %b dato = %b", ag_dr_transaction.source,ag_dr_transaction.id_row,ag_dr_transaction.id_colum,ag_dr_transaction.mode,ag_dr_transaction.dato);
-    
-  end
-  
+    */ 
   
 end
   
