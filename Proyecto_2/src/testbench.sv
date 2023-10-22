@@ -4,7 +4,8 @@
 `include "Monitor.sv"
 `include "Agente.sv"
 //`define LIB
-//`include "Router_library.sv"
+`include "Router_library.sv"
+`include "inner_signal.sv"
 //DEBUG
 
 module router_tb;
@@ -26,6 +27,7 @@ parameter Drivers = COLUMS*2+ROWS*2;
   Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
   
   
+  
   gen_ag_mbx gen_ag_mbx;
   gen_ag gen_ag_transaction;
   
@@ -38,7 +40,7 @@ end
 
 router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) v_if (.clk(clk_tb));
   
-  
+  inner_signals #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) signals_if (.clk(clk_tb));
 
   mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size), .bdcst(broadcast)) DUT (
   .clk(clk_tb),
@@ -52,6 +54,24 @@ router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_siz
   );
   
 
+  
+    for (genvar r = 1; r <=4; r++) begin
+    for (genvar c = 1; c <=4; c++) begin
+      for (genvar t = 0; t <=3; t++) begin
+        initial begin
+          fork
+            forever begin
+              signals_if.data_out[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.data_out;
+              signals_if.pop[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.pop;
+              signals_if.data_out_i_in[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.data_out_i_in;
+              signals_if.popin[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.popin;
+             #1;
+            end 
+         join_none
+        end
+      end
+    end
+  end
 
 initial begin
 forever begin

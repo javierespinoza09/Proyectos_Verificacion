@@ -6,8 +6,8 @@
 
 class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter ROWS = 2, parameter COLUMS = 2);
     	int drv_num;
-  bit [3:0] self_row;
-  bit [3:0] self_col;
+        bit [3:0] self_row;
+        bit [3:0] self_col;
   		fifo_in #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) fifo_in;//instancia de la FIFO que se comunica al DUT
  		ag_dr_mbx #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_mbx;				   //Mailbox con el agente
   		ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;		   	   //Transacción para comunicarse con el agente
