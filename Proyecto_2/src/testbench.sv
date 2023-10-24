@@ -31,6 +31,8 @@ parameter Drivers = COLUMS*2+ROWS*2;
   
   gen_ag_mbx gen_ag_mbx;
   gen_ag gen_ag_transaction;
+  list_chk_mbx list_chk_mbx;
+  list_chk transaction;
   
 
 initial begin
@@ -78,15 +80,17 @@ initial begin
  initial begin 
    agente = new();
    gen_ag_mbx = new();
+   list_chk_mbx = new();
   for(int i = 0; i < COLUMS*2+ROWS*2; i++) begin
     automatic int k = i;
     ag_dr_mbx[k] = new();
     
   end
-
-	
-				listener=new();
-				listener.v_if = v_if;
+   
+   
+   listener=new();
+   listener.v_if = v_if;
+   listener.list_chk_mbx = list_chk_mbx;
 
 
 
@@ -134,6 +138,7 @@ initial begin
   fork
     agente.run();
 	listener.run();
+    
     for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
       fork
       automatic int k = i;
@@ -169,10 +174,17 @@ initial begin
       ag_dr_mbx[ag_dr_transaction.source].put(ag_dr_transaction);
     $display("source = %0d id_row = %0d id_col = %0d mode = %b dato = %b", ag_dr_transaction.source,ag_dr_transaction.id_row,ag_dr_transaction.id_colum,ag_dr_transaction.mode,ag_dr_transaction.dato);
     */ 
+   
+   
   
 end
   
-
+initial begin
+  forever begin
+    list_chk_mbx.get(transaction);
+    $display("\nSe recibió del listener [%0d] [%0d] el dato [%b]",transaction.list_r,transaction.list_c,transaction.data_out);
+  end
+end
 
 initial begin
 #5000;

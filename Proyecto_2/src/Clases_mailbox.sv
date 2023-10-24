@@ -205,6 +205,24 @@ typedef enum {normal, broadcastt, one_to_all, all_to_one} Generador_modo;
 //PROYECTO 2//
 typedef enum {col_first,row_firts} mode;
 
-
+//////////
 //MACROS//
+//////////
 
+`define mapping(ROWS, COLUMS) \
+               for (int i = 0; i<COLUMS;i++)begin \
+                  drv_map[i].row = 0;              \
+                  drv_map[i].column = i+1; \
+                end \
+                for (int i = 0; i<ROWS;i++)begin \
+                  drv_map[i+COLUMS].column = 0; \
+                  drv_map[i+COLUMS].row = i+1; \
+                end \
+                for (int i = 0; i<COLUMS;i++)begin \
+                  drv_map[i+ROWS*2].row = ROWS+1; \
+                  drv_map[i+ROWS*2].column = i+1; \
+                end \
+                for (int i = 0; i<ROWS;i++)begin \
+                  drv_map[i+COLUMS*3].column = COLUMS+1; \
+                  drv_map[i+COLUMS*3].row = i+1; \
+                end 
