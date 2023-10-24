@@ -1,8 +1,10 @@
-for r in range(1, 5):
-    for c in range(1, 5):
-        for t in range(4):
-            code_line_data_out = f"signals_if.data_out[{r}][{c}][{t}] = DUT._rw_[{r}]._clm_[{c}].rtr._nu_[{t}].rtr_ntrfs_.data_out \\"
-            code_line_pop = f"signals_if.pop[{r}][{c}][{t}] = DUT._rw_[{r}]._clm_[{c}].rtr._nu_[{t}].rtr_ntrfs_.pop \\"
-            print(code_line_data_out)
-            print(code_line_pop)
+for row in range(1, 5):
+    for col in range(1, 5):
+        for terminal in range(4):
+            print(f"begin")
+            print(f"    forever begin")
+            print(f"        @(posedge router_tb.DUT._rw_[{row}]._clm_[{col}].rtr._nu_[{terminal}].rtr_ntrfs_.pop);")
+            print(f"        // Aquí colocar las acciones que deseas realizar cuando ocurra el flanco de subida")
+            print(f"    end")
+            print(f"end")
 

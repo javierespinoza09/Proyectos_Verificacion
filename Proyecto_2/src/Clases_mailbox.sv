@@ -128,15 +128,26 @@ class gen_chk;
 endclass
 
 
-class list_chk;
-  int id_r;
-  int id_c;
+class list_chk #(parameter pckg_sz = 40);
+  int list_r;
+  int list_c;
+  bit [pckg_sz-1:0] data_out;
   int time_list;
+  /*
+  bit [3:0] trgt_r;
+  bit [3:0] trgt_c;
+  bit mode;
+  bit [3:0] src_R;
+  bit [3:0] src_C;
+  bit [pck_sz-26:0] pyld
+  */
   
   
-  function new(int row, int col);
-    this.id_r = row;
-    this.id_c = col;
+  
+  function new(int list_r, int list_c, [pckg_sz-1:0] data_out);
+    this.list_r = list_r;
+    this.list_c = list_c;
+    this.data_out = data_out;
     this.time_list = $time;
   endfunction
   
@@ -144,7 +155,7 @@ class list_chk;
 endclass
 
 /*
-class listener;
+class list_chk;
   //list_chk_mbx list_chk_mbx;
   list_chk list_chk_transaction;
   
