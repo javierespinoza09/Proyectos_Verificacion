@@ -67,44 +67,83 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 			case (this.gen_ag_transaction.id_modo)
 				self_id: begin 
                   ag_dr_transaction.self_r_c.constraint_mode(0); 
-                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(1);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(1); 
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.send_to_itself.constraint_mode(0);
                   
 				end
-				any_id: begin 
+				any_id: begin //Send to any id, even invalid id and it self
                   ag_dr_transaction.self_r_c.constraint_mode(0); 
-                  ag_dr_transaction.valid_addrs.constraint_mode(0); 
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(0); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(0);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(0);
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.send_to_itself.constraint_mode(0);
                   
 				end
-				invalid_id: begin 
+				invalid_id: begin //Send to any id,even invalid id, but it self
                   ag_dr_transaction.self_r_c.constraint_mode(1); 
-                  ag_dr_transaction.valid_addrs.constraint_mode(0);  
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(0); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(0);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(0);  
                   ag_dr_transaction.source_addrs.constraint_mode(1);
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.send_to_itself.constraint_mode(0);
                   
 				end
-				fix_source: begin 
-                  ag_dr_transaction.self_r_c.constraint_mode(1); 
-                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
-                  ag_dr_transaction.source_addrs.constraint_mode(1); 
-                  ag_dr_transaction.pos_source_addrs.constraint_mode(1); 
-                   
-				end
-              	normal_id: begin 
+				
+        normal_id: begin 
                   ag_dr_transaction.self_r_c.constraint_mode(1);  
-                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(1);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(1); 
                   ag_dr_transaction.source_addrs.constraint_mode(1); 
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.send_to_itself.constraint_mode(0);
+                  
+				end
+        send_to_itself: begin 
+                  ag_dr_transaction.self_r_c.constraint_mode(0);  
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(1);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(1); 
+                  ag_dr_transaction.source_addrs.constraint_mode(1); 
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1);
+                  ag_dr_transaction.send_to_itself.constraint_mode(1);
                   
 				end
 				default: begin 
-                  ag_dr_transaction.self_r_c.constraint_mode(1); 
-                  ag_dr_transaction.valid_addrs.constraint_mode(1); 
+                  ag_dr_transaction.self_r_c.constraint_mode(1);  
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(1);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(1); 
+                  ag_dr_transaction.source_addrs.constraint_mode(1); 
+                  ag_dr_transaction.pos_source_addrs.constraint_mode(1); 
 				end
 			endcase
+
+      case (this.gen_ag_transaction.mode)
+        random: begin
+          ag_dr_transaction.mode_1.constraint_mode(0);
+          ag_dr_transaction.mode_0.constraint_mode(0);
+        end
+        mode_1: begin 
+          ag_dr_transaction.mode_1.constraint_mode(1);
+          ag_dr_transaction.mode_0.constraint_mode(0);  
+        end
+        mode_0: begin 
+          ag_dr_transaction.mode_1.constraint_mode(0);
+          ag_dr_transaction.mode_0.constraint_mode(1);  
+        end
+        default: begin 
+          ag_dr_transaction.mode_1.constraint_mode(0);
+          ag_dr_transaction.mode_0.constraint_mode(0);
+        end
+      endcase
           //////////////////
           //ALEATORIZACION//
           //////////////////
@@ -113,30 +152,33 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
       	//////////////////////////////
         //VALIDACION DE FILA-COLUMNA//
         //////////////////////////////
-	
+    
 		if(this.gen_ag_transaction.source_rand==0) begin
                         ag_dr_transaction.source = gen_ag_transaction.source;
-          
-          if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin  
-            if(ag_dr_transaction.id_row == 0 || ag_dr_transaction.id_row == ROWS + 1) begin
-              if(ag_dr_transaction.id_colum == 1) ag_dr_transaction.id_colum = ag_dr_transaction.id_colum + 1;
-              else ag_dr_transaction.id_colum = ag_dr_transaction.id_colum - 1;
-			end 
-            else begin 
-              if(ag_dr_transaction.id_row == 1) ag_dr_transaction.id_row = ag_dr_transaction.id_row + 1;
-              else ag_dr_transaction.id_row = ag_dr_transaction.id_row - 1; 
+          if(this.gen_ag_transaction.id_modo != self_id || this.gen_ag_transaction.id_modo != send_to_itself) begin
+            if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin  
+              if(ag_dr_transaction.id_row == 0 || ag_dr_transaction.id_row == ROWS + 1) begin
+                if(ag_dr_transaction.id_colum == 1) ag_dr_transaction.id_colum = ag_dr_transaction.id_colum + 1;
+                else ag_dr_transaction.id_colum = ag_dr_transaction.id_colum - 1;
+              end 
+              else begin 
+                if(ag_dr_transaction.id_row == 1) ag_dr_transaction.id_row = ag_dr_transaction.id_row + 1;
+                else ag_dr_transaction.id_row = ag_dr_transaction.id_row - 1; 
+              end
             end
           end
         end
                         ///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
         if(this.gen_ag_transaction.id_rand==0) begin
-			ag_dr_transaction.id_row = gen_ag_transaction.id_row;
-          	ag_dr_transaction.id_colum = gen_ag_transaction.id_colum;
-     		if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin
-         		if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.source+1;
-             	else ag_dr_transaction.source = ag_dr_transaction.source-1;
-			end
-		end
+			    ag_dr_transaction.id_row = gen_ag_transaction.id_row;
+          ag_dr_transaction.id_colum = gen_ag_transaction.id_colum;
+          if(this.gen_ag_transaction.id_modo != self_id || this.gen_ag_transaction.id_modo != send_to_itself) begin
+            if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin
+                if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.source+1;
+                  else ag_dr_transaction.source = ag_dr_transaction.source-1;
+            end
+          end
+		    end
 
 			///Se carga el tiempo de la transacción 
           	this.ag_dr_transaction.tiempo = $time;

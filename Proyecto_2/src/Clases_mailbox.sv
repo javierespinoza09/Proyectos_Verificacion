@@ -27,6 +27,7 @@ class tst_gen;
   bit [3:0] row;
   bit [3:0] colum;
   int source;
+  int mode;
   function new ();
   endfunction;
 endclass
@@ -37,6 +38,7 @@ class gen_ag;
   int data_modo;        
   int id_modo;
   int id_rand;
+  int mode;
   bit [3:0] id_row;
   bit [3:0] id_colum;
   int source_rand;
@@ -68,7 +70,7 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   rand bit [pckg_sz-18:0] dato;
   randc bit [3:0] id_row;
   randc bit [3:0] id_colum;
-  rand bit mode;
+  rand int mode;
   rand int source;
   bit [7:0] Nxt_jump;
   int tiempo;
@@ -80,11 +82,14 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   constraint source_addrs {source < COLUMS*2+ROWS*2;};  //**Restriccion para asegurar que el paquete se dirige a un driver existente (necesaria)
   constraint self_r_c {id_row != drv_map[source].row; id_colum != drv_map[source].column;};
   //Respecto al ID
-  constraint valid_addrs {id_row <= ROWS+1; id_row >= 0; id_colum <= COLUMS+1; id_colum >= 0;};       //Restriccion asegura que la direccion pertenece a un driver
+  constraint send_to_itself {id_row == drv_map[source].row; id_colum == drv_map[source].column;};
+  constraint pos_id_addrs {id_row >= 0; id_colum>= 0;};
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
   constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
   constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
-  
+  //Respecto al modo
+  constraint mode_1 {mode == 1;};
+  constraint mode_0 {mode == 0;};
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO
   //constraint data_variablility {dato inside {{(pckg_sz-18){1'b1}},{(pckg_sz-18){1'b0}}};};
@@ -201,6 +206,8 @@ typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
 typedef enum {self_id, any_id, invalid_id, fix_source ,normal_id} gen_ag_id_modo;
 typedef enum {bus_push, bus_pop} monitor_modo;
 typedef enum {normal, broadcastt, one_to_all, all_to_one} Generador_modo;
+typedef enum {random, mode_1, mode_0} Mode_type;
+
 
 //PROYECTO 2//
 typedef enum {col_first,row_firts} mode;
