@@ -1,4 +1,4 @@
-interface router_if #(parameter ROWS = 2, parameter COLUMS = 2, parameter pckg_sz =20, parameter fifo_depth = 4)(input clk);
+interface router_if #(parameter ROWS = 4, parameter COLUMS = 4, parameter pckg_sz =40, parameter fifo_depth = 4)(input clk);
    
   
   logic pndng[ROWS*2+COLUMS*2];

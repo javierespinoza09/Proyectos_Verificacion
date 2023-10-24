@@ -5,7 +5,7 @@
 `include "Agente.sv"
 //`define LIB
 `include "Router_library.sv"
-`include "inner_signal.sv"
+`include "listener.sv"
 //DEBUG
 
 module router_tb;
@@ -25,7 +25,8 @@ parameter Drivers = COLUMS*2+ROWS*2;
   ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;
   Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) monitor [Drivers];
   Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
-  
+  listener listener;
+
   
   
   gen_ag_mbx gen_ag_mbx;
@@ -40,7 +41,7 @@ end
 
 router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) v_if (.clk(clk_tb));
   
-  inner_signals #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) signals_if (.clk(clk_tb));
+  //inner_signals #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size)) signals_if (.clk(clk_tb));
 
   mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_size), .bdcst(broadcast)) DUT (
   .clk(clk_tb),
@@ -52,26 +53,10 @@ router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_siz
   .data_out_i_in(v_if.data_out_i_in),
   .pndng_i_in(v_if.pndng_i_in)
   );
-  
 
-  
-    for (genvar r = 1; r <=4; r++) begin
-    for (genvar c = 1; c <=4; c++) begin
-      for (genvar t = 0; t <=3; t++) begin
-        initial begin
-          fork
-            forever begin
-              signals_if.data_out[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.data_out;
-              signals_if.pop[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.pop;
-              signals_if.data_out_i_in[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.data_out_i_in;
-              signals_if.popin[r][c][t] = DUT._rw_[r]._clm_[c].rtr._nu_[t].rtr_ntrfs_.popin;
-             #1;
-            end 
-         join_none
-        end
-      end
-    end
-  end
+
+
+ 
 
 initial begin
 forever begin
@@ -98,6 +83,15 @@ initial begin
     ag_dr_mbx[k] = new();
     
   end
+
+	
+				listener=new();
+				listener.v_if = v_if;
+
+
+
+
+
   #50;
    agente = new();
    agente.gen_ag_mbx = gen_ag_mbx;
@@ -139,6 +133,7 @@ initial begin
    
   fork
     agente.run();
+	listener.run();
     for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
       fork
       automatic int k = i;
@@ -150,7 +145,7 @@ initial begin
    
    
    gen_ag_transaction = new();
-   gen_ag_transaction.cant_datos = 20;
+   gen_ag_transaction.cant_datos = 3;
    gen_ag_transaction.data_modo = max_aleatoriedad;
    gen_ag_transaction.id_modo = normal_id;
    gen_ag_transaction.id_rand = 1;

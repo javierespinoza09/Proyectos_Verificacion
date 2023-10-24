@@ -143,7 +143,7 @@ class list_chk;
   
 endclass
 
-
+/*
 class listener;
   //list_chk_mbx list_chk_mbx;
   list_chk list_chk_transaction;
@@ -168,7 +168,7 @@ class listener;
     
   endtask
 endclass
-
+*/
 
 ///////////////////
 ////Mailboxes//////
