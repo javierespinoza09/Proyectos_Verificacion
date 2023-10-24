@@ -6,6 +6,7 @@
 //`define LIB
 `include "Router_library.sv"
 `include "listener.sv"
+`include "scoreboard.sv"
 //DEBUG
 
 module router_tb;
@@ -26,6 +27,7 @@ parameter Drivers = COLUMS*2+ROWS*2;
   Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) monitor [Drivers];
   Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
   listener listener;
+  scoreboard #(.pckg_sz(pckg_sz)) sb;
 
   
   
@@ -33,6 +35,8 @@ parameter Drivers = COLUMS*2+ROWS*2;
   gen_ag gen_ag_transaction;
   list_chk_mbx list_chk_mbx;
   list_chk transaction;
+  drv_sb_mbx #(.pckg_sz(pckg_sz)) drv_sb_mbx;
+  sb_chk_mbx #(.pckg_sz(pckg_sz)) sb_chk_mbx;
   
 
 initial begin
@@ -58,7 +62,8 @@ router_if #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_siz
 
 
 
- 
+
+
 
 initial begin
 forever begin
@@ -77,22 +82,26 @@ initial begin
   v_if.reset = reset_tb;
  end
 
+
  initial begin 
    agente = new();
    gen_ag_mbx = new();
    list_chk_mbx = new();
+   drv_sb_mbx = new();
+   sb_chk_mbx = new();
+   
   for(int i = 0; i < COLUMS*2+ROWS*2; i++) begin
     automatic int k = i;
     ag_dr_mbx[k] = new();
     
   end
    
-   
+   sb = new();
+   sb.drv_sb_mbx=drv_sb_mbx;
+   sb.sb_chk_mbx = sb_chk_mbx;
    listener=new();
    listener.v_if = v_if;
    listener.list_chk_mbx = list_chk_mbx;
-
-
 
 
 
@@ -104,6 +113,7 @@ initial begin
     driver[k] = new(k);
     monitor[k] = new(k);
     driver[k].ag_dr_mbx = ag_dr_mbx[k];
+    driver[k].drv_sb_mbx = drv_sb_mbx;
     agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
     
   end
@@ -138,7 +148,7 @@ initial begin
   fork
     agente.run();
 	listener.run();
-    
+    sb.run();
     for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
       fork
       automatic int k = i;
