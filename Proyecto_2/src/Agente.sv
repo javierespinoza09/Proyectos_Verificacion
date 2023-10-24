@@ -1,23 +1,7 @@
 //`include "Clases_mailbox.sv"
 
 
-`define mapping(ROWS, COLUMS) \
-               for (int i = 0; i<COLUMS;i++)begin \
-                  drv_map[i].row = 0;              \
-                  drv_map[i].column = i+1; \
-                end \
-                for (int i = 0; i<ROWS;i++)begin \
-                  drv_map[i+COLUMS].column = 0; \
-                  drv_map[i+COLUMS].row = i+1; \
-                end \
-                for (int i = 0; i<COLUMS;i++)begin \
-                  drv_map[i+ROWS*2].row = ROWS+1; \
-                  drv_map[i+ROWS*2].column = i+1; \
-                end \
-                for (int i = 0; i<ROWS;i++)begin \
-                  drv_map[i+COLUMS*3].column = COLUMS+1; \
-                  drv_map[i+COLUMS*3].row = i+1; \
-                end 
+
 
 
 class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size = 4, parameter ROWS = 2, parameter COLUMS = 2);
