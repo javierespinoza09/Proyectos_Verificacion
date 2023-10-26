@@ -24,9 +24,10 @@ endclass
 
 class tst_gen;
   int caso;
-  bit [3:0] row;
-  bit [3:0] colum;
+  bit [3:0] id_row;
+  bit [3:0] id_colum;
   int source;
+  int mode;
   function new ();
   endfunction;
 endclass
@@ -203,7 +204,8 @@ typedef mailbox #(drv_sb) sb_chk_mbx ;
 typedef enum {max_variabilidad, max_aleatoriedad} gen_ag_data_modo;
 typedef enum {self_id, any_id, invalid_id, fix_source ,normal_id,send_to_itself} gen_ag_id_modo;
 typedef enum {bus_push, bus_pop} monitor_modo;
-typedef enum {normal, broadcastt, one_to_all, all_to_one} Generador_modo;
+typedef enum {normal, broadcastt, one_to_all, all_to_one, any,
+       		itself, all_to_one_itself, one_to_all_itself} Generador_modo;
 
 //PROYECTO 2//
 typedef enum {col_first,row_firts} mode;

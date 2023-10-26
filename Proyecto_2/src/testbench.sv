@@ -9,6 +9,7 @@
 `include "listener.sv"
 `include "scoreboard.sv"
 `include "checker.sv"
+`include "Generador.sv"
 //DEBUG
 
 module router_tb;
@@ -31,16 +32,21 @@ parameter Drivers = COLUMS*2+ROWS*2;
   listener listener;
   scoreboard #(.pckg_sz(pckg_sz)) sb;
   _checker #(.pckg_sz(pckg_sz)) chk;
-  
+ 
+	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador; 
   
   gen_ag_mbx gen_ag_mbx;
-  gen_ag gen_ag_transaction;
+  //gen_ag gen_ag_transaction;
   list_chk_mbx list_chk_mbx;
   list_chk transaction;
   drv_sb_mbx #(.pckg_sz(pckg_sz)) drv_sb_mbx;
   sb_chk_mbx #(.pckg_sz(pckg_sz)) sb_chk_mbx;
   mon_chk_mbx mon_chk_mbx;
-  
+
+  /////Temporal Pruebas Generador//////
+  ////////////////////////////////////
+  tst_gen_mbx tst_gen_mbx;
+  tst_gen tst_gen_transaction;
 
 initial begin
   $dumpfile("test_router.vcd");
@@ -88,6 +94,8 @@ initial begin
 
  initial begin 
    agente = new();
+   generador = new();
+   tst_gen_mbx = new();
    gen_ag_mbx = new();
    list_chk_mbx = new();
    drv_sb_mbx = new();
@@ -115,6 +123,8 @@ initial begin
   #50;
    agente = new();
    agente.gen_ag_mbx = gen_ag_mbx;
+   generador.gen_ag_mbx = gen_ag_mbx;
+   generador.tst_gen_transaction = tst_gen_transaction;
   for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
     automatic int k = i;
     driver[k] = new(k);
@@ -169,7 +179,12 @@ initial begin
     end
   join_none
    
-   
+	
+	tst_gen_transaction = new();
+	tst_gen_transaction.caso = normal;
+	tst_gen_transaction.mode = random;
+	tst_gen_mbx.put(tst_gen_transaction); 
+   /*
    gen_ag_transaction = new();
    gen_ag_transaction.cant_datos = 30;
    gen_ag_transaction.id_modo = normal_id;
@@ -178,11 +193,11 @@ initial begin
    gen_ag_transaction.id_colum = 0;
    gen_ag_transaction.source_rand = 1;
    gen_ag_transaction.source = 0;
-   gen_ag_transaction.mode = mode_1;
+   gen_ag_transaction.mode = random;
    
    
    gen_ag_mbx.put(gen_ag_transaction);
-     
+     */
      /*
      ag_dr_transaction = new();
      ag_dr_transaction.randomize();

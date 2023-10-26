@@ -9,13 +9,13 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
   gen_ag_mbx gen_ag_mbx;
   gen_ag gen_ag_transaction;
   tst_gen tst_gen_transaction;
-  gen_chk_sb_mbx gen_chk_sb_mbx;
-  gen_chk_sb gen_chk_sb_transaction;
+  //gen_chk_sb_mbx gen_chk_sb_mbx;
+  //gen_chk_sb gen_chk_sb_transaction;
 
   function new();
     this.gen_ag_transaction = new();
     this.tst_gen_transaction = new();
-    this.gen_chk_sb_transaction = new();
+    //this.gen_chk_sb_transaction = new();
   endfunction 
   /*                                         */
   /*Contiene los casos de generación de datos*/
@@ -28,7 +28,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
     case (this.tst_gen_transaction.caso)
       normal:begin
         //this.gen_ag_transaction.data_modo = max_aleatoriedad;
-        this.gen_ag_transaction.cant_datos = 35;
+        this.gen_ag_transaction.cant_datos = 5;
         this.gen_ag_transaction.id_modo = normal_id;
         this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id_row = tst_gen_transaction.id_row;
@@ -42,7 +42,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.id_rand = 0;
         this.gen_ag_transaction.id_modo = normal_id;
         //this.gen_ag_transaction.data_modo = max_aleatoriedad;
-        this.gen_ag_transaction.id = {8{1'b1}};
+        //this.gen_ag_transaction.id = {8{1'b1}};
         this.gen_ag_transaction.source_rand = 1;
         this.gen_ag_transaction.source = tst_gen_transaction.source;
         
@@ -116,7 +116,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
       
       default: begin
         //this.gen_ag_transaction.cant_datos = 10;
-        $display("Generador \n Warning: Invalid test-case %g", this.tst_gen_transaction.caso)
+        $display("Generador \n Warning: Invalid test-case %g", this.tst_gen_transaction.caso);
       end 
       
 	endcase
@@ -124,8 +124,8 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
   this.gen_ag_transaction.mode = this.tst_gen_transaction.mode;
   
   gen_ag_mbx.put(gen_ag_transaction);
-  gen_chk_sb_transaction.cant_datos = this.gen_ag_transaction.cant_datos;
-  gen_chk_sb_mbx.put(gen_chk_sb_transaction);
+  //gen_chk_sb_transaction.cant_datos = this.gen_ag_transaction.cant_datos;
+  //gen_chk_sb_mbx.put(gen_chk_sb_transaction);
 end
     
     
