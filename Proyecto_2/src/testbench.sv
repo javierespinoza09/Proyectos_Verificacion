@@ -7,6 +7,7 @@
 `include "Router_library.sv"
 `include "listener.sv"
 `include "scoreboard.sv"
+`include "checker.sv"
 //DEBUG
 
 module router_tb;
@@ -28,7 +29,7 @@ parameter Drivers = COLUMS*2+ROWS*2;
   Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
   listener listener;
   scoreboard #(.pckg_sz(pckg_sz)) sb;
-
+  _checker #(.pckg_sz(pckg_sz)) chk;
   
   
   gen_ag_mbx gen_ag_mbx;
@@ -37,6 +38,7 @@ parameter Drivers = COLUMS*2+ROWS*2;
   list_chk transaction;
   drv_sb_mbx #(.pckg_sz(pckg_sz)) drv_sb_mbx;
   sb_chk_mbx #(.pckg_sz(pckg_sz)) sb_chk_mbx;
+  mon_chk_mbx mon_chk_mbx;
   
 
 initial begin
@@ -89,13 +91,17 @@ initial begin
    list_chk_mbx = new();
    drv_sb_mbx = new();
    sb_chk_mbx = new();
+   mon_chk_mbx = new();
+   
    
   for(int i = 0; i < COLUMS*2+ROWS*2; i++) begin
     automatic int k = i;
     ag_dr_mbx[k] = new();
     
   end
-   
+   chk = new();
+   chk.sb_chk_mbx =sb_chk_mbx;
+   chk.mon_chk_mbx = mon_chk_mbx;
    sb = new();
    sb.drv_sb_mbx=drv_sb_mbx;
    sb.sb_chk_mbx = sb_chk_mbx;
@@ -111,10 +117,12 @@ initial begin
   for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
     automatic int k = i;
     driver[k] = new(k);
-    monitor[k] = new(k);
     driver[k].ag_dr_mbx = ag_dr_mbx[k];
     driver[k].drv_sb_mbx = drv_sb_mbx;
+    monitor[k] = new(k);
+    monitor[k].mon_chk_mbx = mon_chk_mbx;
     agente.ag_dr_mbx_array[k] = ag_dr_mbx[k];
+    
     
   end
    
@@ -149,6 +157,8 @@ initial begin
     agente.run();
 	listener.run();
     sb.run();
+    chk.run_sc();
+    chk.run_mon();
     for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
       fork
       automatic int k = i;
@@ -160,7 +170,7 @@ initial begin
    
    
    gen_ag_transaction = new();
-   gen_ag_transaction.cant_datos = 3;
+   gen_ag_transaction.cant_datos = 100;
    gen_ag_transaction.data_modo = max_aleatoriedad;
    gen_ag_transaction.id_modo = normal_id;
    gen_ag_transaction.id_rand = 1;
@@ -192,12 +202,16 @@ end
 initial begin
   forever begin
     list_chk_mbx.get(transaction);
-    $display("\nSe recibió del listener [%0d] [%0d] el dato [%b]",transaction.list_r,transaction.list_c,transaction.data_out);
+    //$display("\nSe recibió del listener [%0d] [%0d] el dato [%b]",transaction.list_r,transaction.list_c,transaction.data_out);
   end
 end
 
 initial begin
-#5000;
+#10000;
+  
+    chk.report();
+  
+
   $finish;
 end
 endmodule
