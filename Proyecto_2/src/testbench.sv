@@ -1,15 +1,10 @@
 
 `timescale 1ns/10ps
 //`include "router_if.sv"
-`include "driver.sv"
-`include "Monitor.sv"
-`include "Agente.sv"
+
 //`define LIB
 `include "Router_library.sv"
-`include "listener.sv"
-`include "scoreboard.sv"
-`include "checker.sv"
-`include "Generador.sv"
+
 //DEBUG
 
 module router_tb;
@@ -33,7 +28,7 @@ parameter Drivers = COLUMS*2+ROWS*2;
   scoreboard #(.pckg_sz(pckg_sz)) sb;
   _checker #(.pckg_sz(pckg_sz)) chk;
  
-	Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador; 
+	
   
   gen_ag_mbx gen_ag_mbx;
   //gen_ag gen_ag_transaction;
@@ -166,7 +161,7 @@ initial begin
    
   fork
     agente.run();
-	listener.run();
+	  listener.run();
     sb.run();
     chk.run_sc();
     chk.run_mon();
