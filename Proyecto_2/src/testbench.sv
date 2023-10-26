@@ -1,3 +1,4 @@
+
 `timescale 1ns/10ps
 //`include "router_if.sv"
 `include "driver.sv"
@@ -170,14 +171,14 @@ initial begin
    
    
    gen_ag_transaction = new();
-   gen_ag_transaction.cant_datos = 100;
-   gen_ag_transaction.data_modo = max_aleatoriedad;
+   gen_ag_transaction.cant_datos = 30;
    gen_ag_transaction.id_modo = normal_id;
    gen_ag_transaction.id_rand = 1;
-   gen_ag_transaction.id_row = 0;
+   gen_ag_transaction.id_row = 1;
    gen_ag_transaction.id_colum = 0;
    gen_ag_transaction.source_rand = 1;
    gen_ag_transaction.source = 0;
+   gen_ag_transaction.mode = mode_1;
    
    
    gen_ag_mbx.put(gen_ag_transaction);
