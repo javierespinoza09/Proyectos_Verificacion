@@ -8,8 +8,8 @@ class scoreboard #(parameter pckg_sz = 20);
     forever begin
  
       drv_sb_mbx.get(drv_sb_transaction);
-      $display("MODE: [%0d]",drv_sb_transaction.paquete[pckg_sz-17]);
-      $display("ORI: [%0d] [%0d] DIR: [%0d] [%0d]",drv_sb_transaction.row,drv_sb_transaction.colum, drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12], drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16]);
+      //$display("MODE: [%0d]",drv_sb_transaction.paquete[pckg_sz-17]);
+      //$display("ORI: [%0d] [%0d] DIR: [%0d] [%0d]",drv_sb_transaction.row,drv_sb_transaction.colum, drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12], drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16]);
       case(drv_sb_transaction.paquete[pckg_sz-17])
         0:begin
           if((drv_sb_transaction.row <=drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])) begin
@@ -88,7 +88,8 @@ class scoreboard #(parameter pckg_sz = 20);
           end
         end
       endcase
-    
+      sb_chk_mbx.put(drv_sb_transaction);
+      //$display("SE ENVIÓ UN PAQUETE AL CHK 1");
     /*$display("FIFO R[%0d] C[%0d] Paquete %b",drv_sb_transaction.row,drv_sb_transaction.colum,drv_sb_transaction.paquete);
     for (int i = 0; i <=5 ; i++)begin
       for (int j = 0; j <= 5; j++) begin
@@ -96,7 +97,7 @@ class scoreboard #(parameter pckg_sz = 20);
       end
     end
     */
-      sb_chk_mbx.put(drv_sb_transaction);
+      
     end 
   endtask
   
