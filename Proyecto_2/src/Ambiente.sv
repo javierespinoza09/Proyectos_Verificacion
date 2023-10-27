@@ -5,7 +5,7 @@
 `include "scoreboard.sv"
 `include "checker.sv"
 `include "Generador.sv"
-class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 20, 
+class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40, 
                 parameter fifo_size = 4, parameter ROWS = 2, 
                 parameter COLUMS = 2);
 
@@ -14,7 +14,7 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 20,
     ////////////////////////////////
 
     Driver #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) driver [ROWS*2+COLUMS*2];
-    Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) monitor [Drivers];
+    Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) monitor [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
     listener listener;
     scoreboard #(.pckg_sz(pckg_sz)) sb;
@@ -29,6 +29,8 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 20,
     //Manejador de arreglo mailbox Agente-Driver
     gen_ag_mbx gen_ag_mbx;
     
+	tst_gen_mbx tst_gen_mbx;
+
     //Instancia de mailbox Generador-Agente
     list_chk_mbx list_chk_mbx;
     //Instancia de mailbox Listener-Checker
@@ -57,6 +59,7 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 20,
 
         generador = new();
         generador.gen_ag_mbx = gen_ag_mbx;
+	
 
         chk = new();
         chk.sb_chk_mbx =sb_chk_mbx;
@@ -67,7 +70,6 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 20,
         sb.sb_chk_mbx = sb_chk_mbx;
 
         listener=new();
-        listener.v_if = v_if;
         listener.list_chk_mbx = list_chk_mbx;
 
         for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
@@ -105,6 +107,7 @@ class Ambiente  #(parameter drvrs = 4, parameter pckg_sz = 20,
 
     task run();
         fork
+	    generador.run();
             agente.run();
             listener.run();
             sb.run();
