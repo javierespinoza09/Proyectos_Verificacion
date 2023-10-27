@@ -28,7 +28,9 @@ class _checker #(parameter pckg_sz = 20);
     forever begin
       mon_chk_mbx.get(mon_chk_transaction);
       array_mon[{mon_chk_transaction.key}] = this.mon_chk_transaction;
-      $display("\nHASH MON Key [%b] mode [%b]",mon_chk_transaction.key, mon_chk_transaction.key[pckg_sz-17]);
+
+      $display("\nHASH MON Key [%d]",mon_chk_transaction.key);
+
     end
     
  
