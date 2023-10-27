@@ -4,6 +4,16 @@
 
 //`define LIB
 `include "Router_library.sv"
+//`include "checker.sv"
+`include "driver.sv"
+`include "listener.sv"
+`include "Agente.sv"
+`include "Generador.sv"
+`include "scoreboard.sv"
+`include "Monitor.sv"
+//`include "Clases_mailbox.sv"
+`include "checker.sv"
+
 
 //DEBUG
 
@@ -24,6 +34,7 @@ parameter Drivers = COLUMS*2+ROWS*2;
   ag_dr #(.pckg_sz(pckg_sz), .ROWS(ROWS), .COLUMS(COLUMS)) ag_dr_transaction;
   Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) monitor [Drivers];
   Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
+  Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador;
   listener listener;
   scoreboard #(.pckg_sz(pckg_sz)) sb;
   _checker #(.pckg_sz(pckg_sz)) chk;
@@ -119,7 +130,7 @@ initial begin
    agente = new();
    agente.gen_ag_mbx = gen_ag_mbx;
    generador.gen_ag_mbx = gen_ag_mbx;
-   generador.tst_gen_transaction = tst_gen_transaction;
+   generador.tst_gen_mbx = tst_gen_mbx;
   for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
     automatic int k = i;
     driver[k] = new(k);
@@ -165,6 +176,7 @@ initial begin
     sb.run();
     chk.run_sc();
     chk.run_mon();
+    generador.run();
     for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
       fork
       automatic int k = i;
@@ -178,7 +190,14 @@ initial begin
 	tst_gen_transaction = new();
 	tst_gen_transaction.caso = normal;
 	tst_gen_transaction.mode = random;
-	tst_gen_mbx.put(tst_gen_transaction); 
+	tst_gen_mbx.put(tst_gen_transaction);
+
+
+	#200
+	tst_gen_transaction = new();
+        tst_gen_transaction.caso = normal;
+        tst_gen_transaction.mode = mode_1;
+        tst_gen_mbx.put(tst_gen_transaction);	
    /*
    gen_ag_transaction = new();
    gen_ag_transaction.cant_datos = 30;

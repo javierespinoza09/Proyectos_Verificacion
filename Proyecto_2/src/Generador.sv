@@ -28,7 +28,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
     case (this.tst_gen_transaction.caso)
       normal:begin
         //this.gen_ag_transaction.data_modo = max_aleatoriedad;
-        this.gen_ag_transaction.cant_datos = 5;
+        this.gen_ag_transaction.cant_datos = 15;
         this.gen_ag_transaction.id_modo = normal_id;
         this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id_row = tst_gen_transaction.id_row;
