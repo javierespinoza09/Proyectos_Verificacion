@@ -1,4 +1,4 @@
-class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20, parameter drvrs = 4, parameter fifo_size = 4);
+class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 40, parameter drvrs = 4, parameter fifo_size = 4);
 
 	bit [pckg_sz-1:0] d_q[$];
 	int fifo_num;
@@ -13,7 +13,7 @@ class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 20
 
 	function fifo_push(bit [pckg_sz-1:0] dato); 
 			this.d_q.push_back(dato);
-      		//$display("Se recibió %b",dato);
+      		$display("FIFO: Se recibió [%b] modo %b",dato,dato[pckg_sz-17]);
 			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
 			this.v_if.pndng_i_in[this.fifo_num] = 1;
 	endfunction

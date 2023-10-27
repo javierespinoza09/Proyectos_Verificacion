@@ -18,6 +18,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
     int num_transacciones;
     int delay;
     int source;
+    int mode;
 
 	r_c_mapping drv_map [COLUMS*2+ROWS*2];
 
@@ -46,6 +47,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
       	//get desde el generador al agente//
         this.gen_ag_mbx.get(this.gen_ag_transaction);
         this.num_transacciones = this.gen_ag_transaction.cant_datos;
+	this.mode = this.gen_ag_transaction.mode;
         //Casos para la variabilidad de los Datos//
         for (int i = 0; i < this.num_transacciones; i++) begin
 			this.ag_dr_transaction = new();
@@ -126,27 +128,33 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 				end
 			endcase
 
-      case (this.gen_ag_transaction.mode)
+      case (this.mode)
         random: begin
-          ag_dr_transaction.mode_1.constraint_mode(0);
-          ag_dr_transaction.mode_0.constraint_mode(0);
+		$display("randdom");
+          this.ag_dr_transaction.mode1.constraint_mode(0);
+          this.ag_dr_transaction.mode0.constraint_mode(0);
         end
-        mode_1: begin 
-          ag_dr_transaction.mode_1.constraint_mode(1);
-          ag_dr_transaction.mode_0.constraint_mode(0);  
+        mode_1: begin
+	       $display("MODE_1");	
+          this.ag_dr_transaction.mode1.constraint_mode(1);
+          this.ag_dr_transaction.mode0.constraint_mode(0);  
         end
-        mode_0: begin 
-          ag_dr_transaction.mode_1.constraint_mode(0);
-          ag_dr_transaction.mode_0.constraint_mode(1);  
+        mode_0: begin
+	        $display("MODE_0");	
+          ag_dr_transaction.mode1.constraint_mode(0);
+          ag_dr_transaction.mode0.constraint_mode(1);  
         end
-        default: begin 
-          ag_dr_transaction.mode_1.constraint_mode(0);
-          ag_dr_transaction.mode_0.constraint_mode(0);
+        default: begin
+	       $display("DEFAULT");	
+          ag_dr_transaction.mode1.constraint_mode(0);
+          ag_dr_transaction.mode0.constraint_mode(0);
         end
       endcase
           //////////////////
           //ALEATORIZACION//
           //////////////////
+	  //
+	  	this.ag_dr_transaction.Nxt_jump = 0;
 		this.ag_dr_transaction.randomize();
 			
       	//////////////////////////////
@@ -182,6 +190,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 
 			///Se carga el tiempo de la transacción 
           	this.ag_dr_transaction.tiempo = $time;
+		$display("AGENTE: Dato [%b] modo [%b] Nxt [%b]", this.ag_dr_transaction.dato, this.ag_dr_transaction.mode, this.ag_dr_transaction.Nxt_jump);
 			///Se envía el paquete al mailbox corresponciente
             this.ag_dr_mbx_array[this.ag_dr_transaction.source].put(this.ag_dr_transaction);
 

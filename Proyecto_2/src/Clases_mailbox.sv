@@ -68,9 +68,9 @@ class r_c_mapping;
 endclass
 
 class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
-  rand bit [pckg_sz-18:0] dato;
-  randc bit [3:0] id_row;
-  randc bit [3:0] id_colum;
+  rand bit [pckg_sz-26:0] dato;
+  rand bit [3:0] id_row;
+  rand bit [3:0] id_colum;
   rand bit mode;
   rand int source;
   bit [7:0] Nxt_jump;
@@ -88,8 +88,8 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
   constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
   constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
-  constraint mode_1 {this.mode == 1;};
-  constraint mode_0 {this.mode == 0;};
+  constraint mode1 {mode == 1;};
+  constraint mode0 {mode == 0;};
 
   
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
