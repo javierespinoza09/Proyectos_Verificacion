@@ -2,14 +2,14 @@
 
 `include "Router_library.sv"
 `include "Ambiente.sv"
-
+`include "Test.sv"
 module router_tb;
 
 
 reg clk_tb,reset_tb;
 
 parameter pckg_sz = 40;
-parameter fifo_size = 8;
+parameter fifo_size = 40;
 parameter broadcast = {pckg_sz-18{1'b1}};
 parameter id_column = 0;
 parameter id_row = 0;
@@ -39,6 +39,9 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 
   	Ambiente #(.Drivers(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), 
             .ROWS(ROWS), .COLUMS(COLUMS)) ambiente;
+    	Test #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size),
+            .ROWS(ROWS), .COLUMS(COLUMS)) test;
+
 	
 	initial begin
 		forever begin
@@ -64,7 +67,9 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 
 	initial begin
 	ambiente = new();
+	test = new(source_burst);
 	tst_gen_mbx = new();
+	test.tst_gen_mbx = tst_gen_mbx;
 	ambiente.generador.tst_gen_mbx = tst_gen_mbx;
 
 
@@ -76,7 +81,8 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
   		end
 	
 	ambiente.run();
-	
+	test.run();
+	/*
 	tst_gen_transaction = new();
         tst_gen_transaction.caso = normal;
         tst_gen_transaction.mode = random;
@@ -89,7 +95,7 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
         tst_gen_transaction.mode = mode_1;
 	$display("TEST: MODO [%g]", tst_gen_transaction.mode);
         tst_gen_mbx.put(tst_gen_transaction);
-
+*/
 	#10000
 	ambiente.report();
 	$finish;

@@ -6,15 +6,16 @@ class Test #(parameter drvrs = 4,
 
   tst_gen_mbx tst_gen_mbx;
   tst_gen tst_gen_transaction;
-  tst_chk_sb_mbx tst_chk_sb_mbx;
-  tst_chk_sb tst_chk_sb_transaction;
+  //tst_chk_sb_mbx tst_chk_sb_mbx;
+  //tst_chk_sb tst_chk_sb_transaction;
   rand_values_generate #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) rand_values_generate;
 	int test;
        int source;
        int id;
   function new(int test);
     this.tst_gen_transaction = new();
-    this.tst_chk_sb_transaction = new();
+    this.tst_gen_mbx = new();
+   // this.tst_chk_sb_transaction = new();
 	this.test = test;
     rand_values_generate = new();
   endfunction 
@@ -39,8 +40,9 @@ class Test #(parameter drvrs = 4,
                 this.tst_gen_transaction = new();
                 rand_values_generate.randomize();
                 tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
-                tst_gen_transaction.id = this.id;
-                tst_gen_transaction.source = this.rand_values_generate.source;
+                tst_gen_transaction.id_row = rand_values_generate.id_row;
+		tst_gen_transaction.id_colum = rand_values_generate.id_colum;
+                tst_gen_transaction.source = rand_values_generate.source;
                 tst_gen_transaction.caso = one_to_all;
                 tst_gen_mbx.put(tst_gen_transaction);
             end
@@ -53,21 +55,24 @@ class Test #(parameter drvrs = 4,
                 this.tst_gen_transaction = new();
                 rand_values_generate.randomize();
                 tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
-                tst_gen_transaction.id = this.id;
+                tst_gen_transaction.id_row = rand_values_generate.id_row;
+                tst_gen_transaction.id_colum = rand_values_generate.id_colum;
                 tst_gen_transaction.source = rand_values_generate.source;
                 tst_gen_transaction.caso = all_to_one;
                 tst_gen_mbx.put(tst_gen_transaction);
             end
         end
-
-        even_source_load:
-
-        even_id_load:
-
-        itself_messages:
-
-        invalid_id_normal:
-
+	
+       	default: begin
+		rand_values_generate.randomize();
+		this.tst_gen_transaction = new();
+                tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
+                tst_gen_transaction.id_row = rand_values_generate.id_row;
+                tst_gen_transaction.id_colum = rand_values_generate.id_colum;
+                tst_gen_transaction.source = this.rand_values_generate.source;
+                tst_gen_transaction.caso = one_to_all;
+                tst_gen_mbx.put(tst_gen_transaction);
+	end
     
 
     endcase

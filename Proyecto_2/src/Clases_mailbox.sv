@@ -14,8 +14,8 @@ class rand_values_generate #(parameter pckg_sz = 20, parameter ROWS = 2, paramet
   constraint source_addrs {source < COLUMS*2+ROWS*2;};
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
   constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
-  constraint burst_test_size_c {burst_test_size > COLUMS*2+ROWS*2; burst_test_size < COLUMS*2+ROWS*2*2};
-  constraint burst_test_c {burst_test > 5; burst_test < 20;};
+  constraint burst_test_size_c {burst_test_size > COLUMS*2+ROWS*2; burst_test_size < COLUMS*2+ROWS*2*2;};
+  constraint burst_test_c {burst_test > 1; burst_test < 5;};
   constraint general_test_c {general_test > 20; general_test < 200;};
 endclass
 
