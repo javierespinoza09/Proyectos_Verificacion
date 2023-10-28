@@ -29,7 +29,7 @@ class _checker #(parameter pckg_sz = 20);
       mon_chk_mbx.get(mon_chk_transaction);
       array_mon[{mon_chk_transaction.key}] = this.mon_chk_transaction;
 
-      $display("\nHASH MON Key [%d]",mon_chk_transaction.key);
+//      $display("\nHASH MON Key [%d]",mon_chk_transaction.key);
 
     end
     

@@ -12,13 +12,15 @@ class Test #(parameter drvrs = 4,
 	int test;
        int source;
        int id;
+       int burst_test_size;
+       
   function new(int test);
     this.tst_gen_transaction = new();
     this.tst_gen_mbx = new();
    // this.tst_chk_sb_transaction = new();
 	this.test = test;
     rand_values_generate = new();
-  endfunction 
+  endfunction
   
   task run();
   /*
@@ -36,15 +38,25 @@ class Test #(parameter drvrs = 4,
     case(this.test)
         source_burst: begin
             rand_values_generate.randomize();
-            for(int i = 0; i <= rand_values_generate.burst_test_size; i++) begin
+	   
+	    this.burst_test_size = rand_values_generate.burst_test_size;
+            for(int i = 0; i <= this.burst_test_size; i++) begin
+
+		
                 this.tst_gen_transaction = new();
-                rand_values_generate.randomize();
+		rand_values_generate.randomize();
+		
+                //rand_values_generate.randomize();
                 tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
                 tst_gen_transaction.id_row = rand_values_generate.id_row;
 		tst_gen_transaction.id_colum = rand_values_generate.id_colum;
                 tst_gen_transaction.source = rand_values_generate.source;
+		$display("RAND SOURCE %d BURST_SZ %d",rand_values_generate.source, rand_values_generate.burst_test);
                 tst_gen_transaction.caso = one_to_all;
                 tst_gen_mbx.put(tst_gen_transaction);
+		#10;
+		
+		
             end
         end
 

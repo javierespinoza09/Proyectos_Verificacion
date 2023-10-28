@@ -200,7 +200,7 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
           
           
 	        
-	    #1;
+	    
         end
         end 
       
