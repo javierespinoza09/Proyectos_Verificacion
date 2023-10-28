@@ -9,7 +9,7 @@ module router_tb;
 reg clk_tb,reset_tb;
 
 parameter pckg_sz = 40;
-parameter fifo_size = 40;
+parameter fifo_size = 4;
 parameter broadcast = {pckg_sz-18{1'b1}};
 parameter id_column = 0;
 parameter id_row = 0;
@@ -79,9 +79,10 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
     			ambiente.driver[k].fifo_in.v_if = v_if;
     			ambiente.monitor[k].v_if = v_if;
   		end
-	
-	ambiente.run();
-	test.run();
+	fork
+		ambiente.run();
+		test.run();
+	join_none
 	/*
 	tst_gen_transaction = new();
         tst_gen_transaction.caso = normal;
