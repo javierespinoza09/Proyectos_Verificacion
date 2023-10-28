@@ -110,9 +110,9 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 				end
         send_to_itself: begin 
                   ag_dr_transaction.self_r_c.constraint_mode(0);  
-                  ag_dr_transaction.valid_addrs_col.constraint_mode(1); 
-                  ag_dr_transaction.valid_addrs_row.constraint_mode(1);
-                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(1); 
+                  ag_dr_transaction.valid_addrs_col.constraint_mode(0); 
+                  ag_dr_transaction.valid_addrs_row.constraint_mode(0);
+                  ag_dr_transaction.valid_addrs_Driver.constraint_mode(0); 
                   ag_dr_transaction.source_addrs.constraint_mode(1); 
                   ag_dr_transaction.pos_source_addrs.constraint_mode(1);
                   ag_dr_transaction.send_to_itself.constraint_mode(1);
@@ -192,7 +192,12 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
           	this.ag_dr_transaction.tiempo = $time;
 		$display("AGENTE: Dato [%b] modo [%b] Nxt [%b]", this.ag_dr_transaction.dato, this.ag_dr_transaction.mode, this.ag_dr_transaction.Nxt_jump);
 			///Se envía el paquete al mailbox corresponciente
+		if(this.gen_ag_transaction.id_modo == send_to_itself) begin 
+			this.ag_dr_transaction.id_row = ag_dr_transaction.drv_map[ag_dr_transaction.source].row;
+			this.ag_dr_transaction.id_colum = ag_dr_transaction.drv_map[ag_dr_transaction.source].column;
+		end
             this.ag_dr_mbx_array[this.ag_dr_transaction.source].put(this.ag_dr_transaction);
+	    #1;
 
 
           	//this.ag_chk_sb_transaction = new(this.ag_dr_transaction.dato, this.ag_dr_transaction.id, $time, this.ag_dr_transaction.source);

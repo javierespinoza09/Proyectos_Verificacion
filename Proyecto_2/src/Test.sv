@@ -4,8 +4,11 @@ class Test #(parameter drvrs = 4,
             parameter ROWS = 2, 
             parameter COLUMS = 2);
 
-  tst_gen_mbx tst_gen_mbx;
-  tst_gen tst_gen_transaction;
+	tst_gen_mbx tst_gen_mbx;
+  	tst_gen tst_gen_transaction;
+  	tb_tst_mbx tb_tst_mbx;
+	tb_tst tb_tst_transaction;
+
   //tst_chk_sb_mbx tst_chk_sb_mbx;
   //tst_chk_sb tst_chk_sb_transaction;
   rand_values_generate #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) rand_values_generate;
@@ -13,13 +16,18 @@ class Test #(parameter drvrs = 4,
        int source;
        int id;
        int burst_test_size;
+       r_c_mapping drv_map [COLUMS*2+ROWS*2];
        
-  function new(int test);
+  function new();
     this.tst_gen_transaction = new();
     this.tst_gen_mbx = new();
-   // this.tst_chk_sb_transaction = new();
-	this.test = test;
+    this.tb_tst_mbx = new();
     rand_values_generate = new();
+    for(int i = 0; i<COLUMS*2+ROWS*2; i++) begin 
+	    automatic int k = i;
+	    drv_map[k] = new();
+    end
+    `mapping(ROWS,COLUMS);
   endfunction
   
   task run();
@@ -35,6 +43,10 @@ class Test #(parameter drvrs = 4,
     tst_chk_sb_transaction.fifo_size = this.fifo_size;
     tst_chk_sb_mbx.put(tst_chk_sb_transaction);
     */
+   forever begin
+	   tb_tst_mbx.get(tb_tst_transaction);
+	   this.test =  tb_tst_transaction.test;
+
     case(this.test)
         source_burst: begin
             rand_values_generate.randomize();
@@ -45,12 +57,11 @@ class Test #(parameter drvrs = 4,
 		
                 this.tst_gen_transaction = new();
 		rand_values_generate.randomize();
-		
-                //rand_values_generate.randomize();
                 tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
                 tst_gen_transaction.id_row = rand_values_generate.id_row;
 		tst_gen_transaction.id_colum = rand_values_generate.id_colum;
                 tst_gen_transaction.source = rand_values_generate.source;
+		tst_gen_transaction.mode =  tb_tst_transaction.mode;
 		$display("RAND SOURCE %d BURST_SZ %d",rand_values_generate.source, rand_values_generate.burst_test);
                 tst_gen_transaction.caso = one_to_all;
                 tst_gen_mbx.put(tst_gen_transaction);
@@ -61,19 +72,41 @@ class Test #(parameter drvrs = 4,
         end
 
         id_burst:begin
+
             rand_values_generate.randomize();
-            this.source = rand_values_generate.source;
-            for(int i = 0; i <= rand_values_generate.burst_test_size; i++) begin
+            this.burst_test_size = rand_values_generate.burst_test_size;
+            for(int i = 0; i <= burst_test_size; i++) begin
                 this.tst_gen_transaction = new();
                 rand_values_generate.randomize();
                 tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
                 tst_gen_transaction.id_row = rand_values_generate.id_row;
                 tst_gen_transaction.id_colum = rand_values_generate.id_colum;
                 tst_gen_transaction.source = rand_values_generate.source;
+		tst_gen_transaction.mode =  tb_tst_transaction.mode;
                 tst_gen_transaction.caso = all_to_one;
+		$display("RAND ID [%d][%d] BURST_SZ %d",rand_values_generate.id_row, rand_values_generate.id_colum, rand_values_generate.burst_test);
                 tst_gen_mbx.put(tst_gen_transaction);
+		#10;
             end
         end
+
+	itself_messages:begin
+	       	rand_values_generate.randomize();
+            this.burst_test_size = rand_values_generate.burst_test_size;
+            for(int i = 0; i <= burst_test_size; i++) begin
+                this.tst_gen_transaction = new();
+                rand_values_generate.randomize();
+                tst_gen_transaction.cant_datos = rand_values_generate.burst_test;
+                tst_gen_transaction.id_row = rand_values_generate.id_row;
+                tst_gen_transaction.id_colum = rand_values_generate.id_colum;
+                tst_gen_transaction.source = rand_values_generate.source;
+                tst_gen_transaction.mode =  tb_tst_transaction.mode;
+                tst_gen_transaction.caso = itself;
+                $display("RAND SOURCE[%d] BURST_SZ %d", rand_values_generate.source, rand_values_generate.burst_test);
+                tst_gen_mbx.put(tst_gen_transaction);
+                #10;
+		end
+	end
 	
        	default: begin
 		rand_values_generate.randomize();
@@ -88,6 +121,7 @@ class Test #(parameter drvrs = 4,
     
 
     endcase
+    end
   endtask
   
   

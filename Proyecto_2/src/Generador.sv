@@ -111,7 +111,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id_row = tst_gen_transaction.id_row;
         this.gen_ag_transaction.id_colum = tst_gen_transaction.id_colum;
-        this.gen_ag_transaction.source_rand = 0;
+        this.gen_ag_transaction.source_rand = 1;
         this.gen_ag_transaction.source = tst_gen_transaction.source;
         
       end

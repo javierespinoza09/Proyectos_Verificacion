@@ -33,6 +33,9 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 );
 	tst_gen tst_gen_transaction;
 	tst_gen_mbx  tst_gen_mbx;
+
+	tb_tst_mbx tb_tst_mbx;
+        tb_tst tb_tst_transaction;
 	
 
 
@@ -67,8 +70,10 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 
 	initial begin
 	ambiente = new();
-	test = new(source_burst);
+	test = new();
 	tst_gen_mbx = new();
+	tb_tst_mbx = new();
+	test.tb_tst_mbx = tb_tst_mbx;
 	test.tst_gen_mbx = tst_gen_mbx;
 	ambiente.generador.tst_gen_mbx = tst_gen_mbx;
 
@@ -83,22 +88,18 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 		ambiente.run();
 		test.run();
 	join_none
-	/*
-	tst_gen_transaction = new();
-        tst_gen_transaction.caso = normal;
-        tst_gen_transaction.mode = random;
-        tst_gen_mbx.put(tst_gen_transaction);
 	
-	
-	#5000
-        tst_gen_transaction = new();
-        tst_gen_transaction.caso = normal;
-        tst_gen_transaction.mode = mode_1;
-	$display("TEST: MODO [%g]", tst_gen_transaction.mode);
-        tst_gen_mbx.put(tst_gen_transaction);
-*/
+	`test_case(id_burst,mode_1);
+
 	#10000
 	ambiente.report();
+
+	$display("///////////////////TEST FINISHED///////////////////");
+
+	`test_case(itself_messages,mode_1);
+
+	#10000
+
 	$finish;
   	end
 

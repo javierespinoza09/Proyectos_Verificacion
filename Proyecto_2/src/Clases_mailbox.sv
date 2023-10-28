@@ -20,6 +20,15 @@ class rand_values_generate #(parameter pckg_sz = 20, parameter ROWS = 2, paramet
   constraint general_test_c {general_test > 20; general_test < 200;};
 endclass
 
+class tb_tst;
+	int test;
+	int mode;
+	function new(int test, int mode);
+		this.test = test;
+		this.mode = mode;
+	endfunction 
+endclass
+
 class tst_sb;
   int test;
   int drvrs;
@@ -207,7 +216,7 @@ typedef mailbox #(tst_sb) tst_sb_mbx;
 typedef mailbox #(gen_chk) gen_chk_mbx;
 typedef mailbox #(list_chk) list_chk_mbx;
 typedef mailbox #(drv_sb) sb_chk_mbx ;
-
+typedef mailbox #(tb_tst) tb_tst_mbx;
 
 /////////////////////////////////////////////
 //Set de variables para los casos de prueba//
@@ -244,6 +253,9 @@ typedef enum {random, mode_1, mode_0} gen_ag_mode;
                   drv_map[i+COLUMS*3].row = i+1; \
                 end 
 
+`define test_case(test,mode) \
+	tb_tst_transaction = new(test, mode);	\
+        tb_tst_mbx.put(tb_tst_transaction);	
 
 
 
