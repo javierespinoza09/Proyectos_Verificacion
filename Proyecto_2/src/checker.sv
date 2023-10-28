@@ -9,28 +9,45 @@ class _checker #(parameter pckg_sz = 20);
   drv_sb #(.pckg_sz(pckg_sz)) array_sc[longint];
   mon_chk array_mon[longint];
   
+  list_chk_mbx list_chk_mbx;
+  list_chk  list_chk_transaction;
+  list_chk real_path[$];
+  
   int prom = 0;
   int count = 1;
+  
+  
+  
+  
+  task listeners();
+    forever begin
+      list_chk_mbx.get(list_chk_transaction);
+      real_path.push_back(list_chk_transaction);
+    end
+  endtask
+  
+  
+  
   task run_sc();
     
-    forever begin
+  forever begin
       sb_chk_mbx.get(chk_sb_transaction);
       array_sc[{chk_sb_transaction.paquete}] = this.chk_sb_transaction;
       //$display("\nHASH SC Key [%d]",chk_sb_transaction.paquete);
     end
     
- 
   endtask
+ 	
   
+  
+  	
   
   task run_mon();
     
     forever begin
       mon_chk_mbx.get(mon_chk_transaction);
       array_mon[{mon_chk_transaction.key}] = this.mon_chk_transaction;
-
-//      $display("\nHASH MON Key [%d]",mon_chk_transaction.key);
-
+      //$display("\nHASH MON Key [%d]",mon_chk_transaction.key);
     end
     
  
@@ -38,6 +55,74 @@ class _checker #(parameter pckg_sz = 20);
   
   task report();
     
+    /* Verifica por arreglo
+    foreach (array_sc[k]) $display("PATH [%p]",array_sc[k].ruta);
+    foreach (real_path[i])array_sc[real_path[i].data_out[pckg_sz-9:0]].ruta.delete({real_path[i].list_r,real_path[i].list_c});
+    $display("\n\n");
+    foreach (array_sc[k]) $display("PATH [%p] r[%0d] c[%0d]",array_sc[k].ruta,array_sc[k].row,array_sc[k].colum);
+    $display("\n\n");
+    foreach (array_sc[k]) begin
+      foreach(array_sc[k].ruta[i])$display("PATH [%p] [%0d]",array_sc[k].ruta,i);
+    end
+    */
+    
+    /*
+     foreach (array_sc[k]) begin
+      
+      $display("\nCAMBIO");
+      //$display("PATH [%p]",array_sc[k].ruta);
+      for (int i = 0; i <=5 ; i++)begin
+        for (int j = 0; j <= 5; j++) begin
+          if(array_sc[k].path[i][j] == 1) $display("ERROR [%0d]",array_sc[k].path[i][j]);
+        end
+      end
+    end;*/
+    
+    //Valida por mapeo
+    foreach (real_path[i]) begin
+      array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=0;
+    end;
+    
+    foreach (array_sc[k]) begin
+      
+      //$display("PATH [%p]",array_sc[k].ruta);
+      for (int i = 0; i <=5 ; i++)begin
+        for (int j = 0; j <= 5; j++) begin
+          if(array_sc[k].path[i][j] == 1) begin
+            $display("\nERROR: PAQUETE [%0b] FUENTE [%0d][%0d] TARGET [%0d][%0d]",array_sc[k].paquete,array_sc[k].row,array_sc[k].colum,array_sc[k].paquete[pckg_sz-9:pckg_sz-12],array_sc[k].paquete[pckg_sz-13:pckg_sz-16]);
+            $display("NO ENTRÓ A LA TERMINAL [%0d][%0d]",i,j);
+            break;
+          end
+        end
+      end
+    end;
+    
+    /*
+    $display("TAMAÑO [%0d]",array_sc.size());
+    foreach (array_sc[k]) begin
+      
+      $display("\nCAMBIO");
+      //$display("PATH [%p]",array_sc[k].ruta);
+      for (int i = 0; i <=5 ; i++)begin
+        for (int j = 0; j <= 5; j++) begin
+          $display("[%0d]",array_sc[k].path[i][j]);
+        end
+      end
+    end;
+    
+    foreach (real_path[i]) begin
+      array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=-1;
+    end;
+    
+    foreach (array_sc[k]) begin
+      $display("\nVERIFICADO");
+      for (int i = 0; i <=5 ; i++)begin
+        for (int j = 0; j <= 5; j++) begin
+          $display("[%0d]",array_sc[k].path[i][j]);
+        end
+      end
+    end;
+    */
     foreach (array_mon[i]) begin
       prom = prom+array_mon[i].tiempo - array_sc[i].transaction_time;
     end;
@@ -54,7 +139,7 @@ class _checker #(parameter pckg_sz = 20);
         count = count +1;
       end;
     end
-    else $display("TODOS LOS PAQUETES LLEGARON A SU DESTINO");
+    else $display("TODOS LOS PAQUETES LLEGARON A SU DESTINO, %0d", real_path.size());
     
   endtask
   

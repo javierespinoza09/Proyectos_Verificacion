@@ -117,11 +117,12 @@ initial begin
    chk = new();
    chk.sb_chk_mbx =sb_chk_mbx;
    chk.mon_chk_mbx = mon_chk_mbx;
+   chk.list_chk_mbx = list_chk_mbx;
    sb = new();
    sb.drv_sb_mbx=drv_sb_mbx;
    sb.sb_chk_mbx = sb_chk_mbx;
    listener=new();
-   listener.v_if = v_if;
+   //listener.v_if = v_if;
    listener.list_chk_mbx = list_chk_mbx;
 
 
@@ -172,10 +173,11 @@ initial begin
    
   fork
     agente.run();
-	  listener.run();
+	listener.run();
     sb.run();
     chk.run_sc();
     chk.run_mon();
+    chk.listeners();
     generador.run();
     for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
       fork
@@ -189,15 +191,16 @@ initial begin
 	
 	tst_gen_transaction = new();
 	tst_gen_transaction.caso = normal;
-	tst_gen_transaction.mode = random;
+	tst_gen_transaction.mode = mode_0;
 	tst_gen_mbx.put(tst_gen_transaction);
 
-
+	/*
 	#200
 	tst_gen_transaction = new();
         tst_gen_transaction.caso = normal;
         tst_gen_transaction.mode = mode_1;
         tst_gen_mbx.put(tst_gen_transaction);	
+        */
    /*
    gen_ag_transaction = new();
    gen_ag_transaction.cant_datos = 30;
@@ -229,12 +232,7 @@ initial begin
   
 end
   
-initial begin
-  forever begin
-    list_chk_mbx.get(transaction);
-    //$display("\nSe recibió del listener [%0d] [%0d] el dato [%b]",transaction.list_r,transaction.list_c,transaction.data_out);
-  end
-end
+
 
 initial begin
 #10000;

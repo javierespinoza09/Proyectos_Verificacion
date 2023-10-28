@@ -122,6 +122,8 @@ class drv_sb #(parameter pckg_sz = 20);
   int transaction_time;
   int source;
   int path [5][5];
+  int ruta [int];
+  bit listo = 0;
   
   function new(bit [pckg_sz-1:0] info,bit [3:0] row, bit [3:0] col,int tiempo);
     this.paquete = info;

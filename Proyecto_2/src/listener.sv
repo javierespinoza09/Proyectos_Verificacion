@@ -5,7 +5,7 @@ class listener;
   	list_chk_mbx list_chk_mbx;
     list_chk     transaction;
 
-	virtual router_if v_if;
+	//virtual router_if v_if;
 
 	task run();
 		fork	
