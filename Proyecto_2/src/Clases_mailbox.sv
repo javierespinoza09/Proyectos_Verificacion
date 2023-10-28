@@ -3,13 +3,20 @@
 ///////////////////////////////////
 
 
-class rand_values_generate;
-	rand int drvrs;
-        rand int pckg_sz;
-        rand int fifo_size;
-        constraint valid_drvrs {drvrs < 15 ; drvrs >= 4;};
-        constraint valid_fifo_size {fifo_size > 0; fifo_size < 20;};
-        constraint valid_pckg_sz {pckg_sz >= 8; pckg_sz < 64;};
+class rand_values_generate #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
+  int target;
+  rand bit [3:0] id_row;
+  rand bit [3:0] id_colum; 
+  randc int source;
+  rand int burst_test;
+  rand int burst_test_size;
+  rand int general_test;
+  constraint source_addrs {source < COLUMS*2+ROWS*2;};
+  constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
+  constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
+  constraint burst_test_size_c {burst_test_size > COLUMS*2+ROWS*2; burst_test_size < COLUMS*2+ROWS*2*2};
+  constraint burst_test_c {burst_test > 5; burst_test < 20;};
+  constraint general_test_c {general_test > 20; general_test < 200;};
 endclass
 
 class tst_sb;
@@ -28,6 +35,7 @@ class tst_gen;
   bit [3:0] id_colum;
   int source;
   int mode;
+  int cant_datos;
   function new ();
   endfunction;
 endclass
@@ -206,6 +214,7 @@ typedef enum {self_id, any_id, invalid_id, fix_source ,normal_id,send_to_itself}
 typedef enum {bus_push, bus_pop} monitor_modo;
 typedef enum {normal, broadcastt, one_to_all, all_to_one, any,
        		itself, all_to_one_itself, one_to_all_itself} Generador_modo;
+typedef enum {source_burst, id_burst, even_source_load, even_id_load, itself_messages} Tests;
 
 //PROYECTO 2//
 typedef enum {col_first,row_firts} mode;
