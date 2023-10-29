@@ -1,3 +1,4 @@
+
 `timescale 1ns/10ps
 
 `include "Router_library.sv"
@@ -101,7 +102,7 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 	$display("///////////////////TEST FINISHED///////////////////");
 	coverage.display_coverage();
 	//`test_case(even_source_load,mode_1);
-
+      ambiente.report();
 	
 
 	$finish;

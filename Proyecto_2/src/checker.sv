@@ -15,6 +15,7 @@ class _checker #(parameter pckg_sz = 20);
   
   int prom = 0;
   int count = 1;
+  int break_path = 0;
   
   
   
@@ -79,23 +80,31 @@ class _checker #(parameter pckg_sz = 20);
     end;*/
     
     //Valida por mapeo
+    
+    $display("REALPATH [%0d]",real_path.size());
+    
+    
     foreach (real_path[i]) begin
+      array_sc[real_path[i].data_out[pckg_sz-9:0]].path[1][1] = 0;
       array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=0;
     end;
     
     foreach (array_sc[k]) begin
-      
+      break_path = 0;
       //$display("PATH [%p]",array_sc[k].ruta);
       for (int i = 0; i <=5 ; i++)begin
         for (int j = 0; j <= 5; j++) begin
           if(array_sc[k].path[i][j] == 1) begin
-            $display("\nERROR: PAQUETE [%0b] FUENTE [%0d][%0d] TARGET [%0d][%0d]",array_sc[k].paquete,array_sc[k].row,array_sc[k].colum,array_sc[k].paquete[pckg_sz-9:pckg_sz-12],array_sc[k].paquete[pckg_sz-13:pckg_sz-16]);
+            $display("\nERROR: PAQUETE [%0b] FUENTE [%0d][%0d] TARGET [%0d][%0d] MODO[%0b]",array_sc[k].paquete,array_sc[k].row,array_sc[k].colum,array_sc[k].paquete[pckg_sz-9:pckg_sz-12],array_sc[k].paquete[pckg_sz-13:pckg_sz-16],array_sc[k].paquete[pckg_sz-17]);
             $display("NO ENTRÓ A LA TERMINAL [%0d][%0d]",i,j);
+            break_path = 1;
             break;
           end
+          if(break_path) break;
         end
       end
     end;
+    
     
     /*
     $display("TAMAÑO [%0d]",array_sc.size());
