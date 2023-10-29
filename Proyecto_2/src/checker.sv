@@ -87,6 +87,9 @@ class _checker #(parameter pckg_sz = 20);
     foreach (real_path[i]) begin
       array_sc[real_path[i].data_out[pckg_sz-9:0]].path[1][1] = 0;
       array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=0;
+      //$display("Cantidad de saltos [%0d]",array_sc[real_path[i].data_out[pckg_sz-9:0]].jump);
+      if(array_sc[real_path[i].data_out[pckg_sz-9:0]].jump == 0) array_sc[real_path[i].data_out[pckg_sz-9:0]].jump = 1;
+      //$display("Cantidad de saltos [%0d]",array_sc[real_path[i].data_out[pckg_sz-9:0]].jump);
     end;
     
     foreach (array_sc[k]) begin
