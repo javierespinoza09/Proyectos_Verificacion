@@ -16,6 +16,7 @@ class Test #(parameter drvrs = 4,
        int source;
        int id;
        int burst_test_size;
+       int burst_test;
        r_c_mapping drv_map [COLUMS*2+ROWS*2];
        
   function new();
@@ -105,6 +106,27 @@ class Test #(parameter drvrs = 4,
                 $display("RAND SOURCE[%d] BURST_SZ %d", rand_values_generate.source, rand_values_generate.burst_test);
                 tst_gen_mbx.put(tst_gen_transaction);
                 #10;
+		end
+	end
+
+	even_source_load: begin
+		rand_values_generate.randomize();
+            	this.burst_test = rand_values_generate.burst_test;
+            for(int i = 0; i < COLUMS*2+ROWS*2 ; i++) begin
+                this.tst_gen_transaction = new();
+                rand_values_generate.randomize();
+                tst_gen_transaction.cant_datos = burst_test;
+                tst_gen_transaction.id_row = rand_values_generate.id_row;
+                tst_gen_transaction.id_colum = rand_values_generate.id_colum;
+                tst_gen_transaction.source = i;
+                tst_gen_transaction.mode =  tb_tst_transaction.mode;
+                tst_gen_transaction.caso = one_to_all;
+                $display("RAND BURST_SZ %d",burst_test);
+		$display("TST_GEN: SOURCE [%0b] ", tst_gen_transaction.source);
+                tst_gen_mbx.put(tst_gen_transaction);
+                #10;
+
+
 		end
 	end
 	
