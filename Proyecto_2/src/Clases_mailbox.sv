@@ -16,7 +16,7 @@ class rand_values_generate #(parameter pckg_sz = 20, parameter ROWS = 2, paramet
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
   constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
   constraint burst_test_size_c {burst_test_size > COLUMS*2+ROWS*2; burst_test_size < COLUMS*2+ROWS*2*2;};
-  constraint burst_test_c {burst_test > 4; burst_test < 20;};
+  constraint burst_test_c {burst_test > 4; burst_test < 6;};
   constraint general_test_c {general_test > 20; general_test < 200;};
 endclass
 
@@ -92,7 +92,7 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   rand bit mode;
   rand int source;
   bit [7:0] Nxt_jump;
-  int tiempo;
+  rand int tiempo;
   int variability;
   int fix_source;
   r_c_mapping drv_map [COLUMS*2+ROWS*2];
@@ -108,7 +108,7 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
   constraint mode1 {mode == 1;};
   constraint mode0 {mode == 0;};
-
+  constraint delay {tiempo > 5; tiempo < 50;};
   
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO

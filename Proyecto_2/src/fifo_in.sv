@@ -13,13 +13,13 @@ class fifo_in #(parameter COLUMS = 2, parameter ROWS = 2, parameter pckg_sz = 40
 
 	function fifo_push(bit [pckg_sz-1:0] dato); 
 			this.d_q.push_back(dato);
-      		$display("FIFO: Se recibió [%b] modo %b",dato,dato[pckg_sz-17]);
+      		//$display("FIFO: Se recibió [%b] modo %b",dato,dato[pckg_sz-17]);
 			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
 			this.v_if.pndng_i_in[this.fifo_num] = 1;
 	endfunction
 
 	task if_signal();
-		$display("FIFO%d: if_signal running",this.fifo_num);
+		//$display("FIFO%d: if_signal running",this.fifo_num);
       	this.v_if.pndng_i_in[this.fifo_num] = 0;
 		forever begin
 			if(this.d_q.size==0) begin 

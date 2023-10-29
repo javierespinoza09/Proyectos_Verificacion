@@ -161,36 +161,37 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
         //VALIDACION DE FILA-COLUMNA//
         //////////////////////////////
     
-		if(this.gen_ag_transaction.source_rand==0) begin
-                        ag_dr_transaction.source = gen_ag_transaction.source;
-          if(this.gen_ag_transaction.id_modo != self_id || this.gen_ag_transaction.id_modo != send_to_itself) begin
-            if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin  
-              if(ag_dr_transaction.id_row == 0 || ag_dr_transaction.id_row == ROWS + 1) begin
-                if(ag_dr_transaction.id_colum == 1) ag_dr_transaction.id_colum = ag_dr_transaction.id_colum + 1;
-                else ag_dr_transaction.id_colum = ag_dr_transaction.id_colum - 1;
-              end 
-              else begin 
-                if(ag_dr_transaction.id_row == 1) ag_dr_transaction.id_row = ag_dr_transaction.id_row + 1;
-                else ag_dr_transaction.id_row = ag_dr_transaction.id_row - 1; 
-              end
-            end
-          end
+	if(this.gen_ag_transaction.source_rand==0) begin
+       		ag_dr_transaction.source = gen_ag_transaction.source;
+          	if(this.gen_ag_transaction.id_modo != self_id || this.gen_ag_transaction.id_modo != send_to_itself) begin
+            		if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[ag_dr_transaction.source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[ag_dr_transaction.source].column) begin  
+              			//$display("WARNING: DIRECCION PROPIA SOURCE [%d]  FILA [%d] COLUMNA [%d]", ag_dr_transaction.source, ag_dr_transaction.id_row, ag_dr_transaction.id_colum);
+				if(ag_dr_transaction.id_row == 0 || ag_dr_transaction.id_row == ROWS + 1) begin
+                			if(ag_dr_transaction.id_colum == 1) ag_dr_transaction.id_colum = ag_dr_transaction.id_colum + 1;
+                			else ag_dr_transaction.id_colum = ag_dr_transaction.id_colum - 1;
+              			end 
+              			else begin 
+                			if(ag_dr_transaction.id_row == 1) ag_dr_transaction.id_row = ag_dr_transaction.id_row + 1;
+                			else ag_dr_transaction.id_row = ag_dr_transaction.id_row - 1; 
+              			end
+            		end
+          	end
         end
                         ///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
         if(this.gen_ag_transaction.id_rand==0) begin
-			    ag_dr_transaction.id_row = gen_ag_transaction.id_row;
-          ag_dr_transaction.id_colum = gen_ag_transaction.id_colum;
-          if(this.gen_ag_transaction.id_modo != self_id || this.gen_ag_transaction.id_modo != send_to_itself) begin
-            if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin
-                if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.source+1;
-                  else ag_dr_transaction.source = ag_dr_transaction.source-1;
-            end
-          end
-		    end
+		ag_dr_transaction.id_row = gen_ag_transaction.id_row;
+          	ag_dr_transaction.id_colum = gen_ag_transaction.id_colum;
+          	if(this.gen_ag_transaction.id_modo != self_id || this.gen_ag_transaction.id_modo != send_to_itself) begin
+            		if(ag_dr_transaction.id_row == ag_dr_transaction.drv_map[source].row && ag_dr_transaction.id_colum == ag_dr_transaction.drv_map[source].column) begin
+                		if(ag_dr_transaction.source == 0) ag_dr_transaction.source = ag_dr_transaction.source+1;
+                  		else ag_dr_transaction.source = ag_dr_transaction.source-1;
+            		end
+          	end		
+	end
 
 			///Se carga el tiempo de la transacción 
           	this.ag_dr_transaction.tiempo = $time;
-		$display("AGENTE: Dato [%b] modo [%b] Nxt [%b]", this.ag_dr_transaction.dato, this.ag_dr_transaction.mode, this.ag_dr_transaction.Nxt_jump);
+		//$display("AGENTE: Dato [%b] modo [%b] Nxt [%b]", this.ag_dr_transaction.dato, this.ag_dr_transaction.mode, this.ag_dr_transaction.Nxt_jump);
 			///Se envía el paquete al mailbox corresponciente
 		if(this.gen_ag_transaction.id_modo == send_to_itself) begin 
 			this.ag_dr_transaction.id_row = ag_dr_transaction.drv_map[ag_dr_transaction.source].row;

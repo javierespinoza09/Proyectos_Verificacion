@@ -3,13 +3,14 @@
 `include "Router_library.sv"
 `include "Ambiente.sv"
 `include "Test.sv"
+`include "func_coverage.sv"
 module router_tb;
 
 
 reg clk_tb,reset_tb;
 
 parameter pckg_sz = 40;
-parameter fifo_size = 4;
+parameter fifo_size = 10;
 parameter broadcast = {pckg_sz-18{1'b1}};
 parameter id_column = 0;
 parameter id_row = 0;
@@ -44,12 +45,17 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
             .ROWS(ROWS), .COLUMS(COLUMS)) ambiente;
     	Test #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size),
             .ROWS(ROWS), .COLUMS(COLUMS)) test;
+	
+	coverage #(.pckg_sz(pckg_sz)) coverage;
 
 	
+
 	initial begin
+		
 		forever begin
         		#5
         		clk_tb = ~clk_tb;
+			
 		end
 	end
 
@@ -64,11 +70,8 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
  	end
 
 
-
-
-
-
 	initial begin
+	coverage = new();
 	ambiente = new();
 	test = new();
 	tst_gen_mbx = new();
@@ -87,21 +90,24 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 	fork
 		ambiente.run();
 		test.run();
+		coverage.run();
 	join_none
 	
-	`test_case(id_burst,mode_1);
+	`test_case(source_burst,mode_1);
 
 	#10000
 	ambiente.report();
 
 	$display("///////////////////TEST FINISHED///////////////////");
+	coverage.display_coverage();
+	//`test_case(even_source_load,mode_1);
 
-	`test_case(itself_messages,mode_1);
-
-	#10000
+	
 
 	$finish;
   	end
+
+
 
 	
 
