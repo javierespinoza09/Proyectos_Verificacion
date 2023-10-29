@@ -54,11 +54,16 @@ class coverage #(parameter pckg_sz = 40);
                 coverpoint router_tb.DUT.data_out[14][pckg_sz-13:pckg_sz-16]{bins c = {[0:5]};}
                 coverpoint router_tb.DUT.data_out[15][pckg_sz-13:pckg_sz-16]{bins c = {[0:5]};}
         endgroup
+
+	covergroup i_pop;
+		`i_pop;
+	endgroup
 	
 	function new();
 		pop_cg = new();
 		id_row_cg = new();
 		id_col_cg = new();
+		i_pop = new();
 	endfunction
 
 	task run();
@@ -66,7 +71,8 @@ class coverage #(parameter pckg_sz = 40);
 			#5
 			pop_cg.sample();
 			id_row_cg.sample();
-			id_col_cg.sample;
+			id_col_cg.sample();
+			i_pop.sample();
 		end
 	endtask
 
@@ -74,6 +80,7 @@ class coverage #(parameter pckg_sz = 40);
 		$display("COVERTURA POP: %0.2f", pop_cg.get_coverage(),$time);
 		$display("COVERTURA ROW: %0.2f", id_row_cg.get_coverage(),$time);
 		$display("COVERTURA COLUMN: %0.2f", id_col_cg.get_coverage(),$time);
+		$display("COVERTURA DE I_POP: %0.2f", i_pop.get_coverage(),$time);
 	endfunction
 
 
