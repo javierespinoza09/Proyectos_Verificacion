@@ -133,6 +133,7 @@ class drv_sb #(parameter pckg_sz = 20);
   int path [5][5];
   int ruta [int];
   bit listo = 0;
+  int jump = 0;
   
   function new(bit [pckg_sz-1:0] info,bit [3:0] row, bit [3:0] col,int tiempo);
     this.paquete = info;
@@ -154,7 +155,7 @@ endclass
 class list_chk #(parameter pckg_sz = 40);
   int list_r;
   int list_c;
-  bit [pckg_sz-1:0] data_out;
+  bit [pckg_sz-9:0] data_out;
   int time_list;
   /*
   bit [3:0] trgt_r;
@@ -170,7 +171,7 @@ class list_chk #(parameter pckg_sz = 40);
   function new(int list_r, int list_c, [pckg_sz-1:0] data_out);
     this.list_r = list_r;
     this.list_c = list_c;
-    this.data_out = data_out;
+    this.data_out = data_out [pckg_sz-9:0];
     this.time_list = $time;
   endfunction
   

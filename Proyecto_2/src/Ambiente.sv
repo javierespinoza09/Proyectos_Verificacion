@@ -64,6 +64,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
         chk = new();
         chk.sb_chk_mbx =sb_chk_mbx;
         chk.mon_chk_mbx = mon_chk_mbx;
+      	chk.list_chk_mbx = list_chk_mbx;
 
         sb = new();
         sb.drv_sb_mbx=drv_sb_mbx;
@@ -113,6 +114,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
             sb.run();
             chk.run_sc();
             chk.run_mon();
+          	chk.listeners();
             for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
             fork
             automatic int k = i;

@@ -130,22 +130,22 @@ class Agente #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 
       case (this.mode)
         random: begin
-		$display("randdom");
+		//$display("randdom");
           this.ag_dr_transaction.mode1.constraint_mode(0);
           this.ag_dr_transaction.mode0.constraint_mode(0);
         end
         mode_1: begin
-	       $display("MODE_1");	
+	      // $display("MODE_1");	
           this.ag_dr_transaction.mode1.constraint_mode(1);
           this.ag_dr_transaction.mode0.constraint_mode(0);  
         end
         mode_0: begin
-	        $display("MODE_0");	
+	       // $display("MODE_0");	
           ag_dr_transaction.mode1.constraint_mode(0);
           ag_dr_transaction.mode0.constraint_mode(1);  
         end
         default: begin
-	       $display("DEFAULT");	
+	       //$display("DEFAULT");	
           ag_dr_transaction.mode1.constraint_mode(0);
           ag_dr_transaction.mode0.constraint_mode(0);
         end
