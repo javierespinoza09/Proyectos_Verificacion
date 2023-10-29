@@ -93,10 +93,10 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 		coverage.run();
 	join_none
 	
-	`test_case(source_burst,mode_1);
+	`test_case(normal_test,mode_1);
 
 	#10000
-	ambiente.report();
+//	ambiente.report();
 
 	$display("///////////////////TEST FINISHED///////////////////");
 	coverage.display_coverage();

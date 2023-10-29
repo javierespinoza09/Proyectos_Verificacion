@@ -130,6 +130,16 @@ class Test #(parameter drvrs = 4,
 		end
 	end
 	
+	normal_test: begin
+		rand_values_generate.randomize();
+		this.tst_gen_transaction = new();
+		tst_gen_transaction.cant_datos = rand_values_generate.general_test;
+		tst_gen_transaction.mode =  tb_tst_transaction.mode;
+		tst_gen_transaction.caso = normal;
+		tst_gen_mbx.put(tst_gen_transaction);
+                #10;
+	end
+	
        	default: begin
 		rand_values_generate.randomize();
 		this.tst_gen_transaction = new();

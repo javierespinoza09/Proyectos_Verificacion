@@ -56,7 +56,69 @@ class coverage #(parameter pckg_sz = 40);
         endgroup
 
 	covergroup i_pop;
-		`i_pop;
+		coverpoint router_tb.DUT._rw_[1]._clm_[1].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[1].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[1].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[2].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[2].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[2].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[2].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[3].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[3].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[3].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[3].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[4].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[4].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[4].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[1]._clm_[4].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[1].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[1].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[1].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[1].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[2].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[2].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[2].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[2].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[3].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[3].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[3].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[3].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[4].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[4].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[4].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[2]._clm_[4].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[1].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[1].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop = {1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[1].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop= {1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[1].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[2].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[2].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[2].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[2].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[3].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[3].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[3].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[3].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[4].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[4].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[4].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[3]._clm_[4].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[1].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[1].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[1].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[1].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[2].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[2].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[2].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[2].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[3].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[3].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[3].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[3].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[4].rtr._nu_[0].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[4].rtr._nu_[1].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[4].rtr._nu_[2].rtr_ntrfs_.pop {bins i_pop ={1};} 
+coverpoint router_tb.DUT._rw_[4]._clm_[4].rtr._nu_[3].rtr_ntrfs_.pop {bins i_pop ={1};}
 	endgroup
 	
 	function new();
