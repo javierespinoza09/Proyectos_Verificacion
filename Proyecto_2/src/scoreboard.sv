@@ -31,7 +31,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((cc< drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc<4))begin
                 //$display("Va de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc++;
@@ -39,7 +39,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while(rr<= drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])begin
                 //$display("Vainside de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr++;
@@ -50,7 +50,7 @@ class scoreboard #(parameter pckg_sz = 20);
               cc = c;
               while((cc > drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc>=2))begin
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc--;
@@ -58,7 +58,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while(rr<= drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])begin
                // $display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr++;
@@ -73,7 +73,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((cc< drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc<=3))begin
                 //$display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc++;
@@ -81,7 +81,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((rr>= drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr>=2))begin
                 //$display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr--;
@@ -95,7 +95,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((cc > drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc>1))begin
                 //$display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc--;
@@ -104,7 +104,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((rr >= drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr>=1))begin
                 //$display("Valoress de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr--;
@@ -122,7 +122,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((rr< drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr<=3))begin
                 //$display("Valores de R- %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr++;
@@ -130,7 +130,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((cc<= drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc<=3))begin
                 //$display("Valores de R- %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc++;
@@ -143,7 +143,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((rr< drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr<=3))begin
                 //$display("Validación de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr++;
@@ -151,7 +151,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while(cc > drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])begin
                 //$display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc--;
@@ -167,7 +167,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((rr> drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr>=2))begin
                //$display("Valores de R- %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr--;
@@ -175,7 +175,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((cc<= drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc<=3))begin
                 //$display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc++;
@@ -188,7 +188,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((rr > drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr>1))begin
                // $display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 rr--;
@@ -196,7 +196,7 @@ class scoreboard #(parameter pckg_sz = 20);
               while((cc > drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16])&(cc>=1))begin
                 //$display("Valores de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
-                drv_sb_transaction.ruta[{rr,cc}]=1;
+                //drv_sb_transaction.ruta[{rr,cc}]=1;
                 drv_sb_transaction.listo = 1;
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc--;
@@ -206,6 +206,7 @@ class scoreboard #(parameter pckg_sz = 20);
         end
       endcase
       sb_chk_mbx.put(drv_sb_transaction);
+      
      /*
       $display("SE ENVIÓ UN PAQUETE AL CHK ");
       $display("SALIDA [%0d][%0d] DESTINO [%0d][%0d] modo [%0d]",drv_sb_transaction.row,drv_sb_transaction.colum,drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12],drv_sb_transaction.paquete[pckg_sz-13:pckg_sz-16],drv_sb_transaction.paquete[pckg_sz-17]);
