@@ -36,7 +36,7 @@ class scoreboard #(parameter pckg_sz = 20);
                 drv_sb_transaction.jump =drv_sb_transaction.jump +1;
                 cc++;
                end
-              while(rr<= drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])begin
+              while((rr<= drv_sb_transaction.paquete[pckg_sz-9:pckg_sz-12])&(rr<4))begin
                 //$display("Vainside de R %0d C %0d",rr,cc);
                 drv_sb_transaction.path[rr][cc] = 1;
                 //drv_sb_transaction.ruta[{rr,cc}]=1;
