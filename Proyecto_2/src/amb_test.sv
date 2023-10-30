@@ -94,16 +94,33 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 		coverage.run();
 	join_none
 	
-	`test_case(normal_test,mode_1);
+	`test_case(normal_test,random);
 
 	#10000
 //	ambiente.report();
-
-	$display("///////////////////TEST FINISHED///////////////////");
-	coverage.display_coverage();
-	//`test_case(even_source_load,mode_1);
-      ambiente.report();
 	
+	$display("///////////////////TEST FINISHED///////////////////");
+	//coverage.display_coverage();
+	`test_case(source_burst,mode_1);
+
+	#50000
+
+	`test_case(id_burst,mode_1);
+
+
+	#50000
+
+        `test_case(id_burst,mode_0);
+
+
+	#50000
+
+        `test_case(source_burst,mode_0);
+
+	#50000
+
+      ambiente.report();
+	coverage.display_coverage();
 
 	$finish;
   	end

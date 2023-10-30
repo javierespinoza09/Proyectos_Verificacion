@@ -23,9 +23,11 @@ endclass
 class tb_tst;
 	int test;
 	int mode;
+	int tiempo;
 	function new(int test, int mode);
 		this.test = test;
 		this.mode = mode;
+		this.tiempo = $time;
 	endfunction 
 endclass
 
@@ -108,7 +110,7 @@ class ag_dr #(parameter pckg_sz = 20, parameter ROWS = 2, parameter COLUMS = 2);
   constraint valid_addrs_Driver {if(id_row != 0 & id_row != ROWS+1)id_colum == 0 | id_colum == COLUMS+1;};
   constraint mode1 {mode == 1;};
   constraint mode0 {mode == 0;};
-  constraint delay {tiempo > 5; tiempo < 50;};
+  constraint delay {tiempo > 20; tiempo < 100;};
   
   //constraint self_addrs {id != source;};        //Restriccion que no permite a un id igual al del dispositivo
   //Respecto al DATO

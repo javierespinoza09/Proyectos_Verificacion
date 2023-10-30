@@ -6,11 +6,11 @@ class Test #(parameter drvrs = 4,
 
 	tst_gen_mbx tst_gen_mbx;
   	tst_gen tst_gen_transaction;
-  	tb_tst_mbx tb_tst_mbx;
-	tb_tst tb_tst_transaction;
+  	
+	
 
-  //tst_chk_sb_mbx tst_chk_sb_mbx;
-  //tst_chk_sb tst_chk_sb_transaction;
+  tst_sb_mbx tst_sb_mbx;
+  tst_sb tst_sb_transaction;
   rand_values_generate #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz)) rand_values_generate;
 	int test;
        int source;
@@ -22,6 +22,7 @@ class Test #(parameter drvrs = 4,
   function new();
     this.tst_gen_transaction = new();
     this.tst_gen_mbx = new();
+    this.tst_sb_mbx = new();
     this.tb_tst_mbx = new();
     rand_values_generate = new();
     for(int i = 0; i<COLUMS*2+ROWS*2; i++) begin 
@@ -46,6 +47,8 @@ class Test #(parameter drvrs = 4,
     */
    forever begin
 	   tb_tst_mbx.get(tb_tst_transaction);
+	tst_sb_transaction = new(tb_tst_transaction.test, tb_tst_transaction.mode);
+	tst_sb_mbx.put(tst_sb_transaction);
 	   this.test =  tb_tst_transaction.test;
 
     case(this.test)
@@ -136,6 +139,7 @@ class Test #(parameter drvrs = 4,
 		tst_gen_transaction.cant_datos = rand_values_generate.general_test;
 		tst_gen_transaction.mode =  tb_tst_transaction.mode;
 		tst_gen_transaction.caso = normal;
+		$display("GENERAL BURST_SZ %d",rand_values_generate.general_test);
 		tst_gen_mbx.put(tst_gen_transaction);
                 #10;
 	end
