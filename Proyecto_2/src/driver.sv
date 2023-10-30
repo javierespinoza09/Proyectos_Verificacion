@@ -36,10 +36,6 @@ class Driver #(parameter drvrs = 4, parameter pckg_sz = 20, parameter fifo_size 
 		forever begin
           this.ag_dr_mbx.get(ag_dr_transaction);                                          //Comunicación con el agente
 	this.count = 0;
-	while(count < ag_dr_transaction.tiempo) begin
-		#1
-		count = count + 1;
-	end
 	while(this.fifo_in.d_q.size >= fifo_size) #5;
        	paquete = {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.self_row,this.self_col,this.ag_dr_transaction.dato[pckg_sz-26:0]};	
           this.fifo_in.fifo_push(paquete);//Manda un paquete a la FIFO  

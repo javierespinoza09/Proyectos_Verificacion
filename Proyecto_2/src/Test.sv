@@ -50,7 +50,6 @@ class Test #(parameter drvrs = 4,
      tb_tst_mbx.get(tb_tst_transaction);
      tst_chk_transaction = new(tb_tst_transaction.test, tb_tst_transaction.mode);
      tst_chk_mbx.put(tst_chk_transaction);
-     $display("ENVIADO MODO %g TEST %g",tst_chk_transaction.mode, tst_chk_transaction.test);
 	 this.test =  tb_tst_transaction.test;
 
     case(this.test)

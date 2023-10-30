@@ -16,11 +16,8 @@ class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
   list_chk_mbx list_chk_mbx;
   list_chk  list_chk_transaction;
   list_chk real_path[$];
-  
-  
   gen_ag_mode enum_mode;
   Tests test_name;
-  
   int prom = 0;
   int count = 1;
   int break_path = 0;
@@ -44,6 +41,7 @@ class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
     forever begin
       list_chk_mbx.get(list_chk_transaction);
       real_path.push_back(list_chk_transaction);
+      #3;
     end
   endtask
   
@@ -55,6 +53,7 @@ class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
       sb_chk_mbx.get(chk_sb_transaction);
       array_sc[{chk_sb_transaction.paquete}] = this.chk_sb_transaction;
       //$display("\nHASH SC Key [%d]",chk_sb_transaction.paquete);
+      #3;
     end
     
   endtask
@@ -69,30 +68,37 @@ class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
       mon_chk_mbx.get(mon_chk_transaction);
       array_mon[{mon_chk_transaction.key}] = this.mon_chk_transaction;
       //$display("\nHASH MON Key [%d]",mon_chk_transaction.key);
+      #3;
     end
     
  
   endtask
   
-  
-
+ /* 
+  task tst();
+    
+    forever begin
+      
+      
+    end
     
  
+  endtask
+  */
   
   task report();
     
-    this.file_name = $sformatf("Reporte_F%0d.csv",fifo_size);
-    this.fa = $fopen(this.file_name,"a");
     
     
-    
-    tst_chk_mbx.get(tst_chk_transaction);
-    enum_mode =tst_chk_transaction.mode;
+      tst_chk_mbx.get(tst_chk_transaction);
+      enum_mode =tst_chk_transaction.mode;
     test_name = tst_chk_transaction.test;
     $display("PRUEBA %s",test_name.name());
     $display("TAMAÑO [%0d]",array_sc.size());
     $display("TAMAÑO [%0d]",array_mon.size());
     
+    this.file_name = $sformatf("Reporte_F%0d.csv",fifo_size);
+    this.fa = $fopen(this.file_name,"a");
     $fdisplay(fa,"Test/%s",test_name.name());
     $fdisplay(fa,"Modo/%s",enum_mode.name());
     $fdisplay(fa,"FIFO/%d",fifo_size);
@@ -100,14 +106,16 @@ class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
     //$display("TAMAÑO BEFORE CLEAN SC [%0d] path [%0d]",array_sc.size(),real_path.size());
     foreach (real_path[i]) begin
       array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=0;
-      if(array_sc[real_path[i].data_out[pckg_sz-9:0]].jump == 0) array_sc[real_path[i].data_out[pckg_sz-9:0]].jump = 1;
+      if(array_sc[real_path[i].data_out[pckg_sz-9:0]].jump < 3) array_sc[real_path[i].data_out[pckg_sz-9:0]].jump = array_sc[real_path[i].data_out[pckg_sz-9:0]].jump + 1;
       //$display("Cantidad de saltos [%0d]",array_sc[real_path[i].data_out[pckg_sz-9:0]].jump);
     end;
     
     foreach (array_sc[k]) begin
       jump_prom = jump_prom + array_sc[k].jump;
+      /*
       break_path = 0;
       //$display("PATH [%p]",array_sc[k].ruta);
+      
       for (int i = 0; i <=5 ; i++)begin
         for (int j = 0; j <= 5; j++) begin
           if(array_sc[k].path[i][j] == 1) begin
@@ -119,7 +127,9 @@ class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
           if(break_path) break;
         end
       end
+      */
     end;
+    
     
     foreach (array_mon[i]) begin
       prom = prom+array_mon[i].tiempo - array_sc[i].transaction_time;
