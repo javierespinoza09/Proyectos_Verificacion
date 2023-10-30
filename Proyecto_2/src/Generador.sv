@@ -23,15 +23,16 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
   task run ();
     forever begin
     tst_gen_mbx.get(tst_gen_transaction);
-	  //$display("GENERADOR: Transaccion recivida de TEST recibida en %d",$time);  
+	  $display("GENERADOR: Transaccion recivida de TEST recibida en %d",$time);  
      
     case (this.tst_gen_transaction.caso)
       normal:begin
         //this.gen_ag_transaction.data_modo = max_aleatoriedad;
 
         this.gen_ag_transaction.cant_datos = tst_gen_transaction.cant_datos;
+
         this.gen_ag_transaction.id_modo = normal_id;
-        this.gen_ag_transaction.id_rand = tst_gen_transaction.cant_datos;
+        this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id_row = tst_gen_transaction.id_row;
         this.gen_ag_transaction.id_colum = tst_gen_transaction.id_colum;
         this.gen_ag_transaction.source_rand = 1;
@@ -110,7 +111,7 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
         this.gen_ag_transaction.id_rand = 1;
         this.gen_ag_transaction.id_row = tst_gen_transaction.id_row;
         this.gen_ag_transaction.id_colum = tst_gen_transaction.id_colum;
-        this.gen_ag_transaction.source_rand = 1;
+        this.gen_ag_transaction.source_rand = 0;
         this.gen_ag_transaction.source = tst_gen_transaction.source;
         
       end
@@ -123,9 +124,8 @@ class Generador #(parameter drvrs = 4, parameter pckg_sz = 16);
 	endcase
 
   this.gen_ag_transaction.mode = this.tst_gen_transaction.mode;
- 	//$display("GENERADOR: MODO [%g]", this.gen_ag_transaction.mode); 
+ 	$display("GENERADOR: MODO [%g]", this.gen_ag_transaction.mode); 
   gen_ag_mbx.put(gen_ag_transaction);
-   #3;
   //gen_chk_sb_transaction.cant_datos = this.gen_ag_transaction.cant_datos;
   //gen_chk_sb_mbx.put(gen_chk_sb_transaction);
 end
