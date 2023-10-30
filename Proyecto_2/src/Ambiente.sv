@@ -17,8 +17,8 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
     Monitor #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz), .fifo_size(fifo_size)) monitor [Drivers];
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
     listener listener;
-    scoreboard #(.pckg_sz(pckg_sz)) sb;
-  _checker #(.pckg_sz(pckg_sz),.fifo_size(fifo_size)) chk;
+  scoreboard #(.pckg_sz(pckg_sz),.fifo_size(fifo_size)) sb;
+    _checker #(.pckg_sz(pckg_sz)) chk;
     Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador; 
 
     /////////////////////////
@@ -30,7 +30,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
     gen_ag_mbx gen_ag_mbx;
     
 	tst_gen_mbx tst_gen_mbx;
-	//tst_chk_mbx tst_chk_mbx;
+	tst_chk_mbx tst_chk_mbx;
     //Instancia de mailbox Generador-Agente
     list_chk_mbx list_chk_mbx;
     //Instancia de mailbox Listener-Checker
@@ -49,7 +49,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
         drv_sb_mbx = new();
         sb_chk_mbx = new();
         mon_chk_mbx = new();
-      	//tst_chk_mbx = new();
+      	tst_chk_mbx = new();
         for(int i = 0; i < COLUMS*2+ROWS*2; i++) begin
             automatic int k = i;
             ag_dr_mbx[k] = new();

@@ -11,7 +11,7 @@ module router_tb;
 reg clk_tb,reset_tb;
 
 parameter pckg_sz = 40;
-parameter fifo_size = 4;
+parameter fifo_size = 10;
 parameter broadcast = {pckg_sz-18{1'b1}};
 parameter id_column = 0;
 parameter id_row = 0;
@@ -99,67 +99,49 @@ mesh_gnrtr #(.ROWS(ROWS), .COLUMS(COLUMS), .pckg_sz(pckg_sz),.fifo_depth(fifo_si
 		coverage.run();
 	join_none
 	
-	//`test_case(normal_test,random);
+	`test_case(normal_test,random);
 
-	//#5000000
-	//ambiente.report();
-    //#10000
-      
-    `test_case(id_burst,mode_1);
-	
-
-	#5000000
+	#10000
 	ambiente.report();
-    #10000
-     
-     #100
-        `test_case(id_burst,mode_0);
-      
-      
-    #500000
-	ambiente.report();
-     #1000
-      `test_case(id_burst,random);
-
-	#500000
-    ambiente.report();
-     #1000
 	
-	coverage.display_coverage();
+	
+	//coverage.display_coverage();
 	`test_case(source_burst,mode_1);
 
-    #500000
+	#50000
 	ambiente.report();
-     #1000
+    
+	`test_case(id_burst,mode_1);
+
+
+	#50000
+	ambiente.report();
+      
+        `test_case(id_burst,mode_0);
+
+
+	#50000
+	ambiente.report();
     
         `test_case(source_burst,mode_0);
-      
-    #500000
-	ambiente.report();
-     #1000
-      `test_case(source_burst,random);
-      
-	#500000
-	ambiente.report();
-     #1000
-	
+
+	#50000
+    ambiente.report();
+    
       `test_case(even_source_load,mode_0);
       
-    #500000
+    #50000
     ambiente.report();
-       #1000
-      `test_case(even_source_load,mode_1);
       
-     #500000
+      `test_case(even_source_load,mode_1);
+    #50000
     ambiente.report();
-       #1000
-      `test_case(even_source_load,random);
     #500000
-    ambiente.report();
-	 #1000
+	
       `test_case(itself_messages,random);
     #500000
     ambiente.report();
+    #100000
     $display("///////////////////TEST FINISHED///////////////////");
 	coverage.display_coverage();
 	
