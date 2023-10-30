@@ -15,8 +15,8 @@ class rand_values_generate #(parameter pckg_sz = 20, parameter ROWS = 2, paramet
   constraint source_addrs {source < COLUMS*2+ROWS*2;};
   constraint valid_addrs_col {if(id_row == 0 | id_row == ROWS+1)id_colum <= COLUMS & id_colum > 0;};
   constraint valid_addrs_row {if(id_colum == 0 | id_colum == COLUMS+1) id_row <= ROWS & id_row > 0;};
-  constraint burst_test_size_c {burst_test_size > COLUMS*2+ROWS*2; burst_test_size < COLUMS*2+ROWS*2*2;};
-  constraint burst_test_c {burst_test > 4; burst_test < 6;};
+  constraint burst_test_size_c {burst_test_size > 16; burst_test_size < 32;};
+  constraint burst_test_c {burst_test > 10; burst_test < 20;};
   constraint general_test_c {general_test > 75; general_test < 200;};
 endclass
 
@@ -31,13 +31,14 @@ class tb_tst;
 	endfunction 
 endclass
 
-class tst_sb;
+class tst_chk;
   int test;
-  int drvrs;
-  int pckg_sz;
-  int fifo_size;
-  function new ();
-  endfunction;
+  int mode;
+
+  function new(int test, int mode);
+		this.test = test;
+		this.mode = mode;
+	endfunction 
 endclass
 
 
@@ -215,7 +216,7 @@ typedef mailbox #(ag_dr) ag_dr_mbx ;
 typedef mailbox #(gen_ag) gen_ag_mbx;
 typedef mailbox #(mon_chk) mon_chk_mbx;
 typedef mailbox #(tst_gen) tst_gen_mbx;
-typedef mailbox #(tst_sb) tst_sb_mbx;
+typedef mailbox #(tst_chk) tst_chk_mbx;
 typedef mailbox #(gen_chk) gen_chk_mbx;
 typedef mailbox #(list_chk) list_chk_mbx;
 typedef mailbox #(drv_sb) sb_chk_mbx ;

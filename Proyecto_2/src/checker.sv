@@ -1,4 +1,4 @@
-class _checker #(parameter pckg_sz = 20);
+class _checker #(parameter pckg_sz = 20,parameter fifo_size = 4);
   
   drv_sb #(.pckg_sz(pckg_sz)) chk_sb_transaction;
   sb_chk_mbx #(.pckg_sz(pckg_sz)) sb_chk_mbx;
@@ -9,21 +9,39 @@ class _checker #(parameter pckg_sz = 20);
   drv_sb #(.pckg_sz(pckg_sz)) array_sc[longint];
   mon_chk array_mon[longint];
   
+  tst_chk tst_chk_transaction;
+  tst_chk_mbx tst_chk_mbx;
+  
+  
   list_chk_mbx list_chk_mbx;
   list_chk  list_chk_transaction;
   list_chk real_path[$];
-  
+  gen_ag_mode enum_mode;
+  Tests test_name;
   int prom = 0;
   int count = 1;
   int break_path = 0;
+  int jump_prom = 0;
+  int fa;
+  string file_name;
   
-  
-  
+  task clean();
+    prom = 0;
+    count = 1;
+    break_path = 0;
+    jump_prom = 0;
+   	foreach (array_sc[i]) array_sc.delete(i);
+    foreach (array_mon[i]) array_mon.delete(i);
+    real_path = {};
+    //$display("TAMAÑO SC [%0d] MON [%0d] REAL [%0d]",array_sc.size(),array_mon.size(),real_path.size());
+    
+  endtask
   
   task listeners();
     forever begin
       list_chk_mbx.get(list_chk_transaction);
       real_path.push_back(list_chk_transaction);
+      #3;
     end
   endtask
   
@@ -35,6 +53,7 @@ class _checker #(parameter pckg_sz = 20);
       sb_chk_mbx.get(chk_sb_transaction);
       array_sc[{chk_sb_transaction.paquete}] = this.chk_sb_transaction;
       //$display("\nHASH SC Key [%d]",chk_sb_transaction.paquete);
+      #3;
     end
     
   endtask
@@ -49,48 +68,50 @@ class _checker #(parameter pckg_sz = 20);
       mon_chk_mbx.get(mon_chk_transaction);
       array_mon[{mon_chk_transaction.key}] = this.mon_chk_transaction;
       //$display("\nHASH MON Key [%d]",mon_chk_transaction.key);
+      #3;
     end
     
  
   endtask
   
+ /* 
+  task tst();
+    
+    forever begin
+      
+      
+    end
+    
+ 
+  endtask
+  */
+  
   task report();
     
-    /* Verifica por arreglo
-    foreach (array_sc[k]) $display("PATH [%p]",array_sc[k].ruta);
-    foreach (real_path[i])array_sc[real_path[i].data_out[pckg_sz-9:0]].ruta.delete({real_path[i].list_r,real_path[i].list_c});
-    $display("\n\n");
-    foreach (array_sc[k]) $display("PATH [%p] r[%0d] c[%0d]",array_sc[k].ruta,array_sc[k].row,array_sc[k].colum);
-    $display("\n\n");
-    foreach (array_sc[k]) begin
-      foreach(array_sc[k].ruta[i])$display("PATH [%p] [%0d]",array_sc[k].ruta,i);
-    end
-    */
-    
-    /*
-     foreach (array_sc[k]) begin
-      
-      $display("\nCAMBIO");
-      //$display("PATH [%p]",array_sc[k].ruta);
-      for (int i = 0; i <=5 ; i++)begin
-        for (int j = 0; j <= 5; j++) begin
-          if(array_sc[k].path[i][j] == 1) $display("ERROR [%0d]",array_sc[k].path[i][j]);
-        end
-      end
-    end;*/
-    
-    //Valida por mapeo
-    
-    $display("REALPATH [%0d]",real_path.size());
     
     
+      tst_chk_mbx.get(tst_chk_transaction);
+      enum_mode =tst_chk_transaction.mode;
+    test_name = tst_chk_transaction.test;
+    $display("PRUEBA %s",test_name.name());
+    $display("TAMAÑO [%0d]",array_sc.size());
+    $display("TAMAÑO [%0d]",array_mon.size());
+    
+    this.file_name = $sformatf("Reporte.csv");
+    this.fa = $fopen(this.file_name,"a");
+    $fdisplay(fa,"Test/%s",test_name.name());
+    $fdisplay(fa,"Modo/%s",enum_mode.name());
+    $fdisplay(fa,"FIFO/%d",fifo_size);
+    
+    //$display("TAMAÑO BEFORE CLEAN SC [%0d] path [%0d]",array_sc.size(),real_path.size());
     foreach (real_path[i]) begin
       array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=0;
-      if(array_sc[real_path[i].data_out[pckg_sz-9:0]].jump == 0) array_sc[real_path[i].data_out[pckg_sz-9:0]].jump = 1;
-      $display("Cantidad de saltos [%0d]",array_sc[real_path[i].data_out[pckg_sz-9:0]].jump);
+      if(array_sc[real_path[i].data_out[pckg_sz-9:0]].jump < 3) array_sc[real_path[i].data_out[pckg_sz-9:0]].jump = array_sc[real_path[i].data_out[pckg_sz-9:0]].jump + 1;
+      //$display("Cantidad de saltos [%0d]",array_sc[real_path[i].data_out[pckg_sz-9:0]].jump);
     end;
     
     foreach (array_sc[k]) begin
+      jump_prom = jump_prom + array_sc[k].jump;
       break_path = 0;
       //$display("PATH [%p]",array_sc[k].ruta);
       for (int i = 0; i <=5 ; i++)begin
@@ -106,42 +127,18 @@ class _checker #(parameter pckg_sz = 20);
       end
     end;
     
-    
-    /*
-    $display("TAMAÑO [%0d]",array_sc.size());
-    foreach (array_sc[k]) begin
-      
-      $display("\nCAMBIO");
-      //$display("PATH [%p]",array_sc[k].ruta);
-      for (int i = 0; i <=5 ; i++)begin
-        for (int j = 0; j <= 5; j++) begin
-          $display("[%0d]",array_sc[k].path[i][j]);
-        end
-      end
-    end;
-    
-    foreach (real_path[i]) begin
-      array_sc[real_path[i].data_out[pckg_sz-9:0]].path[real_path[i].list_r][real_path[i].list_c]=-1;
-    end;
-    
-    foreach (array_sc[k]) begin
-      $display("\nVERIFICADO");
-      for (int i = 0; i <=5 ; i++)begin
-        for (int j = 0; j <= 5; j++) begin
-          $display("[%0d]",array_sc[k].path[i][j]);
-        end
-      end
-    end;
-    */
     foreach (array_mon[i]) begin
       prom = prom+array_mon[i].tiempo - array_sc[i].transaction_time;
     end;
-    $display("En las transacciones completadas el retraso promedio fué de: [%0d]",prom/array_mon.size);
+    $fdisplay(fa,"Transacciones/%0d",array_sc.size());
+    $fdisplay(fa,"Recibidas/%0d",array_mon.size());
+    $fdisplay(fa,"Saltos/%0d",jump_prom/array_sc.size());
+    $fdisplay(fa,"Delay/%0d",prom/array_mon.size);
    	
     foreach (array_mon[i]) begin
       array_sc.delete(i);
     end;
-    $display("\nSe perdieron [%0d] paquetes",array_sc.size);
+    $fdisplay(fa,"Perdidos/%0d",array_sc.size);
     
     if(array_sc.size !=0)begin
       foreach (array_sc[i]) begin

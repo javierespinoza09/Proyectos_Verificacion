@@ -18,7 +18,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
     Agente #(.drvrs(Drivers), .pckg_sz(pckg_sz), .fifo_size(fifo_size), .ROWS(ROWS), .COLUMS(COLUMS)) agente;
     listener listener;
     scoreboard #(.pckg_sz(pckg_sz)) sb;
-    _checker #(.pckg_sz(pckg_sz)) chk;
+  _checker #(.pckg_sz(pckg_sz),.fifo_size(fifo_size)) chk;
     Generador #(.drvrs(Drivers), .pckg_sz(pckg_sz)) generador; 
 
     /////////////////////////
@@ -30,7 +30,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
     gen_ag_mbx gen_ag_mbx;
     
 	tst_gen_mbx tst_gen_mbx;
-
+	//tst_chk_mbx tst_chk_mbx;
     //Instancia de mailbox Generador-Agente
     list_chk_mbx list_chk_mbx;
     //Instancia de mailbox Listener-Checker
@@ -49,6 +49,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
         drv_sb_mbx = new();
         sb_chk_mbx = new();
         mon_chk_mbx = new();
+      	//tst_chk_mbx = new();
         for(int i = 0; i < COLUMS*2+ROWS*2; i++) begin
             automatic int k = i;
             ag_dr_mbx[k] = new();
@@ -65,6 +66,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
         chk.sb_chk_mbx =sb_chk_mbx;
         chk.mon_chk_mbx = mon_chk_mbx;
       	chk.list_chk_mbx = list_chk_mbx;
+      	//chk.tst_chk_mbx = tst_chk_mbx;
 
         sb = new();
         sb.drv_sb_mbx=drv_sb_mbx;
@@ -115,6 +117,7 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
             chk.run_sc();
             chk.run_mon();
           	chk.listeners();
+          	//chk.tst();
             for(int i = 0; i<COLUMS*2+ROWS*2; i++ ) begin
             fork
             automatic int k = i;
@@ -127,7 +130,10 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
 
     task report();
         chk.report();
-        
+      	$display("//////////////////////////////////FIN DEL REPORTE/////////////////////////////////////");
+      	//#100;
+        chk.clean();
+      	#100;
 
     endtask
 

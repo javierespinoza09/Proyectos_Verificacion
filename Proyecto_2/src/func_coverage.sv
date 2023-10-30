@@ -1,20 +1,20 @@
 class coverage #(parameter pckg_sz = 40);
 	covergroup pop_cg;
-		coverpoint router_tb.DUT.popin[0] {bins b1 = {1};}
-		coverpoint router_tb.DUT.popin[1] {bins b1 = {1};}
-		coverpoint router_tb.DUT.popin[2] {bins b1 = {1};}
-		coverpoint router_tb.DUT.popin[3] {bins b1 = {1};}
-		coverpoint router_tb.DUT.popin[4] {bins b1 = {1};}
-		coverpoint router_tb.DUT.popin[6] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[7] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[8] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[9] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[10] {bins b1 = {1};}
-		coverpoint router_tb.DUT.popin[11] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[12] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[13] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[14] {bins b1 = {1};}
-                coverpoint router_tb.DUT.popin[15] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[0] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[1] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[2] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[3] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[4] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[6] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[7] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[8] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[9] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[10] {bins b1 = {1};}
+		coverpoint router_tb.DUT.pop[11] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[12] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[13] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[14] {bins b1 = {1};}
+                coverpoint router_tb.DUT.pop[15] {bins b1 = {1};}
 	endgroup
 
 	covergroup id_row_cg;
