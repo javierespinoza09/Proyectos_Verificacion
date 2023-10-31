@@ -91,18 +91,26 @@ class Ambiente  #(parameter Drivers = 4, parameter pckg_sz = 40,
         for (int i = 0; i<COLUMS;i++)begin
             driver[i].self_row = 0;
             driver[i].self_col = i+1;
+          	monitor[i].self_row = 0;
+            monitor[i].self_col = i+1;
         end
         for (int i = 0; i<ROWS;i++)begin
             driver[i+COLUMS].self_col = 0;
             driver[i+COLUMS].self_row = i+1;
+          	monitor[i+COLUMS].self_col = 0;
+            monitor[i+COLUMS].self_row = i+1;
         end
         for (int i = 0; i<COLUMS;i++)begin
             driver[i+ROWS*2].self_row = ROWS+1;
             driver[i+ROWS*2].self_col = i+1;
+          	monitor[i+ROWS*2].self_row = ROWS+1;
+            monitor[i+ROWS*2].self_col = i+1;
         end
         for (int i = 0; i<ROWS;i++)begin
             driver[i+COLUMS*3].self_col = COLUMS+1;
             driver[i+COLUMS*3].self_row = i+1;
+          	monitor[i+COLUMS*3].self_col = COLUMS+1;
+            monitor[i+COLUMS*3].self_row = i+1;
         end
 
     endfunction
