@@ -6,12 +6,16 @@
 //  2023                                        //
 //////////////////////////////////////////////////
 
-class driver extends uvm_driver;
+class driver extends uvm_driver#(drv_item);
   
   `uvm_component_utils(driver)
   
   virtual router_if v_if;
-  
+  int driver_num;
+  bit [3:0] self_row;
+  bit [3:0] self_col;
+  bit [40-1:0] d_q [$];
+  bit [40-1:0] paquete;
   function new(string name,uvm_component parent);
     super.new(name,parent);
   endfunction
@@ -25,14 +29,56 @@ class driver extends uvm_driver;
   
   task run_phase(uvm_phase phase);
     v_if.reset = 1;
-    phase.raise_objection(this);
+    fork 
+      this.if_signal();
+      begin 
+        forever begin
+          //this.ag_dr_mbx.get(ag_dr_transaction);
+          drv_item drv_item_i;
+          seq_item_port.get_next_item(drv_item_i);                                      
+	        this.count = 0;
+	          while(this.d_q.size >= fifo_size) #5;
+       	      paquete = {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.self_row,this.self_col,this.ag_dr_transaction.dato[pckg_sz-26:0]};	
+              this.fifo_push(paquete);//Manda un paquete a la FIFO  
+              seq_item_port.item_done();
+              //drv_sb_transaction = new(paquete,self_row,self_col,$time);
+              //drv_sb_mbx.put(drv_sb_transaction);
+        end
+      end
+    join_none
+
+
+    //phase.raise_objection(this);
     @(posedge v_if.clk);
     #20;
     v_if.reset = 0;
     #10;
     `uvm_warning("Se hizo el reinicio en driver!",get_type_name())
-    phase.drop_objection(this);
+
   endtask
+
+  function fifo_push(bit [pckg_sz-1:0] dato); 
+			this.d_q.push_back(dato);
+			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
+			this.v_if.pndng_i_in[this.fifo_num] = 1;
+	endfunction
+
+
+  task if_signal();
+      	this.v_if.pndng_i_in[this.fifo_num] = 0;
+		forever begin
+			if(this.d_q.size==0) begin 
+				this.v_if.pndng_i_in[this.fifo_num] = 0;
+				this.v_if.data_out_i_in[this.fifo_num] = 0;
+			end
+			else begin
+				this.v_if.pndng_i_in[this.fifo_num] = 1;
+				this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
+			end
+      @(posedge this.v_if.popin[this.fifo_num]);
+			if(this.d_q.size>0) this.d_q.delete(0);
+		end
+	endtask
   
   
 endclass: driver
