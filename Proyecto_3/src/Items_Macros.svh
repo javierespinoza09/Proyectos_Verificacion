@@ -1,3 +1,5 @@
+`include Clases_mailbox
+
 class drv_item extends uvm_sequence_item;
     `uvm_object_utils(drv_item)
     rand bit [pckg_sz-26:0] dato;
@@ -204,9 +206,7 @@ class gen_sequence_item extends uvm_sequence;
 	    #1;
         `uvm_info("SEQ",$sformatf("New item %0s", drv_item_i.item_str_content()),UVM_HIGH)
         finish_item(drv_item_i);  
-          
-	        
-	    
+
         end
         `uvm_info("SEQ", $sformatf("Done generatating %0d items", cant_datos), UVM_LOW)
 
