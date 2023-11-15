@@ -2,6 +2,11 @@
 
 class drv_item extends uvm_sequence_item;
     `uvm_object_utils(drv_item)
+    int COLUMS;
+    int ROWS;
+    if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
+        `uvm_error("","uvm_config_db::get failed")
+    end
     rand bit [pckg_sz-26:0] dato;
     rand bit [3:0] id_row;
     rand bit [3:0] id_colum;
