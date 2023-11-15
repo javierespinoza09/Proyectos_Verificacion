@@ -4,7 +4,7 @@
 
 package test;
 import uvm_pkg::*;
-
+/*
 `include "driver.svh"
 
 //clase agente
@@ -40,7 +40,7 @@ class ambiente extends uvm_env;
   
 endclass
 
-
+*/
 class test extends uvm_test;
   `uvm_component_utils(test)
   

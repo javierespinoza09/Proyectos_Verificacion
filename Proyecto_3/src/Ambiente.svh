@@ -9,7 +9,7 @@
 class ambiente extends uvm_env;
     `uvm_component_utils(ambiente);
 
-    function new(string name="ambiente", uvm_component parent=null);
+    function new(string name, uvm_component parent=null);
         super.new(name, parent);
     endfunction
 
@@ -19,8 +19,5 @@ class ambiente extends uvm_env;
         super.build_phase(phase);
         agente0 = agente::type_id::create("agente0",this);
     endfunction
-
-    
-
 
 endclass
