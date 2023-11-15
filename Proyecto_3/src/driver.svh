@@ -9,7 +9,7 @@
 class driver extends uvm_driver#(drv_item);
   
   `uvm_component_utils(driver)
-  
+  parameter fifo_size = 4;
   virtual router_if v_if;
   int driver_num;
   bit [3:0] self_row;
@@ -66,6 +66,7 @@ class driver extends uvm_driver#(drv_item);
 
   task if_signal();
       	this.v_if.pndng_i_in[this.fifo_num] = 0;
+        this.v_if.data_out_i_in[this.fifo_num] = 0;
 		forever begin
 			if(this.d_q.size==0) begin 
 				this.v_if.pndng_i_in[this.fifo_num] = 0;

@@ -49,4 +49,13 @@ class agente extends uvm_agent;
             //monitor[i+COLUMS*3].self_row = i+1;
         end
   endfunction
+
+  virtual function void connect_phase(uvm_phase phase);
+    super.connect_phase(phase);
+    for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
+      automatic int k = i;
+      driver_ag[k].seq_item_port.connect(secuencer[k]);
+    end
+  endfunction
+
 endclass
