@@ -1,12 +1,13 @@
-`include Clases_mailbox
+`include "Clases_mailbox.sv"
 
 class drv_item extends uvm_sequence_item;
     `uvm_object_utils(drv_item)
-    int COLUMS;
-    int ROWS;
-    if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
+    int COLUMS = 4;
+    int ROWS = 4;
+  	int pckg_sz = 40;
+    /*if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
         `uvm_error("","uvm_config_db::get failed")
-    end
+    end*/
     rand bit [pckg_sz-26:0] dato;
     rand bit [3:0] id_row;
     rand bit [3:0] id_colum;
@@ -30,11 +31,27 @@ class drv_item extends uvm_sequence_item;
     constraint mode1 {mode == 1;};
     constraint mode0 {mode == 0;};
     constraint delay {tiempo > 20; tiempo < 100;};
+  	virtual router_if v_if;
 
     function new(string name = "drv_item");
         super.new(name);
     endfunction
 
+    function void build_phase(uvm_phase phase);
+      if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
+        `uvm_error("","uvm_config_db::get failed")
+      end
+      if(!uvm_config_db#(int)::get(this, "", "pckg_sz", pckg_sz)) begin
+          `uvm_error("","uvm_config_db::get failed")
+      end
+      if(!uvm_config_db#(int)::get(this, "", "COLUMS", COLUMS)) begin
+          `uvm_error("","uvm_config_db::get failed")
+        end
+      if(!uvm_config_db#(int)::get(this, "", "ROWS", ROWS)) begin
+          `uvm_error("","uvm_config_db::get failed")
+        end
+    endfunction
+  
     virtual function string item_str_content ();
         return $sformatf("Source=%0d, Mode=%0b, Row=%0d, Col=%0d, Data=%0h", source, mode, id_row, id_row, dato);
     endfunction
@@ -42,13 +59,14 @@ class drv_item extends uvm_sequence_item;
 endclass
 
 
-class gen_sequence_item extends uvm_sequence;
+class gen_sequence_item extends uvm_sequence #(drv_item);
     `uvm_object_utils(gen_sequence_item);
 
     function new (string name = "gen_sequence_item");
         super.new(name);
     endfunction
-
+	int COLUMS = 4;
+  	int ROWS = 4;
     int cant_datos;
     int data_modo;        
     int id_modo;
@@ -58,20 +76,28 @@ class gen_sequence_item extends uvm_sequence;
     bit [3:0] id_colum;
     int source_rand;
     bit [3:0] source;
-
+	drv_item drv_item_i;
     r_c_mapping drv_map [COLUMS*2+ROWS*2];
 
     function void build_phase(uvm_phase phase);
+      
+      if(!uvm_config_db#(int)::get(this, "", "COLUMS", COLUMS)) begin
+          `uvm_error("","uvm_config_db::get failed")
+        end
+      if(!uvm_config_db#(int)::get(this, "", "ROWS", ROWS)) begin
+          `uvm_error("","uvm_config_db::get failed")
+        end*/
         `mapping(ROWS,COLUMS);
         foreach (drv_map[i]) begin
 			$display("POS %d ROW=%0d COL=%0d",i,drv_map[i].row,drv_map[i].column);
 		end
+      
     endfunction
 
     virtual task body();
         for (int i = 0; i < this.cant_datos; i++) begin
 			
-            drv_item drv_item_i = drv_item::type_id::create("drv_item_i");
+            drv_item_i = drv_item::type_id::create("drv_item_i");
             start_item(drv_item_i);
 
           	/////////////////////////////////////////////////

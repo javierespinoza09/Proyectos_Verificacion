@@ -9,9 +9,11 @@
 class driver extends uvm_driver#(drv_item);
   
   `uvm_component_utils(driver)
-  parameter fifo_size = 4;
+  int fifo_size;
+  int pckg_sz;
   virtual router_if v_if;
   int driver_num;
+  int count;
   bit [3:0] self_row;
   bit [3:0] self_col;
   bit [40-1:0] d_q [$];
@@ -23,6 +25,12 @@ class driver extends uvm_driver#(drv_item);
   function void build_phase(uvm_phase phase);
     if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
       `uvm_error("","uvm_config_db::get failed")
+    end
+    if(!uvm_config_db#(int)::get(this, "", "fifo_size", fifo_size)) begin
+          `uvm_error("","uvm_config_db::get failed")
+    end
+    if(!uvm_config_db#(int)::get(this, "", "pckg_sz", pckg_sz)) begin
+          `uvm_error("","uvm_config_db::get failed")
     end
   endfunction
   
@@ -39,7 +47,7 @@ class driver extends uvm_driver#(drv_item);
           seq_item_port.get_next_item(drv_item_i);                                      
 	        this.count = 0;
 	          while(this.d_q.size >= fifo_size) #5;
-       	      paquete = {this.ag_dr_transaction.Nxt_jump,this.ag_dr_transaction.id_row,this.ag_dr_transaction.id_colum,this.ag_dr_transaction.mode,this.self_row,this.self_col,this.ag_dr_transaction.dato[pckg_sz-26:0]};	
+          paquete = {drv_item_i.Nxt_jump,drv_item_i.id_row,drv_item_i.id_colum,drv_item_i.mode,self_row,self_col,drv_item_i.dato};	
               this.fifo_push(paquete);//Manda un paquete a la FIFO  
               seq_item_port.item_done();
               //drv_sb_transaction = new(paquete,self_row,self_col,$time);
@@ -61,24 +69,24 @@ class driver extends uvm_driver#(drv_item);
 
   function fifo_push(bit [pckg_sz-1:0] dato); 
 			this.d_q.push_back(dato);
-			this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
-			this.v_if.pndng_i_in[this.fifo_num] = 1;
+			this.v_if.data_out_i_in[this.driver_num] = d_q[0];
+			this.v_if.pndng_i_in[this.driver_num] = 1;
 	endfunction
 
 
   task if_signal();
-      	this.v_if.pndng_i_in[this.fifo_num] = 0;
-        this.v_if.data_out_i_in[this.fifo_num] = 0;
+      	this.v_if.pndng_i_in[this.driver_num] = 0;
+        this.v_if.data_out_i_in[this.driver_num] = 0;
 		forever begin
 			if(this.d_q.size==0) begin 
-				this.v_if.pndng_i_in[this.fifo_num] = 0;
-				this.v_if.data_out_i_in[this.fifo_num] = 0;
+				this.v_if.pndng_i_in[this.driver_num] = 0;
+				this.v_if.data_out_i_in[this.driver_num] = 0;
 			end
 			else begin
-				this.v_if.pndng_i_in[this.fifo_num] = 1;
-				this.v_if.data_out_i_in[this.fifo_num] = d_q[0];
+				this.v_if.pndng_i_in[this.driver_num] = 1;
+				this.v_if.data_out_i_in[this.driver_num] = d_q[0];
 			end
-      @(posedge this.v_if.popin[this.fifo_num]);
+      @(posedge this.v_if.popin[this.driver_num]);
 			if(this.d_q.size>0) this.d_q.delete(0);
 		end
 	endtask

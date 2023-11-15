@@ -54,7 +54,7 @@ class agente extends uvm_agent;
     super.connect_phase(phase);
     for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
       automatic int k = i;
-      driver_ag[k].seq_item_port.connect(secuencer[k]);
+      driver_ag[k].seq_item_port.connect(secuencer[k].seq_item_export);
     end
   endfunction
 

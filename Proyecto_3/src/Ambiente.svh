@@ -8,12 +8,13 @@
 
 class ambiente extends uvm_env;
     `uvm_component_utils(ambiente);
+  
+  agente agente0;
 
     function new(string name, uvm_component parent=null);
         super.new(name, parent);
     endfunction
 
-    agente agente0;
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
