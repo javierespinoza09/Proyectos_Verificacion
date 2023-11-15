@@ -28,6 +28,7 @@ class driver extends uvm_driver#(drv_item);
   
   
   task run_phase(uvm_phase phase);
+    //Objecion
     v_if.reset = 1;
     fork 
       this.if_signal();
@@ -54,7 +55,8 @@ class driver extends uvm_driver#(drv_item);
     v_if.reset = 0;
     #10;
     `uvm_warning("Se hizo el reinicio en driver!",get_type_name())
-
+    //Delay grandote
+    //Bajar Objscion
   endtask
 
   function fifo_push(bit [pckg_sz-1:0] dato); 
