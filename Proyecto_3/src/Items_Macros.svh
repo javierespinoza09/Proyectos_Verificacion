@@ -1,10 +1,10 @@
 `include "Clases_mailbox.sv"
-
+import uvm_pkg::*;
 class drv_item extends uvm_sequence_item;
     `uvm_object_utils(drv_item)
-    int COLUMS = 4;
-    int ROWS = 4;
-  	int pckg_sz = 40;
+    parameter COLUMS = 4;
+    parameter ROWS = 4;
+  	parameter pckg_sz = 40;
     /*if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
         `uvm_error("","uvm_config_db::get failed")
     end*/
@@ -38,18 +38,22 @@ class drv_item extends uvm_sequence_item;
     endfunction
 
     function void build_phase(uvm_phase phase);
-      if(!uvm_config_db#(virtual router_if)::get(this, "", "v_if", v_if)) begin
+      /*
+	    if(!uvm_config_db#(virtual router_if)::get(this, "", "router_if", v_if)) begin
         `uvm_error("","uvm_config_db::get failed")
       end
+      
       if(!uvm_config_db#(int)::get(this, "", "pckg_sz", pckg_sz)) begin
           `uvm_error("","uvm_config_db::get failed")
       end
+      
       if(!uvm_config_db#(int)::get(this, "", "COLUMS", COLUMS)) begin
           `uvm_error("","uvm_config_db::get failed")
         end
       if(!uvm_config_db#(int)::get(this, "", "ROWS", ROWS)) begin
           `uvm_error("","uvm_config_db::get failed")
         end
+	*/
     endfunction
   
     virtual function string item_str_content ();
@@ -65,8 +69,8 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
     function new (string name = "gen_sequence_item");
         super.new(name);
     endfunction
-	int COLUMS = 4;
-  	int ROWS = 4;
+	parameter COLUMS = 4;
+  	parameter ROWS = 4;
     int cant_datos;
     int data_modo;        
     int id_modo;
@@ -80,13 +84,14 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
     r_c_mapping drv_map [COLUMS*2+ROWS*2];
 
     function void build_phase(uvm_phase phase);
-      
+      /*
       if(!uvm_config_db#(int)::get(this, "", "COLUMS", COLUMS)) begin
           `uvm_error("","uvm_config_db::get failed")
         end
       if(!uvm_config_db#(int)::get(this, "", "ROWS", ROWS)) begin
           `uvm_error("","uvm_config_db::get failed")
-        end*/
+        end
+	*/
         `mapping(ROWS,COLUMS);
         foreach (drv_map[i]) begin
 			$display("POS %d ROW=%0d COL=%0d",i,drv_map[i].row,drv_map[i].column);

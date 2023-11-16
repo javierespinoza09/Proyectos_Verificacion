@@ -67,7 +67,7 @@ class driver extends uvm_driver#(drv_item);
     //Bajar Objscion
   endtask
 
-  function fifo_push(bit [pckg_sz-1:0] dato); 
+  function fifo_push(bit [40-1:0] dato); 
 			this.d_q.push_back(dato);
 			this.v_if.data_out_i_in[this.driver_num] = d_q[0];
 			this.v_if.pndng_i_in[this.driver_num] = 1;
