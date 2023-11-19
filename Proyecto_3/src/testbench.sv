@@ -1,6 +1,7 @@
 // Code your testbench here
 // or browse Examples
 `include "uvm_macros.svh"
+import uvm_pkg::*;
 `include "Items_Macros.svh"
 `include "driver.svh"
 `include "agente.svh"
@@ -10,12 +11,12 @@
 
 
 module tb_top;
-  import uvm_pkg::*;
+  //import uvm_pkg::*;
   import test::*;
   
-  int COLUMS = 4;
+  parameter int COLUMS = 4;
   parameter int ROWS = 4;
-  parameter int fifo_size = 4;
+  parameter int  fifo_size = 4;
   parameter int pckg_sz = 40;
   bit clk_tb;
   always #5 clk_tb <= ~clk_tb;
