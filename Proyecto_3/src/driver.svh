@@ -32,12 +32,16 @@ class driver extends uvm_driver#(drv_item);
     if(!uvm_config_db#(int)::get(this, "", "pckg_sz", pckg_sz)) begin
           `uvm_error("","uvm_config_db::get failed")
     end*/
+   this.v_if.pndng_i_in[this.driver_num] = 0;
+        this.v_if.data_out_i_in[this.driver_num] = 0;
   endfunction
   
   
   task run_phase(uvm_phase phase);
     //Objecion
     //v_if.reset = 1;
+    this.v_if.pndng_i_in[this.driver_num] = 0;
+    this.v_if.data_out_i_in[this.driver_num] = 0;
     fork 
       this.if_signal();
       begin 

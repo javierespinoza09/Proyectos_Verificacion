@@ -55,7 +55,7 @@ class drv_item extends uvm_sequence_item;
     endfunction
   
     virtual function string item_str_content ();
-        return $sformatf("Source=%0d, Mode=%0b, Row=%0d, Col=%0d, Data=%0h", source, mode, id_row, id_row, dato);
+        return $sformatf("Source=%0d, Mode=%0b, Row=%0d, Col=%0d, Data=%0h", source, mode, id_row, id_colum, dato);
     endfunction
 
 endclass
@@ -88,19 +88,37 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
         end
       if(!uvm_config_db#(int)::get(this, "", "ROWS", ROWS)) begin
           `uvm_error("","uvm_config_db::get failed")
-        end*/
+        end
+	
+       phase.raise_objection(this);
+
+       for (int i = 0; i<ROWS*2+COLUMS*2; i++) begin
+		automatic int k = i;
+		drv_map[k] = new();
+  	end
         `mapping(ROWS,COLUMS);
         foreach (drv_map[i]) begin
 			$display("POS %d ROW=%0d COL=%0d",i,drv_map[i].row,drv_map[i].column);
 		end
-      
+		phase.drop_objection(this);
+		
+*/      
     endfunction
 
     virtual task body();
+    for (int i = 0; i<ROWS*2+COLUMS*2; i++) begin
+                automatic int k = i;
+                drv_map[k] = new();
+        end
+        `mapping(ROWS,COLUMS);
+        foreach (drv_map[i]) begin
+                        $display("POS %d ROW=%0d COL=%0d",i,drv_map[i].row,drv_map[i].column);
+                end
         for (int i = 0; i < this.cant_datos; i++) begin
 			
-            drv_item_i = drv_item::type_id::create("drv_item_i");
+            drv_item drv_item_i = drv_item::type_id::create("drv_item_i");
             start_item(drv_item_i);
+	  	drv_item_i.drv_map = drv_map;
 
           	/////////////////////////////////////////////////
 			//Casos para las pruebas que se desean ejecutar//
@@ -170,12 +188,12 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
       case (this.mode)
         random: begin
 		//$display("randdom");
-          this.drv_item_i.mode1.constraint_mode(0);
-          this.drv_item_i.mode0.constraint_mode(0);
+          drv_item_i.mode1.constraint_mode(0);
+          drv_item_i.mode0.constraint_mode(0);
         end
         mode_1: begin
 	      // $display("MODE_1");	
-          this.drv_item_i.mode1.constraint_mode(1);
+          drv_item_i.mode1.constraint_mode(1);
           this.drv_item_i.mode0.constraint_mode(0);  
         end
         mode_0: begin
@@ -193,8 +211,8 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
           //ALEATORIZACION//
           //////////////////
 	  //
-	  	this.drv_item_i.Nxt_jump = 0;
-		this.drv_item_i.randomize();
+	  	drv_item_i.Nxt_jump = 0;
+		drv_item_i.randomize();
 			
       	//////////////////////////////
         //VALIDACION DE FILA-COLUMNA//
@@ -202,8 +220,8 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
     
 	if(this.source_rand==0) begin
        		drv_item_i.source = source;
-          	if(this.id_modo != self_id || this.id_modo != send_to_itself) begin
-            		if(drv_item_i.id_row == drv_item_i.drv_map[drv_item_i.source].row && drv_item_i.id_colum == drv_item_i.drv_map[drv_item_i.source].column) begin  
+          	if(id_modo != self_id || id_modo != send_to_itself) begin
+            		if(drv_item_i.id_row == drv_item_i.drv_map[source].row && drv_item_i.id_colum == drv_item_i.drv_map[source].column) begin  
               		//$display("WARNING: DIRECCION PROPIA SOURCE [%d]  FILA [%d] COLUMNA [%d]", drv_item_i.source, drv_item_i.id_row, drv_item_i.id_colum);
                         if(drv_item_i.id_row == 0 || drv_item_i.id_row == ROWS + 1) begin
                             if(drv_item_i.id_colum == 1) drv_item_i.id_colum = drv_item_i.id_colum + 1;
@@ -215,11 +233,14 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
                         end
             		end
           	end
+		
         end
+	
         ///Se evalúa si el paquete requere que el ID, Source o ambos en cada paquete sea previamente determinado
         if(this.id_rand==0) begin
 		drv_item_i.id_row = id_row;
           	drv_item_i.id_colum = id_colum;
+		
           	if(this.id_modo != self_id || this.id_modo != send_to_itself) begin
             		if(drv_item_i.id_row == drv_item_i.drv_map[source].row && drv_item_i.id_colum == drv_item_i.drv_map[source].column) begin
                 		if(drv_item_i.source == 0) drv_item_i.source = drv_item_i.source+1;
@@ -229,19 +250,19 @@ class gen_sequence_item extends uvm_sequence #(drv_item);
 	end
 
 			///Se carga el tiempo de la transacción 
-          	this.drv_item_i.tiempo = $time;
+          	drv_item_i.tiempo = $time;
 		//$display("AGENTE: Dato [%b] modo [%b] Nxt [%b]", this.drv_item_i.dato, this.drv_item_i.mode, this.drv_item_i.Nxt_jump);
 			///Se envía el paquete al mailbox corresponciente
-		if(this.id_modo == send_to_itself) begin 
-			this.drv_item_i.id_row = drv_item_i.drv_map[drv_item_i.source].row;
-			this.drv_item_i.id_colum = drv_item_i.drv_map[drv_item_i.source].column;
+		if(id_modo == send_to_itself) begin 
+			drv_item_i.id_row = drv_item_i.drv_map[drv_item_i.source].row;
+			drv_item_i.id_colum = drv_item_i.drv_map[drv_item_i.source].column;
 		end
 	    #1;
-        `uvm_info("SEQ",$sformatf("New item %0s", drv_item_i.item_str_content()),UVM_HIGH)
+        `uvm_info("SEQ",$sformatf("New item %0s", drv_item_i.item_str_content()),UVM_LOW)
         finish_item(drv_item_i);  
 
         end
-        `uvm_info("SEQ", $sformatf("Done generatating %0d items", cant_datos), UVM_LOW)
+        `uvm_info("SEQ", $sformatf("Done generatating %0d items", cant_datos), UVM_LOW);
 
     endtask
 

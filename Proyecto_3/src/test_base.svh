@@ -39,6 +39,7 @@ class test_base extends uvm_test;
 
         for (int i = 0; i<ROWS*2+COLUMS*2; i++ ) begin
         automatic int k = i;
+		sec[k] = gen_sequence_item::type_id::create($sformatf("sec_num%0d",k),this);
             sec[k].cant_datos = 2;
             sec[k].data_modo = 0;
             sec[k].id_modo = normal_id;
@@ -70,7 +71,7 @@ class test_base extends uvm_test;
     virtual task apply_reset();
         v_if.reset = 1;
         @(posedge v_if.clk);
-        #20;
+        #2000;
         v_if.reset = 0;
         #10;
         `uvm_warning("Se hizo el reinicio en driver!",get_type_name())

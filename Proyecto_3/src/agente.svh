@@ -24,7 +24,11 @@ class agente extends uvm_agent;
       automatic int k = i;
       driver_ag [k] = driver ::type_id::create($sformatf("driver_num%0d",k),this);
       secuencer [k] = uvm_sequencer #(drv_item)::type_id::create($sformatf("sequencer_num%0d",k), this);
+      driver_ag[k].driver_num = k;
     end
+
+
+
     for (int i = 0; i<COLUMS;i++)begin
             driver_ag[i].self_row = 0;
             driver_ag[i].self_col = i+1;
