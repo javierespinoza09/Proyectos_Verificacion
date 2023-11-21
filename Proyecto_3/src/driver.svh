@@ -38,8 +38,7 @@ class driver extends uvm_driver#(drv_item);
   
   
   task run_phase(uvm_phase phase);
-    //Objecion
-    //v_if.reset = 1;
+    
     this.v_if.pndng_i_in[this.driver_num] = 0;
     this.v_if.data_out_i_in[this.driver_num] = 0;
     fork 
@@ -54,23 +53,11 @@ class driver extends uvm_driver#(drv_item);
           paquete = {drv_item_i.Nxt_jump,drv_item_i.id_row,drv_item_i.id_colum,drv_item_i.mode,self_row,self_col,drv_item_i.dato};	
               this.fifo_push(paquete);//Manda un paquete a la FIFO  
               seq_item_port.item_done();
-              //drv_sb_transaction = new(paquete,self_row,self_col,$time);
-              //drv_sb_mbx.put(drv_sb_transaction);
+
         end
       end
     join_none
 
-
-    //phase.raise_objection(this);
-    /*
-    @(posedge v_if.clk);
-    #20;
-    v_if.reset = 0;
-    #10;
-    `uvm_warning("Se hizo el reinicio en driver!",get_type_name())
-    //Delay grandote
-    //Bajar Objscion
-    */
   endtask
 
   function fifo_push(bit [pckg_sz-1:0] dato); 
